@@ -99,14 +99,29 @@ function createThinkSection(messageDiv) {
 
   const thinkHeader = document.createElement('div');
   thinkHeader.classList.add('think-header');
-  thinkHeader.textContent = 'Thinking... (Click to toggle)';
+
+  const icon = document.createElement('span');
+  icon.classList.add('think-icon');
+  icon.innerHTML = '▶';
+
+  const headerText = document.createTextNode('Thinking...');
+
+  thinkHeader.appendChild(icon);
+  thinkHeader.appendChild(headerText);
 
   const thinkContent = document.createElement('div');
   thinkContent.classList.add('think-content');
 
+  const expanded = localStorage.getItem('think_section_expanded') === 'true';
+  if (expanded) {
+    icon.classList.add('expanded');
+    thinkContent.classList.add('expanded');
+  }
+
   thinkHeader.addEventListener('click', () => {
-    thinkHeader.classList.toggle('expanded');
-    thinkContent.style.display = thinkContent.style.display === 'none' ? 'block' : 'none';
+    icon.classList.toggle('expanded');
+    thinkContent.classList.toggle('expanded');
+    localStorage.setItem('think_section_expanded', thinkContent.classList.contains('expanded'));
   });
 
   thinkSection.appendChild(thinkHeader);

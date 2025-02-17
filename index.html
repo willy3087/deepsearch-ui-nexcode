@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>Jina DeepSearch Chat</title>
     <meta charset="utf-8">
     <meta name="title" content="DeepSearch Chat">
     <meta name="description" content="Search, read and reason until best answer found.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://search.jina.ait">
+    <meta property="og:url" content="https://search.jina.ai">
     <meta property="og:title" content="DeepSearch Chat">
     <meta property="og:description" content="Search, read and reason until best answer found.">
     <meta property="og:image" content="https://jina.ai/banner-deepsearch.png">
@@ -30,100 +29,43 @@
 </head>
 
 <body>
-<!DOCTYPE html>
-<html>
+    <div id="chat-app">
+        <div id="input-area">
+            <img id="logo" src="Jina%20-%20Light.svg">
+            <input type="text" id="message-input" placeholder="Type your question here"/>
+            <button id="send-button">Search</button>
+            <button id="clear-button">Clear</button>
+        </div>
 
-<head>
-    <title>Jina DeepSearch Chat</title>
-    <meta charset="utf-8">
-    <meta name="title" content="Jina Search">
-    <meta name="description" content="Search, read and reason until best answer found.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://search.jina.ai">
-    <meta property="og:title" content="Jina Search">
-    <meta property="og:description" content="Search, read and reason until best answer found.">
-    <meta property="og:image" content="https://jina.ai/banner-deepsearch.png">
-    <meta property="twitter:site" content="@JinaAI_">
-    <meta name="twitter:creator" content="@JinaAI_">
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://search.jina.ai">
-    <meta property="twitter:title" content="Jina Search">
-    <meta property="twitter:description" content="Search, read and reason until best answer found.">
-    <meta property="twitter:image" content="https://jina.ai/banner-deepsearch.png">
-    <link rel="icon" type="image/ico" href="favicon.ico">
+        <div id="chat-container"></div>
 
-    <script defer src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/marked-footnote/dist/index.umd.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/marked-highlight/lib/index.umd.js"></script>
-    <link rel="stylesheet" href="styles.css">
-    <link defer rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.min.css">
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-</head>
+        <div class="footer-buttons">
+            <button id="toggle-api-key" class="header-button add-key-btn">Add API Key</button>
+            <button id="theme-toggle" class="header-button">Toggle Theme</button>
+        </div>
 
-<body>
-<div id="chat-app">
-
-
-    <div id="input-area">
-        <img id="logo" src="Jina%20-%20Light.svg">
-        <input type="text" id="message-input" placeholder="Type your question here"/>
-        <button id="send-button">Search</button>
-        <button id="clear-button">Clear</button>
+        <div id="error-message"></div>
     </div>
 
-    <div id="chat-container"></div>
-
-
-    <div class="footer-buttons">
-        <button id="toggle-api-key" class="header-button add-key-btn">Add API Key</button>
-        <a id="get-api-key" href="https://jina.ai" target="_blank">
-            <button class="header-button get-key-btn">Get API Key</button>
-        </a>
-        <button id="theme-toggle" class="header-button">Toggle Theme</button>
-    </div>
-
-    <div id="error-message"></div>
-</div>
-
-<!-- Add the dialog HTML -->
-<div class="dialog-overlay" id="api-key-dialog">
-    <div class="dialog">
-        <div class="dialog-header">
-            <span class="dialog-title">Add API Key</span>
-            <button class="dialog-close">&times;</button>
-        </div>
-        <div class="dialog-content">
-            <input type="password" id="api-key-input" placeholder="Enter your API key">
-        </div>
-        <div class="dialog-footer">
-            <button id="save-api-key" class="header-button add-key-btn">Save</button>
+    <!-- Add the dialog HTML -->
+    <div class="dialog-overlay" id="api-key-dialog">
+        <div class="dialog">
+            <div class="dialog-header">
+                <span class="dialog-title">Add API Key</span>
+                <button class="dialog-close">&times;</button>
+            </div>
+            <div class="dialog-content">
+                <input type="password" id="api-key-input" placeholder="Enter your API key">
+                <a id="get-api-key" href="https://jina.ai" target="_blank">
+                    <button class="header-button get-key-btn">Get API Key</button>
+                </a>
+            </div>
+            <div class="dialog-footer">
+                <button id="save-api-key" class="header-button add-key-btn">Save</button>
+            </div>
         </div>
     </div>
-</div>
 
-<script defer src="app.js"></script>
+    <script defer src="app.js"></script>
 </body>
-
-</html>
-
-<!-- Add the dialog HTML -->
-<div class="dialog-overlay" id="api-key-dialog">
-    <div class="dialog">
-        <div class="dialog-header">
-            <span class="dialog-title">Add API Key</span>
-            <button class="dialog-close">&times;</button>
-        </div>
-        <div class="dialog-content">
-            <input type="password" id="api-key-input" placeholder="Enter your API key">
-        </div>
-        <div class="dialog-footer">
-            <button id="save-api-key" class="header-button add-key-btn">Save</button>
-        </div>
-    </div>
-</div>
-
-<script defer src="app.js"></script>
-</body>
-
 </html>

@@ -72,15 +72,16 @@ header {
 }
 
 .header-button {
-    padding: 9px 15px;
+    padding: 0 16px;
+    height: 44px;
     border-radius: 4px;
     border: none;
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
-    background: transparent;
+    background-color: var(--bg-color-200);
     color: var(--text-color);
-    transition: background-color 0.2s;
+    transition: all 0.2s;
 }
 
 .header-button:hover {
@@ -114,23 +115,14 @@ header {
 }
 
 .footer-buttons .header-button:hover {
-    color: var(--text-color);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+    background-color: var(--bg-color-200);
+    border: 1px solid var(--bg-color-400);
 }
 
-.footer-buttons .header-button:before {
-    content: '';
-    position: absolute;
-    bottom: -16px;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: var(--primary);
-    opacity: 0;
-    transition: opacity 0.2s;
-}
-
-.footer-buttons .header-button:hover:before {
-    opacity: 1;
+.footer-buttons .header-button:focus {
+    border: 1px solid var(--primary);
+    outline: none;
 }
 
 .footer-buttons a {
@@ -238,18 +230,18 @@ header {
 }
 
 #send-button {
-    background-color: #f8f9fa;
-    color: #202124;
+    background-color: var(--bg-color-200);
+    color: var(--text-color);
 }
 
 #send-button:hover {
     box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
-    background-color: #f8f9fa;
-    border: 1px solid #dadce0;
+    background-color: var(--bg-color-200);
+    border: 1px solid var(--bg-color-400);
 }
 
 #send-button:focus {
-    border: 1px solid #4285f4;
+    border: 1px solid var(--primary);
     outline: none;
 }
 
@@ -259,7 +251,14 @@ header {
 }
 
 #clear-button:hover {
-    background-color: var(--bg-color-300);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+    background-color: var(--bg-color-200);
+    border: 1px solid var(--bg-color-400);
+}
+
+#clear-button:focus {
+    border: 1px solid var(--primary);
+    outline: none;
 }
 
 .message {
@@ -297,6 +296,7 @@ header {
     border-radius: 8px;
     padding: 24px;
     width: 400px;
+    max-width: 90vw;
     box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.14),
     0 9px 46px 8px rgba(0, 0, 0, 0.12),
     0 11px 15px -7px rgba(0, 0, 0, 0.2);
@@ -323,10 +323,19 @@ header {
     cursor: pointer;
     padding: 4px;
     border-radius: 50%;
+    height: auto;
+    transition: all 0.2s;
 }
 
 .dialog-close:hover {
-    background-color: var(--button-hover);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+    background-color: var(--bg-color-200);
+    border: 1px solid var(--bg-color-400);
+}
+
+.dialog-close:focus {
+    border: 1px solid var(--primary);
+    outline: none;
 }
 
 #api-key-input {
@@ -338,6 +347,10 @@ header {
     margin-bottom: 20px;
     background: var(--bg-color);
     color: var(--text-color);
+    max-width: 100%;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 #api-key-input:focus {
@@ -354,13 +367,17 @@ header {
 #save-api-key {
     background-color: var(--primary);
     color: white;
-    padding: 10px 24px;
-    border-radius: 4px;
     font-weight: 500;
 }
 
 #save-api-key:hover {
-    background-color: #1557b0;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+    opacity: 0.9;
+}
+
+#save-api-key:focus {
+    border: 1px solid var(--primary);
+    outline: none;
 }
 
 #error-message {
@@ -369,4 +386,39 @@ header {
     padding: 8px;
     margin-top: 8px;
     font-size: 14px;
+}
+
+/* Think section styles */
+.think-section {
+    margin: 10px 0;
+    font-family: 'Courier New', monospace;
+    color: var(--text-secondary);
+}
+
+.think-header {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 8px;
+}
+
+.think-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+    transition: transform 0.2s;
+}
+
+.think-icon.expanded {
+    transform: rotate(90deg);
+}
+
+.think-content {
+    padding: 8px;
+    margin-left: 28px;
+    display: none;
+}
+
+.think-content.expanded {
+    display: block;
 }
