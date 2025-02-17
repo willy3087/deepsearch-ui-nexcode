@@ -1,3 +1,29 @@
+// UI Strings
+const UI_STRINGS = {
+    buttons: {
+        send: 'Deep Search',
+        clear: 'Clear',
+        addKey: 'Add API Key',
+        updateKey: 'Update API Key',
+        getKey: 'Get API Key',
+        saveKey: 'Save'
+    },
+    dialog: {
+        title: 'Add API Key',
+        description: 'Enter your API key to access DeepSearch. You can get a key from the Jina AI dashboard.',
+        placeholder: 'Enter your API key'
+    },
+    think: {
+        initial: 'Thinking...',
+        toggle: 'Chain of thoughts (Click to toggle)'
+    },
+    errors: {
+        invalidKey: 'Invalid API key',
+        insufficientTokens: 'Insufficient tokens',
+        rateLimit: 'Rate limit exceeded'
+    }
+};
+
 // DOM Elements - grouped at the top for better organization
 const themeToggle = document.getElementById('theme-toggle');
 const logo = document.getElementById('logo');
@@ -54,7 +80,7 @@ function initializeApiKey() {
   const savedKey = localStorage.getItem('api_key') || '';
   apiKeyInput.value = savedKey;
   getApiKeyBtn.style.display = savedKey ? 'none' : 'block';
-  toggleApiKeyBtn.textContent = savedKey ? 'Update API Key' : 'Add API Key';
+  toggleApiKeyBtn.textContent = savedKey ? UI_STRINGS.buttons.updateKey : UI_STRINGS.buttons.addKey;
   saveApiKeyBtn.disabled = !savedKey.trim();
 }
 
@@ -64,7 +90,7 @@ function handleApiKeySave() {
     localStorage.setItem('api_key', key);
     apiKeyDialog.style.display = 'none';
     getApiKeyBtn.style.display = 'none';
-    toggleApiKeyBtn.textContent = 'Update API Key';
+    toggleApiKeyBtn.textContent = UI_STRINGS.buttons.updateKey;
   }
 }
 
@@ -99,14 +125,36 @@ function createThinkSection(messageDiv) {
 
   const thinkHeader = document.createElement('div');
   thinkHeader.classList.add('think-header');
-  thinkHeader.textContent = 'Thinking... (Click to toggle)';
+
+  const icon = document.createElement('span');
+  icon.classList.add('think-icon');
+  icon.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6A4.997 4.997 0 0 1 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z" fill="currentColor"/>
+  </svg>`;
+
+  const headerText = document.createTextNode(UI_STRINGS.think.initial);
+
+  thinkHeader.appendChild(icon);
+  thinkHeader.appendChild(headerText);
 
   const thinkContent = document.createElement('div');
   thinkContent.classList.add('think-content');
 
-  thinkHeader.addEventListener('click', () => {
-    thinkHeader.classList.toggle('expanded');
-    thinkContent.style.display = thinkContent.style.display === 'none' ? 'block' : 'none';
+  const expanded = localStorage.getItem('think_section_expanded') === 'true';
+  if (expanded) {
+    icon.classList.add('expanded');
+    thinkContent.classList.add('expanded');
+    thinkContent.style.display = 'block';
+  } else {
+    thinkContent.style.display = 'none';
+  }
+
+  thinkHeader.addEventListener('click', (e) => {
+    e.stopPropagation();
+    icon.classList.toggle('expanded');
+    thinkContent.classList.toggle('expanded');
+    thinkContent.style.display = thinkContent.classList.contains('expanded') ? 'block' : 'none';
+    localStorage.setItem('think_section_expanded', thinkContent.classList.contains('expanded'));
   });
 
   thinkSection.appendChild(thinkHeader);
@@ -243,21 +291,21 @@ async function sendMessage() {
       switch (res.status) {
         case 401:
           showErrorWithAction(
-            'Invalid API key',
+            UI_STRINGS.errors.invalidKey,
             'Update API Key',
             () => apiKeyDialog.style.display = 'flex'
           );
           break;
         case 402:
           showErrorWithAction(
-            'Insufficient tokens',
+            UI_STRINGS.errors.insufficientTokens,
             'Purchase More Tokens',
             () => window.open('https://jina.ai/api-dashboard/key-manager', '_blank')
           );
           break;
         case 429:
           showErrorWithAction(
-            'Rate limit exceeded',
+            UI_STRINGS.errors.rateLimit,
             'Add API Key',
             () => apiKeyDialog.style.display = 'flex'
           );
@@ -314,7 +362,7 @@ async function sendMessage() {
                         const thinkContentElement = thinkSectionElement.querySelector('.think-content');
                         thinkContentElement.style.display = 'none';
                         if (thinkHeaderElement) {
-                          thinkHeaderElement.textContent = 'Chain of thoughts (Click to toggle)';
+                          thinkHeaderElement.textContent = UI_STRINGS.think.toggle;
                         }
                       }
                     } else {

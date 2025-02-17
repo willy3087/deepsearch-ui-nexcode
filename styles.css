@@ -72,19 +72,21 @@ header {
 }
 
 .header-button {
-    padding: 9px 15px;
+    padding: 0 16px;
+    height: 44px;
     border-radius: 4px;
-    border: none;
+    border: 1px solid transparent;
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
-    background: transparent;
+    background-color: var(--bg-color-200);
     color: var(--text-color);
-    transition: background-color 0.2s;
+    transition: all 0.2s;
 }
 
 .header-button:hover {
-    background-color: var(--button-hover);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+    border-color: var(--bg-color-400);
 }
 
 .footer-buttons {
@@ -102,35 +104,25 @@ header {
 }
 
 .footer-buttons .header-button {
-    padding: 14px 12px;
     font-size: 14px;
     font-family: arial, sans-serif;
     color: var(--text-secondary);
     text-decoration: none;
     background: transparent;
-    border: none;
+    border: 1px solid transparent;
     cursor: pointer;
     position: relative;
 }
 
 .footer-buttons .header-button:hover {
-    color: var(--text-color);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+    background-color: var(--bg-color-200);
+    border: 1px solid var(--bg-color-400);
 }
 
-.footer-buttons .header-button:before {
-    content: '';
-    position: absolute;
-    bottom: -16px;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: var(--primary);
-    opacity: 0;
-    transition: opacity 0.2s;
-}
-
-.footer-buttons .header-button:hover:before {
-    opacity: 1;
+.footer-buttons .header-button:focus {
+    border: 1px solid var(--primary);
+    outline: none;
 }
 
 .footer-buttons a {
@@ -142,7 +134,14 @@ header {
 }
 
 .get-key-btn {
-    text-decoration: none;
+    background-color: var(--bg-color-200);
+    color: var(--text-color);
+    font-weight: 500;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding: 0 16px;
+    height: 44px;
+    transition: all 0.2s;
 }
 
 #chat-container {
@@ -230,26 +229,25 @@ header {
     padding: 0 16px;
     height: 44px;
     border-radius: 4px;
-    border: none;
+    border: 1px solid transparent;
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: all 0.2s;
 }
 
 #send-button {
-    background-color: #f8f9fa;
-    color: #202124;
+    background-color: var(--bg-color-200);
+    color: var(--text-color);
 }
 
 #send-button:hover {
     box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
-    background-color: #f8f9fa;
-    border: 1px solid #dadce0;
+    border-color: var(--bg-color-400);
 }
 
 #send-button:focus {
-    border: 1px solid #4285f4;
+    border: 1px solid var(--primary);
     outline: none;
 }
 
@@ -259,7 +257,13 @@ header {
 }
 
 #clear-button:hover {
-    background-color: var(--bg-color-300);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+    border-color: var(--bg-color-400);
+}
+
+#clear-button:focus {
+    border: 1px solid var(--primary);
+    outline: none;
 }
 
 .message {
@@ -297,6 +301,7 @@ header {
     border-radius: 8px;
     padding: 24px;
     width: 400px;
+    max-width: 90vw;
     box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.14),
     0 9px 46px 8px rgba(0, 0, 0, 0.12),
     0 11px 15px -7px rgba(0, 0, 0, 0.2);
@@ -317,27 +322,42 @@ header {
 
 .dialog-close {
     background: none;
-    border: none;
+    border: 1px solid transparent;
     color: var(--text-secondary);
     font-size: 24px;
     cursor: pointer;
-    padding: 4px;
+    width: 32px;
+    height: 32px;
+    padding: 0;
     border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
 }
 
 .dialog-close:hover {
-    background-color: var(--button-hover);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+    border-color: var(--bg-color-400);
+    background-color: var(--bg-color-200);
+}
+
+.dialog-close:focus {
+    border: 1px solid var(--primary);
+    outline: none;
 }
 
 #api-key-input {
-    width: 100%;
     padding: 12px;
     border: 1px solid var(--bg-color-400);
     border-radius: 4px;
     font-size: 14px;
-    margin-bottom: 20px;
     background: var(--bg-color);
     color: var(--text-color);
+    max-width: 100%;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 #api-key-input:focus {
@@ -345,22 +365,44 @@ header {
     border-color: var(--primary);
 }
 
+.dialog-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.dialog-description {
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0;
+}
+
 .dialog-footer {
     display: flex;
-    justify-content: flex-end;
-    gap: 8px;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
 }
 
 #save-api-key {
-    background-color: var(--primary);
-    color: white;
-    padding: 10px 24px;
-    border-radius: 4px;
+    background-color: var(--bg-color-200);
+    color: var(--text-color);
     font-weight: 500;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding: 0 16px;
+    height: 44px;
 }
 
 #save-api-key:hover {
-    background-color: #1557b0;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+    border-color: var(--bg-color-400);
+}
+
+#save-api-key:focus {
+    border: 1px solid var(--primary);
+    outline: none;
 }
 
 #error-message {
@@ -369,4 +411,60 @@ header {
     padding: 8px;
     margin-top: 8px;
     font-size: 14px;
+}
+
+/* Think section styles */
+.think-section {
+    margin: 16px 0;
+    color: var(--text-secondary);
+    background: var(--bg-color-200);
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.08);
+    transition: box-shadow 0.2s;
+}
+
+.think-section:hover {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.16), 0 2px 3px rgba(0, 0, 0, 0.12);
+}
+
+.think-header {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 8px;
+    font-weight: 500;
+    color: var(--text-color);
+    transition: background-color 0.2s;
+    border-radius: 4px;
+}
+
+.think-header:hover {
+    background-color: var(--bg-color-300);
+}
+
+.think-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 12px;
+    transition: transform 0.2s;
+    display: flex;
+    align-items: center;
+    color: var(--text-secondary);
+}
+
+.think-icon.expanded {
+    transform: rotate(90deg);
+}
+
+.think-content {
+    padding: 12px;
+    display: none;
+    border-left: 2px solid var(--bg-color-400);
+    margin-top: 4px;
+    font-family: 'Roboto Mono', 'Courier New', monospace;
+}
+
+.think-content.expanded {
+    display: block;
 }
