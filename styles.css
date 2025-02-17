@@ -1,38 +1,40 @@
 :root {
     --bg-color: #121212;
+
+    --bg-color-200: #323838;
+    --bg-color-300: #484e4e;
+    --bg-color-400: #5e6363;
+    --primary: #81e3ee;
+    --negative: #FB767B;
+    --disabled: #ccc;
     --text-color: #fff;
-    --message-bg: #323838;
-    --input-bg: #323838;
-    --button-primary-bg: #81e3ee;
-    --button-primary-text: #000;
-    --button-secondary-bg: #484e4e;
-    --button-secondary-text: #fff;
-    --button-disabled-bg: #ccc;
-    --code-bg: #484e4e;
-    --link-color: #81e3ee;
-    --text-error-color: #FB767B;
-    --border-color: #323838;
-}
+    --text-color-black: #000;
 
-[data-theme="light"] {
-    --bg-color: #ffffff;
-    --text-color: #000000;
-    --message-bg: #f0f0f0;
-    --input-bg: #ffffff;
-    --input-border: #cccccc;
-    --button-primary-bg: #81e3ee;
-    --button-primary-text: #000;
-    --button-secondary-bg: #484e4e;
-    --button-secondary-text: #fff;
-    --button-disabled-bg: #ccc;
-    --code-bg: #f5f5f5;
-    --api-input-bg: #ffffff;
-    --link-color: #81e3ee;
-    --text-error-color: #FB767B;
-    --border-color: #ccc;
-}
+    --message-bg: var(--bg-color-200);
+    --input-bg: var(--bg-color-200);
+    --code-bg: var(--bg-color-300);
 
-body {
+    --button-primary-bg: var(--primary);
+    --button-primary-text: var(--text-color-black);
+    --button-secondary-bg: var(--bg-color-300);
+    --button-secondary-text: var(--text-color);
+    --button-disabled-bg: var(--disabled);
+
+    --link-color: var(--primary);
+    --text-error-color: var(--negative);
+    --border-color: var(--bg-color-300);
+  }
+
+  [data-theme="light"] {
+    --bg-color: #fff;
+    --bg-color-200: #f0f0f0;
+    --bg-color-300: #e6e6e6;
+    --bg-color-400: #d9d9d9;
+    --text-color: #000;
+
+  }
+
+  body {
     font-family: sans-serif;
     margin: 0;
     /* Remove body margin */
@@ -42,18 +44,18 @@ body {
     background-color: var(--bg-color);
     color: var(--text-color);
     /* Prevent body scroll */
-}
+  }
 
-#chat-app {
+  #chat-app {
     position: relative;
     height: 100%;
     /* Occupy full body height */
     padding: 0 20px;
     display: flex;
     flex-direction: column;
-}
+  }
 
-#chat-container {
+  #chat-container {
     width: 100%;
     padding: 10px;
     margin-bottom: 60px;
@@ -62,9 +64,9 @@ body {
     /* Enable vertical scroll */
     flex-grow: 1;
     /* Take up available space */
-}
+  }
 
-.message {
+  .message {
     margin-bottom: 5px;
     padding: 20px;
     margin-top: 20px;
@@ -77,32 +79,32 @@ body {
     background-color: var(--message-bg);
     color: var(--text-color);
     /* Handle long words */
-}
+  }
 
-.user-message {
+  .user-message {
     /* background-color: #DCF8C6; */
     text-align: right;
     align-self: flex-end;
     /* Align to the right in the chat container */
-}
+  }
 
-.assistant-message {
+  .assistant-message {
     /* background-color: #ECE5DD; */
     text-align: left;
     align-self: flex-start;
     /* Align to the left in the chat container */
-}
+  }
 
-#input-area {
+  #input-area {
     display: flex;
     position: absolute;
     bottom: 20px;
     left: 20px;
     right: 20px;
     /* Align with chat app padding */
-}
+  }
 
-#message-input {
+  #message-input {
     flex-grow: 1;
     padding: 8px;
     border: 1px solid var(--input-border);
@@ -110,24 +112,24 @@ body {
     background-color: var(--input-bg);
     color: var(--text-color);
     height: 32px;
-}
+  }
 
-#send-button {
+  #send-button {
     padding: 8px 15px;
-    background-color: var(--button-primary-bg);
+    background-color: var( --button-primary-bg);
     margin-left: 8px;
     color: var(--button-primary-text);
     border: none;
     border-radius: 5px;
     cursor: pointer;
-}
+  }
 
-#send-button:disabled {
+  #send-button:disabled {
     background-color: var(--button-disabled-bg);
     cursor: not-allowed;
-}
+  }
 
-#clear-button {
+  #clear-button {
     padding: 8px 15px;
     background-color: var(--text-error-color);
     /* Red color */
@@ -136,68 +138,68 @@ body {
     border-radius: 5px;
     cursor: pointer;
     margin-left: 8px;
-}
+  }
 
-#error-message {
+  #error-message {
     color: var(--text-error-color);
     margin-top: 5px;
     display: none;
-}
+  }
 
-/* Styles for the think section */
-.think-section {
+  /* Styles for the think section */
+  .think-section {
     /* border: 1px solid #ccc; */
     margin-top: 5px;
     padding: 5px;
     border-radius: 3px;
-}
+  }
 
-.think-header {
+  .think-header {
     cursor: pointer;
     font-weight: bold;
     margin-bottom: 5px;
-}
+  }
 
-.think-content {
+  .think-content {
     display: none;
     /* Initially hidden */
     color: #929595;
     padding: 5px;
     font-family: monospace;
     line-height: 1.25;
-}
+  }
 
-/* Basic Markdown Styling */
-.markdown p {
+  /* Basic Markdown Styling */
+  .markdown p {
     margin-bottom: 0.5em;
-}
+  }
 
-.markdown h1 {
+  .markdown h1 {
     font-size: 1.5em;
     margin-bottom: 0.75em;
     border-bottom: 1px solid var(--border-color);
-}
+  }
 
-.markdown h2 {
+  .markdown h2 {
     font-size: 1.2em;
     margin-bottom: 0.6em;
-}
+  }
 
-.markdown pre code {
+  .markdown pre code {
     padding: 0.75em;
-}
+  }
 
-.markdown ul,
-.markdown ol {
+  .markdown ul,
+  .markdown ol {
     padding-left: 20px;
     margin-bottom: 0.5em;
-}
+  }
 
-.markdown a {
+  .markdown a {
     color: var(--link-color);
-}
+  }
 
-.markdown code {
+  .markdown code {
     white-space: pre-line;
     font-size: 14px;
     display: inline-block;
@@ -205,88 +207,87 @@ body {
     background-color: var(--code-bg);
     border-radius: 3px;
     font-family: monospace;
-}
+  }
 
-.markdown table {
+  .markdown table {
     display: block;
     width: 100%;
     transform: translateZ(0);
     overflow: auto;
     border-collapse: collapse;
     margin: 1em 0;
-}
+  }
 
-.markdown #footnote-label {
+  .markdown #footnote-label {
     display: none;
-}
+  }
 
-/* Add flexbox to chat container */
-#chat-container {
+  /* Add flexbox to chat container */
+  #chat-container {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     /* Align items to the start horizontally */
-}
-
-header {
+  }
+  header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 10px 0;
-}
+  }
 
-#logo {
+  #logo {
     height: 32px;
-}
+  }
 
-.header-buttons {
+  .header-buttons {
     display: flex;
     gap: 10px;
-}
+  }
 
-.header-button {
+  .header-button {
     padding: 8px 15px;
     border-radius: 4px;
     border: none;
     cursor: pointer;
-}
+  }
 
-.header-button:disabled {
+  .header-button:disabled {
     background-color: var(--button-disabled-bg);
     cursor: not-allowed;
-}
+  }
 
-.get-key-btn {
+  .get-key-btn {
     background: var(--button-secondary-bg);
     color: var(--button-secondary-text);
     text-decoration: none;
-}
+  }
 
-.add-key-btn, save-api-key {
+  .add-key-btn, save-api-key {
     background: var(--button-primary-bg);
     color: var(--button-primary-text);
-}
+  }
 
-#api-key-input {
+  #api-key-input {
     padding: 8px;
     border: 1px solid var(--border-color);
     border-radius: 4px;
-    background: var(--input-bg);
+    background: var(--bg-color-300);
     color: var(--text-color);
     width: 300px;
-}
+  }
 
-#theme-toggle {
+  #theme-toggle {
     padding: 8px 15px;
     background-color: var(--button-secondary-bg);
     color: var(--button-secondary-text);
     border: none;
     border-radius: 4px;
     cursor: pointer;
-}
+  }
 
-/* Add these new styles for the dialog */
-.dialog-overlay {
+  /* Add these new styles for the dialog */
+  .dialog-overlay {
     display: none;
     position: fixed;
     top: 0;
@@ -297,49 +298,49 @@ header {
     z-index: 100;
     align-items: center;
     justify-content: center;
-}
+  }
 
-.dialog {
-    background: var(--bg-color);
+  .dialog {
+    background: var(--bg-color-200);
     padding: 20px;
     border-radius: 8px;
     min-width: 300px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
+  }
 
-.dialog-header {
+  .dialog-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 15px;
-}
+  }
 
-.dialog-title {
+  .dialog-title {
     font-size: 1.2em;
     font-weight: bold;
     color: var(--text-color);
-}
+  }
 
-.dialog-close {
+  .dialog-close {
     background: none;
     border: none;
     font-size: 1.5em;
     cursor: pointer;
     color: var(--text-color);
     padding: 0;
-}
+  }
 
-.dialog-content {
+  .dialog-content {
     margin-bottom: 20px;
-}
+  }
 
-.dialog-footer {
+  .dialog-footer {
     display: flex;
     justify-content: flex-end;
     gap: 10px;
-}
-
-.error-message button {
+  }
+  
+  .error-message button {
     padding: 8px 15px;
     border-radius: 4px;
     border: none;
@@ -348,4 +349,4 @@ header {
     background-color: var(--button-primary-bg);
     color: var(--button-primary-text);
     display: block;
-}
+  }
