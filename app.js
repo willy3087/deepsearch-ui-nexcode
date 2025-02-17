@@ -57,7 +57,7 @@ function initializeTheme() {
   const savedTheme = localStorage.getItem('theme') || 'dark';
   document.documentElement.setAttribute('data-theme', savedTheme);
   // Show the opposite icon of current theme to indicate what you'll switch to
-  themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+  themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌒';
   updateLogo(savedTheme);
 }
 
@@ -72,7 +72,7 @@ themeToggle.addEventListener('click', () => {
   document.documentElement.setAttribute('data-theme', newTheme);
   localStorage.setItem('theme', newTheme);
   // Show the opposite icon of new theme to indicate what you'll switch to next
-  themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+  themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌒';
   updateLogo(newTheme);
 });
 
