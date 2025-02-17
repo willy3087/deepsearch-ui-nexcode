@@ -475,7 +475,7 @@ header {
     transition: transform 0.2s ease;
 }
 
-.think-header:has(.think-icon.expanded):after {
+.think-icon.expanded + .think-header:after {
     transform: rotate(90deg);
 }
 

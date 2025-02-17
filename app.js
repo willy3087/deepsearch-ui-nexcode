@@ -15,7 +15,8 @@ const UI_STRINGS = {
     },
     think: {
         initial: 'Thinking...',
-        toggle: 'Chain of thoughts'
+        toggle: 'Chain of thoughts',
+        loading: 'Loading...'
     },
     errors: {
         invalidKey: 'Invalid API key',
@@ -172,7 +173,7 @@ function displayMessage(role, content) {
   messageDiv.classList.add('message', `${role}-message`);
 
   if (role === 'assistant') {
-    messageDiv.innerHTML = '<div class="loading-indicator">Loading...</div>';
+    messageDiv.innerHTML = `<div class="loading-indicator">${UI_STRINGS.think.loading}</div>`;
   } else {
     messageDiv.textContent = content;
   }
