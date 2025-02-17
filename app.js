@@ -116,11 +116,16 @@ function createThinkSection(messageDiv) {
   if (expanded) {
     icon.classList.add('expanded');
     thinkContent.classList.add('expanded');
+    thinkContent.style.display = 'block';
+  } else {
+    thinkContent.style.display = 'none';
   }
 
-  thinkHeader.addEventListener('click', () => {
+  thinkHeader.addEventListener('click', (e) => {
+    e.stopPropagation();
     icon.classList.toggle('expanded');
     thinkContent.classList.toggle('expanded');
+    thinkContent.style.display = thinkContent.classList.contains('expanded') ? 'block' : 'none';
     localStorage.setItem('think_section_expanded', thinkContent.classList.contains('expanded'));
   });
 
