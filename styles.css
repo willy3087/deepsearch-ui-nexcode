@@ -463,20 +463,34 @@ header {
     background-color: var(--bg-color-300);
 }
 
-.header-content:after {
+.think-wrapper {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.think-header {
+    position: relative;
+    padding-right: 24px;
+    flex: 1;
+}
+
+.think-header:after {
     content: '';
-    display: inline-block;
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
     width: 0;
     height: 0;
-    margin-left: 8px;
     border-left: 5px solid var(--text-secondary);
     border-top: 5px solid transparent;
     border-bottom: 5px solid transparent;
     transition: transform 0.2s ease;
 }
 
-.think-header:has(.think-icon.expanded) .header-content:after {
-    transform: rotate(90deg);
+.think-icon.expanded + .think-header:after {
+    transform: translateY(-50%) rotate(90deg);
 }
 
 .think-icon {
