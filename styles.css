@@ -326,9 +326,13 @@ header {
     color: var(--text-secondary);
     font-size: 24px;
     cursor: pointer;
-    padding: 4px;
+    width: 32px;
+    height: 32px;
+    padding: 0;
     border-radius: 50%;
-    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: all 0.2s;
 }
 
@@ -368,10 +372,18 @@ header {
     gap: 16px;
 }
 
+.dialog-description {
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0;
+}
+
 .dialog-footer {
     display: flex;
-    justify-content: flex-end;
-    gap: 8px;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
 }
 
 #save-api-key {
@@ -404,9 +416,18 @@ header {
 
 /* Think section styles */
 .think-section {
-    margin: 10px 0;
-    font-family: 'Courier New', monospace;
+    margin: 16px 0;
+    font-family: 'Roboto Mono', 'Courier New', monospace;
     color: var(--text-secondary);
+    background: var(--bg-color-200);
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.08);
+    transition: box-shadow 0.2s;
+}
+
+.think-section:hover {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.16), 0 2px 3px rgba(0, 0, 0, 0.12);
 }
 
 .think-header {
@@ -414,13 +435,24 @@ header {
     align-items: center;
     cursor: pointer;
     padding: 8px;
+    font-weight: 500;
+    color: var(--text-color);
+    transition: background-color 0.2s;
+    border-radius: 4px;
+}
+
+.think-header:hover {
+    background-color: var(--bg-color-300);
 }
 
 .think-icon {
     width: 20px;
     height: 20px;
-    margin-right: 8px;
+    margin-right: 12px;
     transition: transform 0.2s;
+    display: flex;
+    align-items: center;
+    color: var(--text-secondary);
 }
 
 .think-icon.expanded {
@@ -428,9 +460,11 @@ header {
 }
 
 .think-content {
-    padding: 8px;
-    margin-left: 28px;
+    padding: 12px;
+    margin-left: 32px;
     display: none;
+    border-left: 2px solid var(--bg-color-400);
+    margin-top: 4px;
 }
 
 .think-content.expanded {
