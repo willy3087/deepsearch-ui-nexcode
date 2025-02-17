@@ -96,7 +96,7 @@ header {
     right: 0;
     display: flex;
     align-items: center;
-    gap: 27px;
+    gap: 10px;
     padding: 5px 10px;
     background: var(--bg-color-200);
     border-top: 1px solid var(--bg-color-400);
