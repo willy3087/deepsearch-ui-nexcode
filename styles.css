@@ -463,7 +463,7 @@ header {
     background-color: var(--bg-color-300);
 }
 
-.think-header:after {
+.header-content:after {
     content: '';
     display: inline-block;
     width: 0;
@@ -475,7 +475,7 @@ header {
     transition: transform 0.2s ease;
 }
 
-.think-icon.expanded + .think-header:after {
+.think-header:has(.think-icon.expanded) .header-content:after {
     transform: rotate(90deg);
 }
 
