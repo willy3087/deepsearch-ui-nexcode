@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 232 100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Dots with perfect 15px radius -->
+  <circle id="j-dot" cx="15" cy="84.5" r="15" fill="#FFFFFF"/>
+  <circle id="top-dot" cx="96" cy="15" r="15" fill="#FFFFFF"/>
+
+  <!-- Letters with improved visual spacing -->
+  <!-- Shifted I slightly left for better optical balance -->
+  <path id="letter-i" fill="#FFFFFF" d="M81 40c0-2 1.5-3.6 3.6-3.6h23.4c2 0 3.6 1.6 3.6 3.6v41c0 2-1.6 3.6-3.6 3.6H84.6c-2 0-3.6-1.6-3.6-3.6V40z"/>
+
+  <path id="letter-j" fill="#FFFFFF" d="M61.5 36.35c2 0 3.6 1.6 3.6 3.6v29.3c0 16.7-13.5 30.3-30 30.5V69.3l-.1-29.4c0-2 1.6-3.6 3.6-3.6h23.3z"/>
+
+  <!-- Adjusted N position to maintain proper spacing from shifted I -->
+  <path id="letter-n" fill="#FFFFFF" d="M128.5 39.8c0-2 1.6-3.6 3.6-3.6h13.3l.5.1c15 .2 27.2 12.3 27.6 27.3v17.3c0 2-1.6 3.6-3.6 3.6h-37.8c-2 0-3.6-1.6-3.6-3.6V39.8z"/>
+
+  <path id="letter-a" fill="#FFFFFF" d="M207.2 84h-.2c-12.6-.7-22.5-11.2-22.5-24 0-13.3 10.8-24.1 24.1-24.1 12.8 0 23.3 10 24 22.6h.1V80.4c0 2-1.6 3.6-3.6 3.6h-21.9z"/>
+</svg>
