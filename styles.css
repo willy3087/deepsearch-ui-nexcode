@@ -348,7 +348,6 @@ header {
 }
 
 #api-key-input {
-    width: 100%;
     padding: 12px;
     border: 1px solid var(--bg-color-400);
     border-radius: 4px;
@@ -417,7 +416,6 @@ header {
 /* Think section styles */
 .think-section {
     margin: 16px 0;
-    font-family: 'Roboto Mono', 'Courier New', monospace;
     color: var(--text-secondary);
     background: var(--bg-color-200);
     border-radius: 8px;
@@ -461,10 +459,10 @@ header {
 
 .think-content {
     padding: 12px;
-    margin-left: 32px;
     display: none;
     border-left: 2px solid var(--bg-color-400);
     margin-top: 4px;
+    font-family: 'Roboto Mono', 'Courier New', monospace;
 }
 
 .think-content.expanded {
