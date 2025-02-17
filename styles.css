@@ -169,7 +169,6 @@ header {
     right: 0;
     padding: 20px;
     align-items: center;
-    background: var(--bg-color);
     box-shadow: 0 2px 5px var(--input-focus-shadow); /* Changed from -2px to 2px to cast shadow downward */
     display: flex;
     gap: 10px;
