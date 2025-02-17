@@ -10,6 +10,7 @@
     --text-secondary: #5f6368;
     --button-hover: #f8f9fa;
     --button-active: #e8f0fe;
+    --input-focus-shadow: rgba(32, 33, 36, 0.28);
 }
 
 [data-theme="dark"] {
@@ -21,6 +22,7 @@
     --text-secondary: #969ba1;
     --button-hover: #303134;
     --button-active: #303134;
+    --input-focus-shadow: rgba(232, 234, 237, 0.16);
 }
 
 body {
@@ -221,7 +223,7 @@ header {
 
 #message-input:focus {
     outline: none;
-    box-shadow: 0 1px 6px rgba(32, 33, 36, 0.28);
+    box-shadow: 0 1px 6px var(--input-focus-shadow);
     border-color: transparent;
 }
 
@@ -451,6 +453,22 @@ header {
 
 .think-header:hover {
     background-color: var(--bg-color-300);
+}
+
+.think-header:after {
+    content: '';
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 8px;
+    border-left: 5px solid var(--text-secondary);
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    transition: transform 0.2s ease;
+}
+
+.think-header:has(.think-icon.expanded):after {
+    transform: rotate(90deg);
 }
 
 .think-icon {

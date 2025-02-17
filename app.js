@@ -15,7 +15,7 @@ const UI_STRINGS = {
     },
     think: {
         initial: 'Thinking...',
-        toggle: 'Chain of thoughts (Click to toggle)'
+        toggle: 'Chain of thoughts'
     },
     errors: {
         invalidKey: 'Invalid API key',
