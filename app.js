@@ -199,6 +199,7 @@ function displayMessage(role, content) {
 
   messageDiv.style.textAlign = role === 'user' ? 'right' : 'left';
   chatContainer.appendChild(messageDiv);
+  updateEmptyState();
   scrollToBottom();
   return messageDiv;
 }
@@ -258,10 +259,22 @@ function renderMarkdown(content) {
 }
 
 // Message handling functions
+// Update empty state class
+function updateEmptyState() {
+  const chatApp = document.getElementById('chat-app');
+  if (chatContainer.innerHTML.trim() === '') {
+    chatApp.classList.add('empty-chat');
+  } else {
+    chatApp.classList.remove('empty-chat');
+  }
+}
+
+
 function clearMessages() {
   chatContainer.innerHTML = '';
   existingMessages = [];
   abortController?.abort();
+  updateEmptyState();
 }
 
 async function sendMessage() {
@@ -479,6 +492,10 @@ async function sendMessage() {
     sendButton.disabled = false;
   }
 }
+
+// Initialize empty state
+updateEmptyState();
+
 
 // Event Listeners
 sendButton.addEventListener('click', sendMessage);
