@@ -192,6 +192,11 @@ header {
     #chat-container {
         margin-left: 25px;
     }
+
+    #logo {
+        width: 50px;
+        margin-right: 10px;
+    }
 }
 
 /* Remove margin when empty */
@@ -236,6 +241,7 @@ header {
 #chat-app:has(#chat-container:empty) #send-button {
     margin: 0;
     width: auto;
+    display: unset;
 }
 
 /* Hide clear button when chat is empty */
@@ -283,6 +289,7 @@ header {
 #send-button {
     background-color: var(--bg-color-200);
     color: var(--text-color);
+    display: none;
 }
 
 #send-button:hover {

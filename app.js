@@ -4,7 +4,7 @@ const UI_STRINGS = {
         send: 'Deep Search',
         clear: 'Clear',
         addKey: 'Upgrade',
-        updateKey: 'Update API Key',
+        updateKey: 'Update Key',
         getKey: 'Get API Key',
         saveKey: 'Save',
         purchase: 'Purchase More Tokens',
@@ -17,9 +17,9 @@ const UI_STRINGS = {
         loading: 'Loading...'
     },
     errors: {
-        invalidKey: 'Invalid API key',
-        insufficientTokens: 'Insufficient tokens',
-        rateLimit: 'Rate limit exceeded'
+        invalidKey: 'Invalid API key. Please update your key by click the "Upgrade" button".',
+        insufficientTokens: 'Insufficient tokens in your API key. Please purchase more tokens or swap to another key.',
+        rateLimit: 'You have reached the rate limit. Please try again later. You can also upgrade to a higher plan by clicking the "Upgrade" button.'
     }
 };
 
