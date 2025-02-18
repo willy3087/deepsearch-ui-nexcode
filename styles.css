@@ -11,6 +11,9 @@
     --button-hover: #f8f9fa;
     --button-active: #e8f0fe;
     --input-focus-shadow: rgba(32, 33, 36, 0.28);
+    --title-size: 24px;
+    --subtitle-size: 16px;
+    --body-size: 14px;
 }
 
 [data-theme="dark"] {
@@ -37,15 +40,24 @@ body {
 #chat-app {
     position: relative;
     height: 100%;
-    max-width: 800px;
-    margin: 0 auto;
     display: flex;
     flex-direction: column;
+}
+
+main {
+    max-width: 868px;
+    width: 100%;
+    height: calc(100% - 140px);
+    display: flex;
+    margin: 86px 0 0 125px;
 }
 
 /* Center layout when chat is empty */
 #chat-app:has(#chat-container:empty) {
     justify-content: center;
+}
+#chat-app:has(#chat-container:empty) main {
+    display: none;
 }
 
 header {
@@ -57,11 +69,11 @@ header {
 /* Center logo when chat is empty */
 #chat-app:has(#chat-container:empty) #logo {
     margin: 0 auto;
-    height: 64px;
+    width: 150px;
 }
 
 #logo {
-    height: 32px;
+    width: 75px;
     margin-right: 20px;
 }
 
@@ -73,12 +85,12 @@ header {
     gap: 8px;
 }
 
-.header-button {
+.header-button, .action-button {
     padding: 0 16px;
     height: 44px;
     border-radius: 4px;
     border: 1px solid transparent;
-    font-size: 14px;
+    font-size: var(--body-size);
     font-weight: 500;
     cursor: pointer;
     background-color: var(--bg-color-200);
@@ -86,9 +98,14 @@ header {
     transition: all 0.2s;
 }
 
-.header-button:hover {
+.header-button:hover, .action-button:hover {
     box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
     border-color: var(--bg-color-400);
+}
+
+.action-button {
+    border: 1px solid rgba(0, 0, 0, .1);
+    margin-left: 8px;
 }
 
 .footer-buttons {
@@ -106,14 +123,13 @@ header {
 }
 
 .footer-buttons .header-button {
-    font-size: 14px;
+    font-size: var(--body-size);
     font-family: arial, sans-serif;
     color: var(--text-secondary);
     text-decoration: none;
     background: transparent;
     border: 1px solid transparent;
     cursor: pointer;
-    position: relative;
 }
 
 .footer-buttons .header-button:hover {
@@ -148,11 +164,11 @@ header {
 
 #chat-container {
     flex-grow: 1;
-    overflow-y: auto;
-    padding: 20px 0;
     position: relative;
-    top: 90px; /* Same as input-area height */
+    max-height: 100%;
+    overflow-y: auto;
     min-height: 50px; /* Ensure container has height even when empty */
+    padding: 20px 20px 20px 0;
 }
 
 /* Remove margin when empty */
@@ -216,7 +232,7 @@ header {
     background-repeat: no-repeat;
     background-position: 16px center;
     color: var(--text-color);
-    font-size: 16px;
+    font-size: var(--subtitle-size);
     transition: box-shadow 0.2s;
 }
 
@@ -231,7 +247,7 @@ header {
     height: 44px;
     border-radius: 4px;
     border: 1px solid transparent;
-    font-size: 14px;
+    font-size: var(--body-size);
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s;
@@ -325,7 +341,7 @@ header {
     background: none;
     border: 1px solid transparent;
     color: var(--text-secondary);
-    font-size: 24px;
+    font-size: var(--title-size);
     cursor: pointer;
     width: 32px;
     height: 32px;
@@ -352,7 +368,7 @@ header {
     padding: 12px;
     border: 1px solid var(--bg-color-400);
     border-radius: 4px;
-    font-size: 14px;
+    font-size: var(--body-size);
     background: var(--bg-color);
     color: var(--text-color);
     max-width: 100%;
@@ -374,7 +390,7 @@ header {
 
 .dialog-description {
     color: var(--text-secondary);
-    font-size: 14px;
+    font-size: var(--body-size);
     line-height: 1.5;
     margin: 0;
 }
@@ -411,7 +427,8 @@ header {
     text-align: center;
     padding: 8px;
     margin-top: 8px;
-    font-size: 14px;
+    font-size: var(--body-size);
+    display: none;
 }
 
 /* Think section styles */

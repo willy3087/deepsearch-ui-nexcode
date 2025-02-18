@@ -6,7 +6,8 @@ const UI_STRINGS = {
         addKey: 'Add API Key',
         updateKey: 'Update API Key',
         getKey: 'Get API Key',
-        saveKey: 'Save'
+        saveKey: 'Save',
+        purchase: 'Purchase More Tokens',
     },
     dialog: {
         title: 'Add API Key',
@@ -205,6 +206,7 @@ function showErrorWithAction(message, buttonText, onClick) {
 
   const actionButton = document.createElement('button');
   actionButton.textContent = buttonText;
+  actionButton.className = 'action-button';
   actionButton.addEventListener('click', onClick);
 
   errorContainer.appendChild(errorText);
@@ -295,21 +297,21 @@ async function sendMessage() {
         case 401:
           showErrorWithAction(
             UI_STRINGS.errors.invalidKey,
-            'Update API Key',
+            UI_STRINGS.buttons.updateKey,
             () => apiKeyDialog.style.display = 'flex'
           );
           break;
         case 402:
           showErrorWithAction(
             UI_STRINGS.errors.insufficientTokens,
-            'Purchase More Tokens',
-            () => window.open('https://jina.ai/api-dashboard/key-manager', '_blank')
+            UI_STRINGS.buttons.purchase,
+            () => window.open('https://jina.ai/api-dashboard/key-manager?login=true', '_blank')
           );
           break;
         case 429:
           showErrorWithAction(
             UI_STRINGS.errors.rateLimit,
-            'Add API Key',
+            UI_STRINGS.buttons.addKey,
             () => apiKeyDialog.style.display = 'flex'
           );
           break;
