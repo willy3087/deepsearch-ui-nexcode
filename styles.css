@@ -85,7 +85,7 @@ header {
     gap: 8px;
 }
 
-.header-button, .action-button {
+.header-button, .action-button, .copy-button {
     padding: 0 16px;
     height: 44px;
     border-radius: 4px;
@@ -98,7 +98,13 @@ header {
     transition: all 0.2s;
 }
 
-.header-button:hover, .action-button:hover {
+.buttons-container {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.header-button:hover, .action-button:hover, .copy-button:hover {
     box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
     border-color: var(--bg-color-400);
 }
@@ -411,6 +417,7 @@ header {
     border-radius: 4px;
     padding: 0 16px;
     height: 44px;
+    margin-left: auto
 }
 
 #save-api-key:hover {

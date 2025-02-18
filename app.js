@@ -8,6 +8,8 @@ const UI_STRINGS = {
         getKey: 'Get API Key',
         saveKey: 'Save',
         purchase: 'Purchase More Tokens',
+        copy: 'Copy',
+        copied: '✓ Copied!'
     },
     dialog: {
         title: 'Add API Key',
@@ -160,6 +162,27 @@ function createThinkSection(messageDiv) {
 
 function scrollToBottom() {
   mainContainer.scrollTop = mainContainer.scrollHeight;
+}
+
+function createCopyButton(content) {
+  const buttonContainer = document.createElement('div');
+  buttonContainer.classList.add('buttons-container');
+  const copyButton = document.createElement('button');
+  copyButton.classList.add('copy-button');
+  copyButton.innerHTML = UI_STRINGS.buttons.copy;
+  buttonContainer.appendChild(copyButton);
+  
+  copyButton.addEventListener('click', () => {
+    navigator.clipboard.writeText(content)
+      .then(() => {
+        copyButton.innerHTML = UI_STRINGS.buttons.copied;
+        setTimeout(() => {
+          copyButton.innerHTML = UI_STRINGS.buttons.copy;
+        }, 3000);
+      });
+  });
+
+  return buttonContainer;
 }
 
 function displayMessage(role, content) {
@@ -406,6 +429,8 @@ async function sendMessage() {
 
       if (markdownContent) {
         markdownDiv.innerHTML = renderMarkdown(markdownContent);
+        const copyButton = createCopyButton(markdownContent);
+        assistantMessageDiv.appendChild(copyButton);
       }
     } else {
       const jsonResult = await res.json();
