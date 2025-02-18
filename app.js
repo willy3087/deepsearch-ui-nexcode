@@ -29,6 +29,7 @@ const UI_STRINGS = {
 // DOM Elements - grouped at the top for better organization
 const themeToggle = document.getElementById('theme-toggle');
 const logo = document.getElementById('logo');
+const mainContainer = document.getElementById('main-container');
 const chatContainer = document.getElementById('chat-container');
 const messageInput = document.getElementById('message-input');
 const sendButton = document.getElementById('send-button');
@@ -158,7 +159,7 @@ function createThinkSection(messageDiv) {
 }
 
 function scrollToBottom() {
-  chatContainer.scrollTop = chatContainer.scrollHeight;
+  mainContainer.scrollTop = mainContainer.scrollHeight;
 }
 
 function displayMessage(role, content) {

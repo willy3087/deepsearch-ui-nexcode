@@ -45,19 +45,18 @@ body {
     flex-direction: column;
 }
 
-main {
-    max-width: 868px;
+#main-container {
     width: 100%;
     height: calc(100% - 140px);
-    display: flex;
-    margin: 86px 0 0 125px;
+    overflow-y: auto;
+    margin-top: 86px;
 }
 
 /* Center layout when chat is empty */
 #chat-app:has(#chat-container:empty) {
     justify-content: center;
 }
-#chat-app:has(#chat-container:empty) main {
+#chat-app:has(#chat-container:empty) #main-container {
     display: none;
 }
 
@@ -166,10 +165,10 @@ header {
 #chat-container {
     flex-grow: 1;
     position: relative;
-    max-height: 100%;
-    overflow-y: auto;
     min-height: 50px; /* Ensure container has height even when empty */
     padding: 20px 20px 20px 0;
+    max-width: 868px;
+    margin-left: 125px;
 }
 
 /* Remove margin when empty */
