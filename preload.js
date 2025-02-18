@@ -6,7 +6,7 @@ function initializeAppearance() {
   const themeLightIcon = document.getElementById('light-icon');
   const themeDarkIcon = document.getElementById('dark-icon');
   if (logo) {
-    logo.src = savedTheme === 'dark' ? 'Jina - Dark.svg' : 'Jina - Light.svg';
+    logo.src = savedTheme === 'dark' ? 'jina-dark.svg' : 'jina-light.svg';
   }
   if (themeLightIcon) {
     themeLightIcon.style.display = savedTheme === 'dark' ? 'block' : 'none';

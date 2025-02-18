@@ -62,7 +62,7 @@ themeToggle.addEventListener('click', () => {
 
   themeLightIcon.style.display = newTheme === 'dark' ? 'block' : 'none';
   themeDarkIcon.style.display = newTheme === 'light' ? 'block' : 'none';
-  logo.src = `Jina - ${newTheme === 'dark' ? 'Dark' : 'Light'}.svg`;
+  logo.src = `jina-${newTheme}.svg`;
   
   const hlTheme = newTheme === 'light' ? 'vs' : 'vs2015';
   const hlThemeElement = document.getElementById('hljs-theme');
