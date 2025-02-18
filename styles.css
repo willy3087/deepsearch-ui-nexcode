@@ -581,8 +581,17 @@ header {
     display: none;
 }
 
+.markdown {
+    padding: 1rem;
+}
+
+.markdown .footnotes-sep {
+    margin-top: 3rem;
+    border-top: 1px solid var(--bg-color-400);
+}
+
 .markdown a {
- color: var(--link-color);
+ color: var(--primary);
 }
 
 .markdown .footnotes {
