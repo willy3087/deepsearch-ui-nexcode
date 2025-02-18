@@ -14,6 +14,7 @@
     --title-size: 24px;
     --subtitle-size: 16px;
     --body-size: 14px;
+    --secondary-size: 12.5px;
 }
 
 [data-theme="dark"] {
@@ -104,7 +105,7 @@ header {
 }
 
 .action-button {
-    border: 1px solid rgba(0, 0, 0, .1);
+    border: 1px solid var(--bg-color-400);
     margin-left: 8px;
 }
 
@@ -189,6 +190,7 @@ header {
     display: flex;
     gap: 10px;
     transition: all 0.3s ease;
+    z-index: 99;
 }
 
 /* Adjust input area when chat is empty */
@@ -490,6 +492,7 @@ header {
     position: relative;
     padding-right: 24px;
     flex: 1;
+    transition: all 0.2s ease;
 }
 
 .think-header:after {
@@ -503,35 +506,43 @@ header {
     border-left: 5px solid var(--text-secondary);
     border-top: 5px solid transparent;
     border-bottom: 5px solid transparent;
-    transition: transform 0.2s ease;
+    transition: all 0.2s ease;
 }
 
-.think-icon.expanded + .think-header:after {
+.think-header.expanded:after {
     transform: translateY(-50%) rotate(90deg);
-}
-
-.think-icon {
-    width: 20px;
-    height: 20px;
-    margin-right: 12px;
-    transition: transform 0.2s;
-    display: flex;
-    align-items: center;
-    color: var(--text-secondary);
-}
-
-.think-icon.expanded {
-    transform: rotate(90deg);
 }
 
 .think-content {
     padding: 12px;
     display: none;
     margin-top: 4px;
-    font-size: 0.8rem;
+    font-size: var(--secondary-size);
     font-family: 'Roboto Mono', 'Courier New', monospace;
 }
 
 .think-content.expanded {
     display: block;
+}
+
+#footnote-label {
+    display: none;
+}
+
+.markdown a {
+ color: var(--link-color);
+}
+
+.markdown .footnotes {
+    font-size: var(--secondary-size);
+}
+
+.markdown code {
+    white-space: pre-line;
+    font-size: var(--body-size);
+    display: inline-block;
+    padding: 2px 4px;
+    background-color: var(--bg-color-300);
+    border-radius: 4px;
+    font-family: monospace;
 }
