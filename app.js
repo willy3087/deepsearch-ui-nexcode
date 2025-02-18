@@ -3,18 +3,13 @@ const UI_STRINGS = {
     buttons: {
         send: 'Deep Search',
         clear: 'Clear',
-        addKey: 'Add API Key',
+        addKey: 'Upgrade',
         updateKey: 'Update API Key',
         getKey: 'Get API Key',
         saveKey: 'Save',
         purchase: 'Purchase More Tokens',
         copy: 'Copy',
         copied: '✓ Copied!'
-    },
-    dialog: {
-        title: 'Add API Key',
-        description: 'Enter your API key to access DeepSearch. You can get a key from the Jina AI dashboard.',
-        placeholder: 'Enter your API key'
     },
     think: {
         initial: 'Thinking...',
