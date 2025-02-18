@@ -49,22 +49,6 @@ let isLoading = false;
 let abortController = null;
 let existingMessages = [];
 
-// Theme management functions
-function updateLogo(theme) {
-  logo.src = `Jina - ${theme === 'dark' ? 'Dark' : 'Light'}.svg`;
-}
-
-function initializeTheme() {
-  const savedTheme = localStorage.getItem('theme') || 'light';
-  document.documentElement.setAttribute('data-theme', savedTheme);
-  // Show the opposite icon of current theme to indicate what you'll switch to
-  themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌒';
-  updateLogo(savedTheme);
-}
-
-// Initialize theme
-initializeTheme();
-
 // Theme toggle handler - fixed logic
 themeToggle.addEventListener('click', () => {
   const currentTheme = document.documentElement.getAttribute('data-theme');
@@ -74,7 +58,13 @@ themeToggle.addEventListener('click', () => {
   localStorage.setItem('theme', newTheme);
   // Show the opposite icon of new theme to indicate what you'll switch to next
   themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌒';
-  updateLogo(newTheme);
+  logo.src = `Jina - ${newTheme === 'dark' ? 'Dark' : 'Light'}.svg`;
+  
+  const hlTheme = newTheme === 'light' ? 'vs' : 'vs2015';
+  const hlThemeElement = document.getElementById('hljs-theme');
+  if (hlThemeElement) {
+    hlThemeElement.href = `https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/${hlTheme}.min.css`;
+  }
 });
 
 // API Key Management
@@ -127,6 +117,7 @@ function createThinkSection(messageDiv) {
 
   const thinkHeader = document.createElement('div');
   thinkHeader.classList.add('think-header');
+  thinkHeader.classList.add('expanded');
   thinkHeader.appendChild(document.createTextNode(UI_STRINGS.think.initial));
 
   thinkSection.appendChild(thinkHeader);
@@ -136,9 +127,11 @@ function createThinkSection(messageDiv) {
 
   const expanded = localStorage.getItem('think_section_expanded') === 'true';
   if (expanded) {
+    thinkHeader.classList.add('expanded');
     thinkContent.classList.add('expanded');
     thinkContent.style.display = 'block';
   } else {
+    thinkHeader.classList.add('collapsed');
     thinkContent.style.display = 'none';
   }
 
@@ -365,6 +358,7 @@ async function sendMessage() {
                         thinkContentElement.style.display = 'none';
                         if (thinkHeaderElement) {
                           thinkHeaderElement.textContent = UI_STRINGS.think.toggle;
+                          thinkHeaderElement.classList.remove('expanded');
                         }
                       }
                     } else {
@@ -392,7 +386,7 @@ async function sendMessage() {
                       thinkContentElement.style.display = 'block';
 
                       if (thinkHeaderElement) {
-                        thinkHeaderElement.textContent = 'Thinking... (Click to toggle)';
+                        thinkHeaderElement.textContent = UI_STRINGS.think.initial;
                       }
                     } else {
                       markdownContent += tempContent;

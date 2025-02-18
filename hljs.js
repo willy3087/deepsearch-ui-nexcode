@@ -1,7 +1,9 @@
 
+const theme = localStorage.getItem('theme') || 'light';
+const hlTheme = theme === 'light' ? 'vs' : 'vs2015';
 const scripts = [
-    { type: 'style', url: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.min.css' },
-    { type: 'script', url: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js' }
+  { type: 'style', url: `https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/${hlTheme}.min.css` },
+  { type: 'script', url: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js' }
 ];
 
 async function loadResource(resource) {
@@ -13,6 +15,7 @@ async function loadResource(resource) {
         } else {
             element = document.createElement('link');
             element.rel = 'stylesheet';
+            element.id = 'hljs-theme';
             element.href = resource.url;
         }
         
