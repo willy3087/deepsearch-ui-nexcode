@@ -318,6 +318,7 @@ async function sendMessage() {
       body: JSON.stringify({
         messages: existingMessages,
         stream: true,
+        reasoning_effort: 'medium',
       }),
       signal: abortController.signal,
     });
