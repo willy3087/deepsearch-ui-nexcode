@@ -212,8 +212,6 @@ header {
 
 /* Adjust input width when chat is empty */
 #chat-app:has(#chat-container:empty) #message-input {
-    width: 584px; /* Google-like width */
-    max-width: 90vw;
     margin-bottom: 20px;
     margin-top: 40px;
 }
