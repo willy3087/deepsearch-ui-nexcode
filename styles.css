@@ -178,6 +178,13 @@ header {
     margin-left: 125px;
 }
 
+/* on mobile make margin-left 25px */
+@media (max-width: 768px) {
+    #chat-container {
+        margin-left: 25px;
+    }
+}
+
 /* Remove margin when empty */
 #chat-container:empty {
     flex-grow: unset;
