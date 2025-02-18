@@ -108,13 +108,14 @@ header {
     margin-left: 8px;
 }
 
-.footer-buttons {
+.footer {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 10px;
     padding: 5px 10px;
     background: var(--bg-color-200);
@@ -122,7 +123,7 @@ header {
     z-index: 1000;
 }
 
-.footer-buttons .header-button {
+.footer .header-button {
     font-size: var(--body-size);
     font-family: arial, sans-serif;
     color: var(--text-secondary);
@@ -132,18 +133,18 @@ header {
     cursor: pointer;
 }
 
-.footer-buttons .header-button:hover {
+.footer .header-button:hover {
     box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
     background-color: var(--bg-color-200);
     border: 1px solid var(--bg-color-400);
 }
 
-.footer-buttons .header-button:focus {
+.footer .header-button:focus {
     border: 1px solid var(--primary);
     outline: none;
 }
 
-.footer-buttons a {
+.footer a {
     text-decoration: none;
 }
 
@@ -185,11 +186,11 @@ header {
     right: 0;
     padding: 20px;
     align-items: center;
-    box-shadow: 0 2px 5px var(--input-focus-shadow); /* Changed from -2px to 2px to cast shadow downward */
     display: flex;
     gap: 10px;
     transition: all 0.3s ease;
     z-index: 99;
+    border-bottom: 1px solid var(--input-focus-shadow); /* Changed from -2px to 2px to cast shadow downward */
 }
 
 /* Adjust input area when chat is empty */
@@ -200,6 +201,7 @@ header {
     flex-direction: column;
     align-items: center;
     gap: 20px;
+    border: unset;
 }
 
 /* Adjust input width when chat is empty */
@@ -534,6 +536,17 @@ header {
 
 .markdown .footnotes {
     font-size: var(--secondary-size);
+        position: relative;
+    padding: 1.5rem 0;
+}
+
+.markdown .footnotes::before {
+    content: '';
+    position: absolute;
+    left: 1.5rem;  /* Changed from 0 to add padding */
+    right: 1.5rem; /* Changed from 0 to add padding */
+    height: 1px;
+    background: var(--bg-color-400); /* Using your theme variable instead of hardcoded #e5e7eb */
 }
 
 .markdown code {
