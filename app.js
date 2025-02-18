@@ -217,7 +217,7 @@ function showErrorWithAction(message, buttonText, onClick) {
   const errorContainer = document.createElement('div');
   errorContainer.className = 'error-message';
 
-  const errorIcon = `<svg id="error-icon" class="action-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-circle"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>`;
+  const errorIcon = `<svg id="error-icon" class="action-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-circle"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>`;
 
   const errorText = document.createElement('span');
   errorText.innerHTML = errorIcon + message;
@@ -371,6 +371,10 @@ async function sendMessage() {
                 removeLoadingIndicator(assistantMessageDiv);
 
                 let tempContent = content;
+                const thinkingAnimationSvg = `<svg id="thinking-animation-icon" width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><style>.spinner_mHwL{animation:spinner_OeFQ .75s cubic-bezier(0.56,.52,.17,.98) infinite; fill:currentColor}.spinner_ote2{animation:spinner_ZEPt .75s cubic-bezier(0.56,.52,.17,.98) infinite;fill:currentColor}@keyframes spinner_OeFQ{0%{cx:4px;r:3px}50%{cx:9px;r:8px}}@keyframes spinner_ZEPt{0%{cx:15px;r:8px}50%{cx:20px;r:3px}}</style><defs><filter id="spinner-gF00"><feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="y"/><feColorMatrix in="y" mode="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 18 -7" result="z"/><feBlend in="SourceGraphic" in2="z"/></filter></defs><g filter="url(#spinner-gF00)"><circle class="spinner_mHwL" cx="4" cy="12" r="3"/><circle class="spinner_ote2" cx="15" cy="12" r="8"/></g></svg>`
+                const thinkingAnimation = document.createElement('span');
+                thinkingAnimation.id = 'thinking-animation';
+                thinkingAnimation.innerHTML = thinkingAnimationSvg;
                 while (tempContent.length > 0) {
                   if (inThinkSection) {
                     const thinkEndIndex = tempContent.indexOf("</think>");
@@ -384,16 +388,22 @@ async function sendMessage() {
                       if (thinkSectionElement) {
                         const thinkContentElement = thinkSectionElement.querySelector('.think-content');
                         thinkContentElement.style.display = 'none';
+                        thinkContentElement.classList.remove('expanded');
+
                         if (thinkHeaderElement) {
                           thinkHeaderElement.textContent = UI_STRINGS.think.toggle;
                           thinkHeaderElement.classList.remove('expanded');
-                        }
+                        }                      
                       }
                     } else {
                       thinkContent += tempContent;
                       if (thinkSectionElement) {
                         const thinkContentElement = thinkSectionElement.querySelector('.think-content');
                         thinkContentElement.textContent = thinkContent;
+                        const animationElement = thinkSectionElement.querySelector('#thinking-animation');
+                        if (!animationElement) {
+                          thinkContentElement.appendChild(thinkingAnimation);
+                        }
                         thinkContentElement.style.display = 'block';
                       }
                       tempContent = "";
