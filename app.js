@@ -235,22 +235,26 @@ function showErrorWithAction(message, buttonText, onClick) {
   scrollToBottom();
 }
 
-// Markdown rendering
-function renderMarkdown(text) {
-  const { Marked } = globalThis.marked;
-  const { markedHighlight } = globalThis.markedHighlight;
-  const marked = new Marked(
-    markedHighlight({
-      emptyLangClass: 'hljs',
-      langPrefix: 'hljs language-',
-      highlight(code, lang) {
-        const language = hljs.getLanguage(lang) ? lang : 'plaintext';
-        return hljs.highlight(code, { language }).value;
-      }
-    })
-  ).use(markedFootnote());
+const md = window.markdownit({
+  html: true,
+  linkify: true,
+  typographer: true,
+  highlight: function (str, lang) {
+    if (lang && hljs.getLanguage(lang)) {
+      try {
+        return '<pre><code class="hljs">' +
+               hljs.highlight(str, { language: lang, ignoreIllegals: true }).value +
+               '</code></pre>';
+      } catch (__) {}
+    }
 
-  return marked.parse(text);
+    return '<pre><code class="hljs">' + md.utils.escapeHtml(str) + '</code></pre>';
+  }
+})
+.use(window.markdownitFootnote);
+
+function renderMarkdown(content) {
+  return md.render(content);
 }
 
 // Message handling functions
