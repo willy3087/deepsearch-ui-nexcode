@@ -210,6 +210,7 @@ header {
     align-items: center;
     display: flex;
     gap: 10px;
+    background: var(--bg-color);
     transition: all 0.3s ease;
     z-index: 99;
     border-bottom: 1px solid var(--input-focus-shadow); /* Changed from -2px to 2px to cast shadow downward */
@@ -228,6 +229,7 @@ header {
     align-items: center;
     gap: 20px;
     border: unset;
+    background: unset;
 }
 
 /* Adjust input width when chat is empty */
@@ -320,7 +322,7 @@ header {
     margin: 20px 0;
     padding: 16px;
     border-radius: 8px;
-    max-width: 80%;
+    max-width: 90%;
     line-height: 1.5;
     width: fit-content;
     background-color: var(--bg-color-200);
