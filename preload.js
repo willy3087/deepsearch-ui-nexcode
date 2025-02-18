@@ -3,13 +3,16 @@ function initializeAppearance() {
   document.documentElement.setAttribute('data-theme', savedTheme);
   
   const logo = document.getElementById('logo');
-  console.log(logo);
-  const themeToggle = document.getElementById('theme-toggle');
+  const themeLightIcon = document.getElementById('light-icon');
+  const themeDarkIcon = document.getElementById('dark-icon');
   if (logo) {
     logo.src = savedTheme === 'dark' ? 'Jina - Dark.svg' : 'Jina - Light.svg';
   }
-  if (themeToggle) {
-    themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌒';
+  if (themeLightIcon) {
+    themeLightIcon.style.display = savedTheme === 'dark' ? 'block' : 'none';
+  }
+  if (themeDarkIcon) {
+    themeDarkIcon.style.display = savedTheme === 'light' ? 'block' : 'none';
   }
 }
 

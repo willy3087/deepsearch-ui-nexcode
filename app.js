@@ -25,6 +25,8 @@ const UI_STRINGS = {
 
 // DOM Elements - grouped at the top for better organization
 const themeToggle = document.getElementById('theme-toggle');
+const themeLightIcon = document.getElementById('light-icon');
+const themeDarkIcon = document.getElementById('dark-icon');
 const logo = document.getElementById('logo');
 const mainContainer = document.getElementById('main-container');
 const chatContainer = document.getElementById('chat-container');
@@ -35,6 +37,7 @@ const errorMessage = document.getElementById('error-message');
 const apiKeyInput = document.getElementById('api-key-input');
 const saveApiKeyBtn = document.getElementById('save-api-key');
 const toggleApiKeyBtn = document.getElementById('toggle-api-key');
+const toggleApiKeyBtnText = toggleApiKeyBtn.querySelector('span');
 const getApiKeyBtn = document.getElementById('get-api-key');
 const apiKeyDialog = document.getElementById('api-key-dialog');
 const dialogCloseBtn = document.querySelector('.dialog-close');
@@ -55,7 +58,9 @@ themeToggle.addEventListener('click', () => {
   document.documentElement.setAttribute('data-theme', newTheme);
   localStorage.setItem('theme', newTheme);
   // Show the opposite icon of new theme to indicate what you'll switch to next
-  themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌒';
+
+  themeLightIcon.style.display = newTheme === 'dark' ? 'block' : 'none';
+  themeDarkIcon.style.display = newTheme === 'light' ? 'block' : 'none';
   logo.src = `Jina - ${newTheme === 'dark' ? 'Dark' : 'Light'}.svg`;
   
   const hlTheme = newTheme === 'light' ? 'vs' : 'vs2015';
@@ -70,27 +75,25 @@ function initializeApiKey() {
   const savedKey = localStorage.getItem('api_key') || '';
   apiKeyInput.value = savedKey;
   getApiKeyBtn.style.display = savedKey ? 'none' : 'block';
-  toggleApiKeyBtn.textContent = savedKey ? UI_STRINGS.buttons.updateKey : UI_STRINGS.buttons.addKey;
-  saveApiKeyBtn.disabled = !savedKey.trim();
+  toggleApiKeyBtnText.textContent = savedKey ? UI_STRINGS.buttons.updateKey : UI_STRINGS.buttons.addKey;
 }
 
 function handleApiKeySave() {
   const key = apiKeyInput.value.trim();
   if (key) {
     localStorage.setItem('api_key', key);
-    apiKeyDialog.style.display = 'none';
     getApiKeyBtn.style.display = 'none';
-    toggleApiKeyBtn.textContent = UI_STRINGS.buttons.updateKey;
+    toggleApiKeyBtnText.textContent = UI_STRINGS.buttons.updateKey;
+  } else {
+    localStorage.removeItem('api_key');
+    getApiKeyBtn.style.display = 'block';
+    toggleApiKeyBtnText.textContent = UI_STRINGS.buttons.addKey;
   }
+  apiKeyDialog.style.display = 'none';
 }
 
 // Initialize API key
 initializeApiKey();
-
-// API Key Event Listeners
-apiKeyInput.addEventListener('input', () => {
-  saveApiKeyBtn.disabled = !apiKeyInput.value.trim();
-});
 
 toggleApiKeyBtn.addEventListener('click', () => {
   apiKeyDialog.style.display = 'flex';
@@ -116,8 +119,8 @@ function createThinkSection(messageDiv) {
   const thinkHeader = document.createElement('div');
   thinkHeader.classList.add('think-header');
   thinkHeader.classList.add('expanded');
-  thinkHeader.appendChild(document.createTextNode(UI_STRINGS.think.initial));
 
+  thinkHeader.appendChild(document.createTextNode(UI_STRINGS.think.initial));
   thinkSection.appendChild(thinkHeader);
 
   const thinkContent = document.createElement('div');
@@ -165,15 +168,19 @@ function createCopyButton(content) {
   const copyButton = document.createElement('button');
   copyButton.classList.add('copy-button');
   copyButton.innerHTML = UI_STRINGS.buttons.copy;
+  const copyIcon = `<svg class="action-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
+  const checkIcon = `<svg class="action-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+  copyButton.innerHTML = copyIcon;
+
   buttonContainer.appendChild(copyButton);
   
   copyButton.addEventListener('click', () => {
     navigator.clipboard.writeText(content)
       .then(() => {
-        copyButton.innerHTML = UI_STRINGS.buttons.copied;
+        copyButton.innerHTML = checkIcon;
         setTimeout(() => {
-          copyButton.innerHTML = UI_STRINGS.buttons.copy;
-        }, 3000);
+          copyButton.innerHTML = copyIcon;
+        }, 2000);
       });
   });
 
@@ -210,8 +217,10 @@ function showErrorWithAction(message, buttonText, onClick) {
   const errorContainer = document.createElement('div');
   errorContainer.className = 'error-message';
 
+  const errorIcon = `<svg id="error-icon" class="action-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-circle"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>`;
+
   const errorText = document.createElement('span');
-  errorText.textContent = message;
+  errorText.innerHTML = errorIcon + message;
 
   const actionButton = document.createElement('button');
   actionButton.textContent = buttonText;
