@@ -265,7 +265,7 @@ a {
 
 #message-input {
     width: 600px;
-    max-width: calc(100% - 200px);
+    max-width: 70vw;
     height: 44px;
     padding: 0 16px 0 48px; /* Added left padding for icon */
     border: 1px solid var(--bg-color-200);
@@ -708,4 +708,16 @@ button {
 .dialog-overlay.visible .dialog {
     transform: translateY(0);
     opacity: 1;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
