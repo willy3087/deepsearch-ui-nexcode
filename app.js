@@ -13,7 +13,7 @@ const UI_STRINGS = {
     },
     think: {
         initial: 'Thinking...',
-        toggle: 'Chain of thoughts',
+        toggle: 'Thoughts',
         loading: 'Loading...'
     },
     errors: {
