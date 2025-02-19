@@ -102,7 +102,6 @@ button {
     font-weight: 500;
     cursor: pointer;
     background-color: var(--bg-color-100);
-    transition: all 0.2s;
     font-family: arial, sans-serif;
     color: var(--text-secondary);
     text-decoration: none;
@@ -162,16 +161,6 @@ a {
 }
 
 
-.get-key-btn {
-    background-color: var(--bg-color-100);
-    color: var(--text-color);
-    font-weight: 500;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    padding: 0 16px;
-    height: 44px;
-    transition: all 0.2s;
-}
 
 #chat-container {
     flex-grow: 1;
@@ -246,7 +235,6 @@ a {
     display: flex;
     gap: 10px;
     background: var(--bg-color-100);
-    transition: all 0.3s ease;
     z-index: 99;
     border-bottom: 1px solid var(--bg-color-200);
     height: 46px;
