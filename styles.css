@@ -441,15 +441,19 @@ a {
 #error-icon {
     vertical-align: text-top;
     margin-right: 8px;
+    color: var(--negative);
 }
 
-#error-message {
+.error-message {
     color: var(--negative);
     text-align: center;
     padding: 8px;
     margin-top: 8px;
     font-size: var(--body-size);
-    display: none;
+}
+
+.error-message span {
+    line-height: 3rem;
 }
 
 /* Think section styles */
