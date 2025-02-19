@@ -17,9 +17,9 @@ const UI_STRINGS = {
         loading: 'Loading...'
     },
     errors: {
-        invalidKey: 'Invalid API key. Please update your key by click the "Upgrade" button".',
+        invalidKey: 'Invalid API key. Please update your key by click the button below".',
         insufficientTokens: 'Insufficient tokens in your API key. Please purchase more tokens or swap to another key.',
-        rateLimit: 'You have reached the rate limit. Please try again later. You can also upgrade to a higher plan by clicking the "Upgrade" button.'
+        rateLimit: 'You have reached the rate limit. Please try again later. You can also upgrade to a higher plan by clicking the button below.'
     }
 };
 
@@ -38,6 +38,7 @@ const saveApiKeyBtn = document.getElementById('save-api-key');
 const toggleApiKeyBtn = document.getElementById('toggle-api-key');
 const toggleApiKeyBtnText = toggleApiKeyBtn.querySelector('span');
 const getApiKeyBtn = document.getElementById('get-api-key');
+const freeUserRPMInfo = document.getElementById('free-user-rpm');
 const apiKeyDialog = document.getElementById('api-key-dialog');
 const helpButton = document.getElementById('help-button');
 const helpDialog = document.getElementById('help-dialog');
@@ -77,6 +78,7 @@ function initializeApiKey() {
   const savedKey = localStorage.getItem('api_key') || '';
   apiKeyInput.value = savedKey;
   getApiKeyBtn.style.display = savedKey ? 'none' : 'block';
+  freeUserRPMInfo.style.display = savedKey ? 'none' : 'block';
   toggleApiKeyBtnText.textContent = savedKey ? UI_STRINGS.buttons.updateKey : UI_STRINGS.buttons.addKey;
 }
 
@@ -194,7 +196,7 @@ function showErrorWithAction(message, buttonText, onClick) {
   const errorContainer = document.createElement('div');
   errorContainer.className = 'error-message';
 
-  const errorIcon = `<svg id="error-icon" class="action-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-circle"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>`;
+  const errorIcon = `<svg id="error-icon" class="action-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>`;
 
   const errorText = document.createElement('span');
   errorText.innerHTML = errorIcon + message;
@@ -331,7 +333,7 @@ async function sendMessage() {
           showErrorWithAction(
             UI_STRINGS.errors.invalidKey,
             UI_STRINGS.buttons.updateKey,
-            () => apiKeyDialog.style.display = 'flex'
+            () => apiKeyDialog.classList.add('visible')
           );
           break;
         case 402:
@@ -345,7 +347,7 @@ async function sendMessage() {
           showErrorWithAction(
             UI_STRINGS.errors.rateLimit,
             UI_STRINGS.buttons.addKey,
-            () => apiKeyDialog.style.display = 'flex'
+            () => apiKeyDialog.classList.add('visible')
           );
           break;
         default:
@@ -589,10 +591,12 @@ function handleApiKeySave() {
   if (key) {
     localStorage.setItem('api_key', key);
     getApiKeyBtn.style.display = 'none';
+    freeUserRPMInfo.style.display = 'none';
     toggleApiKeyBtnText.textContent = UI_STRINGS.buttons.updateKey;
   } else {
     localStorage.removeItem('api_key');
     getApiKeyBtn.style.display = 'block';
+    freeUserRPMInfo.style.display = 'block';
     toggleApiKeyBtnText.textContent = UI_STRINGS.buttons.addKey;
   }
   apiKeyDialog.classList.remove('visible');
