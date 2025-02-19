@@ -1,5 +1,5 @@
 function initializeAppearance() {
-  const savedTheme = localStorage.getItem('theme') || 'light';
+  const savedTheme = localStorage.getItem('theme') || getCurrentColorScheme();
   document.documentElement.setAttribute('data-theme', savedTheme);
   
   const logo = document.getElementById('logo');
@@ -13,6 +13,16 @@ function initializeAppearance() {
   }
   if (themeDarkIcon) {
     themeDarkIcon.style.display = savedTheme === 'light' ? 'block' : 'none';
+  }
+}
+
+
+// Check the current color scheme
+function getCurrentColorScheme() {
+  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    return 'dark';
+  } else {
+    return 'light'; // Default is light
   }
 }
 
