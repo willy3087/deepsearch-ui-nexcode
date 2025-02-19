@@ -21,8 +21,9 @@ function updateLogo(logo, theme) {
   const isNotEmptyChat = !document.getElementById('chat-app').classList.contains('empty-chat');
   const largeLogoSrc = `jina-${theme}.svg`;
   const smallLogoSrc = `j-${theme}.svg`;
+  const isMobile = window.innerWidth <= 768;
 
-  logo.src = isNotEmptyChat ? smallLogoSrc : largeLogoSrc;
+  logo.src = isNotEmptyChat && isMobile ? smallLogoSrc : largeLogoSrc;
 }
 
 // Check the current color scheme
