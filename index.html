@@ -41,7 +41,7 @@
 <body>
 <div id="chat-app" class="empty-chat">
     <div id="input-area">
-        <img id="logo" alt="Jina AI Company Logo" src="jina-light.svg" width="235px" height="100px">
+        <img id="logo" alt="Jina AI Company Logo" src="jina-light.svg" width="240px" height="120px">
         <input type="search" id="message-input" maxlength="2000"
                autocomplete="off" autocapitalize="off" spellcheck="false" data-form-type="other"
                placeholder="Type your question here"
@@ -64,7 +64,7 @@
 
     <div class="footer">
         <div class="buttons-group">
-            <button id="help-button" class="header-button">
+            <button id="help-button">
                 <svg class="action-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="10"></circle>
@@ -72,20 +72,21 @@
                     <line x1="12" y1="17" x2="12.01" y2="17"></line>
                 </svg>
             </button>
-            <button id="toggle-api-key" class="header-button add-key-btn">
+            <button id="toggle-api-key" class=" icon-button">
                 <svg class="action-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path>
                 </svg>
                 <span>Upgrade</span>
             </button>
-            <button id="theme-toggle" class="header-button">
+            <button id="theme-toggle">
                 <svg id="dark-icon" class="action-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                      viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                      stroke-linejoin="round">
                     <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                 </svg>
-                <svg id="light-icon" class="action-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                <svg id="light-icon" style="display: none" class="action-icon" xmlns="http://www.w3.org/2000/svg"
+                     width="16" height="16"
                      viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                      stroke-linejoin="round">
                     <circle cx="12" cy="12" r="5"></circle>
@@ -102,7 +103,7 @@
         </div>
         <div class="footer-text">
             <a href="https://jina.ai" target="_blank">
-                <button id="about-jina" class="header-button">About Jina AI</button>
+                <button id="about-jina">About Jina AI</button>
             </a>
         </div>
     </div>
@@ -122,9 +123,9 @@
         </div>
         <div class="dialog-footer">
             <a id="get-api-key" href="https://jina.ai" target="_blank">
-                <button class="header-button get-key-btn">Get API Key</button>
+                <button class=" get-key-btn">Get API Key</button>
             </a>
-            <button id="save-api-key" class="header-button add-key-btn">Save</button>
+            <button id="save-api-key">Save</button>
         </div>
     </div>
 </div>
@@ -143,7 +144,20 @@
                 <li>No ads, no login, no bullet points, no lengthy report, no nonsense design.</li>
                 <li>Free users get 3 search requests per minute. Provide an API key to get a higher rate limit.</li>
                 <li>Add to your browser's search engines via <code>https://search.jina.ai/?q={YOUR_QUERY}</code></li>
+                <li>This <i>is</i> our product, not a POC or hype-chasing gimmick. Find a bug? Interested in on-prem?
+                    Contact us.
+                </li>
             </ul>
+        </div>
+        <div class="dialog-footer">
+            <button id="contact-us" class="icon-button">
+                <svg class="action-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+                <span>Contact Us</span>
+            </button>
         </div>
     </div>
 </div>

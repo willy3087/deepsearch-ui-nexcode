@@ -4,8 +4,8 @@
     --bg-color-100: #f0f0f0;
     --bg-color-200: #e1e1e1;
     --bg-color-300: #d3d3d3;
-    --primary: #009191;
-    --negative: #910000;
+    --primary: #008F8F;
+    --negative: #E85F5F;
     --disabled: #f2f2f2;
     --text-color: #202124;
     --text-secondary: #5f6368;
@@ -22,7 +22,6 @@
     --bg-color-200: #434948;
     --bg-color-300: #5b605f;
     --bg-color-400: #747978;
-    --negative: #ff4d4d;
     --text-color: #e8eaed;
     --text-secondary: #969ba1;
     --input-focus-shadow: rgba(232, 234, 237, 0.16);
@@ -93,6 +92,8 @@ button {
     font-family: arial, sans-serif;
     color: var(--text-secondary);
     text-decoration: none;
+    display: flex;
+    align-items: center;
 }
 
 .buttons-container {
@@ -405,29 +406,10 @@ button:focus {
     margin-top: 20px;
 }
 
-#save-api-key {
-    background-color: var(--bg-color-100);
-    color: var(--text-color);
-    font-weight: 500;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    padding: 0 16px;
-    height: 44px;
-    margin-left: auto
-}
 
 
-#save-api-key:focus {
-    border: 1px solid var(--primary);
-    outline: none;
-}
 
-#toggle-api-key {
-    display: flex;
-    align-items: center;
-}
-
-#toggle-api-key .action-icon {
+.icon-button .action-icon {
     margin-right: 8px;
 }
 
