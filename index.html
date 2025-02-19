@@ -26,7 +26,7 @@
     <script defer src="third-party/markdown-it-footnote.min.js"></script>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" type="image/ico" href="favicon.ico">
-    <link rel="canonical" href="https://search.jina.ai" />
+    <link rel="canonical" href="https://search.jina.ai"/>
     <script type="application/ld+json">
         {
             "@context": "https://schema.org",
@@ -42,7 +42,10 @@
 <div id="chat-app" class="empty-chat">
     <div id="input-area">
         <img id="logo" alt="Jina AI Company Logo" src="jina-light.svg" width="235px" height="100px">
-        <input type="text" id="message-input" maxlength="2000" placeholder="Type your question here"/>
+        <input type="search" id="message-input" maxlength="2000"
+               autocomplete="off" autocapitalize="off" spellcheck="false" data-form-type="other"
+               placeholder="Type your question here"
+        />
         <button id="send-button">Deep Search</button>
         <button id="clear-button">
             <svg class="action-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
@@ -64,7 +67,10 @@
             <button id="help-button" class="header-button">
                 <svg class="action-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
             </button>
             <button id="toggle-api-key" class="header-button add-key-btn">
                 <svg class="action-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
@@ -95,7 +101,9 @@
             </button>
         </div>
         <div class="footer-text">
-            <a href="https://jina.ai" target="_blank"><button id="about-jina" class="header-button">About Jina AI</button></a>
+            <a href="https://jina.ai" target="_blank">
+                <button id="about-jina" class="header-button">About Jina AI</button>
+            </a>
         </div>
     </div>
 </div>
@@ -110,7 +118,7 @@
         <div class="dialog-content">
             <p class="dialog-description">Use your Jina API key to access Jina DeepSearch with higher rate limit. You
                 can get a free API key and understand more about the rate limit from Jina AI's website.</p>
-            <input type="password" id="api-key-input" placeholder="Enter your API key">
+            <input type="password" id="api-key-input" placeholder="Enter your API key" autocomplete="new-password">
         </div>
         <div class="dialog-footer">
             <a id="get-api-key" href="https://jina.ai" target="_blank">
