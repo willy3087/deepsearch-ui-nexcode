@@ -139,7 +139,11 @@ button:focus {
     color: var(--text-secondary);
 }
 
-.footer a {
+a {
+    text-decoration: none;
+}
+
+.link-button {
     text-decoration: none;
 }
 
@@ -407,8 +411,6 @@ button:focus {
 }
 
 
-
-
 .icon-button .action-icon {
     margin-right: 8px;
 }
@@ -559,6 +561,24 @@ button:focus {
 
 .markdown a {
     color: var(--primary);
+    position: relative;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.markdown a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1px;
+    bottom: 0;
+    left: 0;
+    background-color: var(--primary);
+    transition: width 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.markdown a:hover::after {
+    width: 100%;
 }
 
 .markdown .footnotes {
