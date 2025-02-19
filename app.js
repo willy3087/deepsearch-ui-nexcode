@@ -38,6 +38,7 @@ const saveApiKeyBtn = document.getElementById('save-api-key');
 const toggleApiKeyBtn = document.getElementById('toggle-api-key');
 const toggleApiKeyBtnText = toggleApiKeyBtn.querySelector('span');
 const getApiKeyBtn = document.getElementById('get-api-key');
+const freeUserRPMInfo = document.getElementById('free-user-rpm');
 const apiKeyDialog = document.getElementById('api-key-dialog');
 const helpButton = document.getElementById('help-button');
 const helpDialog = document.getElementById('help-dialog');
@@ -77,6 +78,7 @@ function initializeApiKey() {
   const savedKey = localStorage.getItem('api_key') || '';
   apiKeyInput.value = savedKey;
   getApiKeyBtn.style.display = savedKey ? 'none' : 'block';
+  freeUserRPMInfo.style.display = savedKey ? 'none' : 'block';
   toggleApiKeyBtnText.textContent = savedKey ? UI_STRINGS.buttons.updateKey : UI_STRINGS.buttons.addKey;
 }
 
@@ -589,10 +591,12 @@ function handleApiKeySave() {
   if (key) {
     localStorage.setItem('api_key', key);
     getApiKeyBtn.style.display = 'none';
+    freeUserRPMInfo.style.display = 'none';
     toggleApiKeyBtnText.textContent = UI_STRINGS.buttons.updateKey;
   } else {
     localStorage.removeItem('api_key');
     getApiKeyBtn.style.display = 'block';
+    freeUserRPMInfo.style.display = 'block';
     toggleApiKeyBtnText.textContent = UI_STRINGS.buttons.addKey;
   }
   apiKeyDialog.classList.remove('visible');
