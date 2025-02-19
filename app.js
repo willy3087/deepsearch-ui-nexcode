@@ -33,23 +33,24 @@ const chatContainer = document.getElementById('chat-container');
 const messageInput = document.getElementById('message-input');
 const sendButton = document.getElementById('send-button');
 const clearButton = document.getElementById('clear-button');
-const errorMessage = document.getElementById('error-message');
 const apiKeyInput = document.getElementById('api-key-input');
 const saveApiKeyBtn = document.getElementById('save-api-key');
 const toggleApiKeyBtn = document.getElementById('toggle-api-key');
 const toggleApiKeyBtnText = toggleApiKeyBtn.querySelector('span');
 const getApiKeyBtn = document.getElementById('get-api-key');
 const apiKeyDialog = document.getElementById('api-key-dialog');
-const dialogCloseBtn = document.querySelector('.dialog-close');
-let md;
+const helpButton = document.getElementById('help-button');
+const helpDialog = document.getElementById('help-dialog');
+const dialogCloseBtns = document.querySelectorAll('.dialog-close');
 
-// Constants
+const loadingSvg = `<svg id="thinking-animation-icon" width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><style>.spinner_mHwL{animation:spinner_OeFQ .75s cubic-bezier(0.56,.52,.17,.98) infinite; fill:currentColor}.spinner_ote2{animation:spinner_ZEPt .75s cubic-bezier(0.56,.52,.17,.98) infinite;fill:currentColor}@keyframes spinner_OeFQ{0%{cx:4px;r:3px}50%{cx:9px;r:8px}}@keyframes spinner_ZEPt{0%{cx:15px;r:8px}50%{cx:20px;r:3px}}</style><defs><filter id="spinner-gF00"><feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="y"/><feColorMatrix in="y" mode="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 18 -7" result="z"/><feBlend in="SourceGraphic" in2="z"/></filter></defs><g filter="url(#spinner-gF00)"><circle class="spinner_mHwL" cx="4" cy="12" r="3"/><circle class="spinner_ote2" cx="15" cy="12" r="8"/></g></svg>`;
 const BASE_ORIGIN = 'https://deepsearch.jina.ai';
 
 // State variables
 let isLoading = false;
 let abortController = null;
 let existingMessages = [];
+let md;
 
 // Theme toggle handler - fixed logic
 themeToggle.addEventListener('click', () => {
@@ -79,36 +80,10 @@ function initializeApiKey() {
   toggleApiKeyBtnText.textContent = savedKey ? UI_STRINGS.buttons.updateKey : UI_STRINGS.buttons.addKey;
 }
 
-function handleApiKeySave() {
-  const key = apiKeyInput.value.trim();
-  if (key) {
-    localStorage.setItem('api_key', key);
-    getApiKeyBtn.style.display = 'none';
-    toggleApiKeyBtnText.textContent = UI_STRINGS.buttons.updateKey;
-  } else {
-    localStorage.removeItem('api_key');
-    getApiKeyBtn.style.display = 'block';
-    toggleApiKeyBtnText.textContent = UI_STRINGS.buttons.addKey;
-  }
-  apiKeyDialog.style.display = 'none';
-}
 
 // Initialize API key
 initializeApiKey();
 
-toggleApiKeyBtn.addEventListener('click', () => {
-  apiKeyDialog.style.display = 'flex';
-});
-
-dialogCloseBtn.addEventListener('click', () => {
-  apiKeyDialog.style.display = 'none';
-});
-
-apiKeyDialog.addEventListener('click', (e) => {
-  if (e.target === apiKeyDialog) {
-    apiKeyDialog.style.display = 'none';
-  }
-});
 
 saveApiKeyBtn.addEventListener('click', handleApiKeySave);
 
@@ -193,7 +168,7 @@ function displayMessage(role, content) {
   messageDiv.classList.add('message', `${role}-message`);
 
   if (role === 'assistant') {
-    messageDiv.innerHTML = `<div class="loading-indicator">${UI_STRINGS.think.loading}</div>`;
+    messageDiv.innerHTML = `<div id="loading-indicator">${loadingSvg}</div>`;
   } else {
     messageDiv.textContent = content;
   }
@@ -206,7 +181,7 @@ function displayMessage(role, content) {
 }
 
 function removeLoadingIndicator(messageDiv) {
-  const loadingIndicator = messageDiv.querySelector('.loading-indicator');
+  const loadingIndicator = messageDiv.querySelector('#loading-indicator');
   if (loadingIndicator) {
     loadingIndicator.remove();
   }
@@ -308,7 +283,6 @@ async function sendMessage() {
 
   if (!query || isLoading) return;
 
-  errorMessage.textContent = '';
   abortController = new AbortController();
   isLoading = true;
   sendButton.disabled = true;
@@ -318,9 +292,6 @@ async function sendMessage() {
   messageInput.value = '';
 
   const assistantMessageDiv = displayMessage('assistant', '');
-  const markdownDiv = document.createElement('div');
-  markdownDiv.classList.add('markdown');
-  assistantMessageDiv.appendChild(markdownDiv);
 
   let markdownContent = '';
   let thinkContent = '';
@@ -387,6 +358,10 @@ async function sendMessage() {
       throw new Error(errorMsg);
     }
 
+    const markdownDiv = document.createElement('div');
+    markdownDiv.classList.add('markdown');
+    assistantMessageDiv.appendChild(markdownDiv);
+
     if (res.headers.get('content-type')?.includes('text/event-stream')) {
       const reader = res.body?.getReader();
       if (!reader) throw new Error('No readable stream available');
@@ -415,10 +390,9 @@ async function sendMessage() {
                 removeLoadingIndicator(assistantMessageDiv);
 
                 let tempContent = content;
-                const thinkingAnimationSvg = `<svg id="thinking-animation-icon" width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><style>.spinner_mHwL{animation:spinner_OeFQ .75s cubic-bezier(0.56,.52,.17,.98) infinite; fill:currentColor}.spinner_ote2{animation:spinner_ZEPt .75s cubic-bezier(0.56,.52,.17,.98) infinite;fill:currentColor}@keyframes spinner_OeFQ{0%{cx:4px;r:3px}50%{cx:9px;r:8px}}@keyframes spinner_ZEPt{0%{cx:15px;r:8px}50%{cx:20px;r:3px}}</style><defs><filter id="spinner-gF00"><feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="y"/><feColorMatrix in="y" mode="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 18 -7" result="z"/><feBlend in="SourceGraphic" in2="z"/></filter></defs><g filter="url(#spinner-gF00)"><circle class="spinner_mHwL" cx="4" cy="12" r="3"/><circle class="spinner_ote2" cx="15" cy="12" r="8"/></g></svg>`
                 const thinkingAnimation = document.createElement('span');
                 thinkingAnimation.id = 'thinking-animation';
-                thinkingAnimation.innerHTML = thinkingAnimationSvg;
+                thinkingAnimation.innerHTML = loadingSvg;
                 while (tempContent.length > 0) {
                   if (inThinkSection) {
                     const thinkEndIndex = tempContent.indexOf("</think>");
@@ -489,26 +463,28 @@ async function sendMessage() {
         markdownDiv.innerHTML = renderMarkdown(markdownContent);
         const copyButton = createCopyButton(markdownContent);
         assistantMessageDiv.appendChild(copyButton);
+        existingMessages.push({
+          role: 'assistant',
+          content: markdownContent,
+        });
       }
     } else {
       const jsonResult = await res.json();
       if (jsonResult) {
         assistantMessageDiv.textContent = jsonResult.choices[0].message.content;
+        existingMessages.push({
+          role: 'assistant',
+          content: jsonResult.choices[0].message.content
+        });
       } else {
         throw new Error('Empty response from server.');
       }
     }
 
-    existingMessages.push({
-      role: 'assistant',
-      content: assistantMessageDiv.textContent
-    });
 
   } catch (error) {
     if (error.name !== 'AbortError') {
-      if (!document.querySelector('.error-container')) {
-        errorMessage.textContent = `Error: ${error.message || String(error)}`;
-      }
+        assistantMessageDiv.textContent = `Error: ${error.message || String(error)}`;
     } else {
       if (assistantMessageDiv) {
         assistantMessageDiv.textContent = "Request cancelled.";
@@ -533,6 +509,21 @@ messageInput.addEventListener('keydown', (event) => {
   }
 });
 
+// Help dialog event listeners
+helpButton.addEventListener('click', () => {
+  helpDialog.style.display = 'flex';
+});
+
+// Close dialogs when clicking outside
+[apiKeyDialog, helpDialog].forEach(dialog => {
+  dialog.addEventListener('click', (e) => {
+    if (e.target === dialog) {
+      dialog.classList.remove('visible');
+    }
+  });
+});
+
+
 // URL Parameter handling
 document.addEventListener('DOMContentLoaded', () => {
   const urlParams = new URLSearchParams(window.location.search);
@@ -543,8 +534,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+let autoScrollEnabled = true; // Flag to track auto-scroll state
 // Auto-scroll setup
 const observer = new MutationObserver((mutations) => {
+  if (!autoScrollEnabled) return;
   mutations.forEach((mutation) => {
     if (mutation.type === 'childList') {
       scrollToBottom();
@@ -553,3 +546,54 @@ const observer = new MutationObserver((mutations) => {
 });
 
 observer.observe(chatContainer, { childList: true, subtree: true });
+
+mainContainer.addEventListener('scroll', () => {
+  // Check if the user has scrolled up from the bottom
+  const isAtBottom = mainContainer.scrollTop + mainContainer.clientHeight >= mainContainer.scrollHeight;
+
+  // If the user has scrolled up, disable auto-scroll
+  if (!isAtBottom) {
+    autoScrollEnabled = false;
+  } else {
+    // If the user scrolls back to the bottom, re-enable auto-scroll
+    autoScrollEnabled = true;
+    scrollToBottom(); // Ensure it's scrolled to the bottom when re-enabled
+  }
+});
+
+// Update toggleApiKeyBtn click handler
+toggleApiKeyBtn.addEventListener('click', () => {
+  apiKeyDialog.classList.add('visible');
+});
+
+// Update dialog close handlers
+dialogCloseBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const dialog = btn.closest('.dialog-overlay');
+    if (dialog) {
+      dialog.classList.remove('visible');
+    }
+  });
+});
+
+
+
+// Update help button click handler
+helpButton.addEventListener('click', () => {
+  helpDialog.classList.add('visible');
+});
+
+// Update handleApiKeySave function
+function handleApiKeySave() {
+  const key = apiKeyInput.value.trim();
+  if (key) {
+    localStorage.setItem('api_key', key);
+    getApiKeyBtn.style.display = 'none';
+    toggleApiKeyBtnText.textContent = UI_STRINGS.buttons.updateKey;
+  } else {
+    localStorage.removeItem('api_key');
+    getApiKeyBtn.style.display = 'block';
+    toggleApiKeyBtnText.textContent = UI_STRINGS.buttons.addKey;
+  }
+  apiKeyDialog.classList.remove('visible');
+}
