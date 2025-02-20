@@ -603,7 +603,12 @@ a {
 .markdown .footnotes {
     font-size: var(--secondary-size);
     position: relative;
-    padding: 1.5rem 0;
+    padding: 2rem;
+    color: var(--text-secondary);
+}
+
+.markdown .footnotes ol {
+    padding: 0;
 }
 
 .markdown code {
