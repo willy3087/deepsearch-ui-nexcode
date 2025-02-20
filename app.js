@@ -606,7 +606,22 @@ function handleApiKeySave() {
   apiKeyDialog.classList.remove('visible');
 }
 
+// Set up event listeners for visibility and focus changes
+document.addEventListener('visibilitychange', handleVisibilityChange);
+window.addEventListener('focus', clearFaviconBadge);
+
+// Function to handle visibility change
+function handleVisibilityChange() {
+  if (document.visibilityState === 'visible') {
+    clearFaviconBadge();
+  }
+}
+
 function setFaviconBadge() {
+  if (document.visibilityState === 'visible') {
+    // dont set favicon badge if the tab is already visible
+    return;
+  }
   const favicon = document.querySelector('link[rel="icon"]');
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
@@ -639,6 +654,10 @@ function clearFaviconBadge() {
 
 
 function playNotificationSound() {
+  if (document.visibilityState === 'visible') {
+    // dont play sound if the tab is already visible
+    return;
+  }
   // Create audio context
   const AudioContext = window.AudioContext || window.webkitAudioContext;
   const audioCtx = new AudioContext();
