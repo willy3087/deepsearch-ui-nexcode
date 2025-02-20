@@ -622,6 +622,20 @@ a {
     white-space: pre;
 }
 
+.markdown table {
+    background-color: var(--bg-color-200);
+    border: 1px solid var(--bg-color-300);
+    border-collapse: collapse;
+}
+
+.markdown table thead {
+    background-color: var(--bg-color-300);
+}
+.markdown table th,
+.markdown table td {
+    padding: 4px;
+}
+
 body {
     transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
     color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
