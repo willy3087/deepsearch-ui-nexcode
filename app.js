@@ -536,7 +536,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const queryParam = urlParams.get('q');
 
   if (queryParam && messageInput) {
-    messageInput.value = queryParam;
+    messageInput.value = decodeURIComponent(queryParam);
+    sendMessage();
   }
 });
 
