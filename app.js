@@ -213,28 +213,10 @@ function showErrorWithAction(message, buttonText, onClick) {
   scrollToBottom();
 }
 
-if (window.markdownit) {
-  md = window.markdownit({
-    html: true,
-    linkify: true,
-    typographer: true,
-    highlight: function (str, lang) {
-      if (lang && hljs.getLanguage(lang)) {
-        try {
-          return '<pre><code class="hljs">' +
-                 hljs.highlight(str, { language: lang, ignoreIllegals: true }).value +
-                 '</code></pre>';
-        } catch (__) {}
-      }
 
-      return '<pre><code class="hljs">' + md.utils.escapeHtml(str) + '</code></pre>';
-    }
-  })
-  .use(window.markdownitFootnote);
-}
 
-function renderMarkdown(content) {
-  if (!md) {
+function initializeMarkdown() {
+  if (window.markdownit) {
     md = window.markdownit({
       html: true,
       linkify: true,
@@ -247,11 +229,37 @@ function renderMarkdown(content) {
                    '</code></pre>';
           } catch (__) {}
         }
-
+  
         return '<pre><code class="hljs">' + md.utils.escapeHtml(str) + '</code></pre>';
       }
     })
-    .use(window.markdownitFootnote);
+    .use(window.markdownitFootnote).use(markdownItTableWrapper);
+  }
+}
+
+initializeMarkdown();
+
+function markdownItTableWrapper(md) {
+  const defaultTableRenderer = md.renderer.rules.table_open || function(tokens, idx, options, env, self) {
+    return self.renderToken(tokens, idx, options, env, self);
+  };
+
+  md.renderer.rules.table_open = function(tokens, idx, options, env, self) {
+    return '<div id="table-container">\n' + defaultTableRenderer(tokens, idx, options, env, self);
+  };
+
+  const defaultTableCloseRenderer = md.renderer.rules.table_close || function(tokens, idx, options, env, self) {
+    return self.renderToken(tokens, idx, options, env, self);
+  };
+
+  md.renderer.rules.table_close = function(tokens, idx, options, env, self) {
+    return defaultTableCloseRenderer(tokens, idx, options, env, self) + '\n</div>';
+  };
+}
+
+function renderMarkdown(content) {
+  if (!md) {
+    initializeMarkdown();
   }
   if (md) {
     return md.render(content);

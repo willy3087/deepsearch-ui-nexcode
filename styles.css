@@ -555,6 +555,7 @@ a {
     margin-top: 4px;
     font-size: var(--secondary-size);
     font-family: 'Roboto Mono', 'Courier New', monospace;
+    word-break: break-word;
 }
 
 .think-content.expanded {
@@ -620,6 +621,24 @@ a {
 .markdown pre code {
     border-radius: 8px;
     white-space: pre;
+}
+
+.markdown table {
+    background-color: var(--bg-color-200);
+    border: 1px solid var(--bg-color-300);
+    border-collapse: collapse;
+}
+
+.markdown table thead {
+    background-color: var(--bg-color-300);
+}
+.markdown table th,
+.markdown table td {
+    padding: 4px;
+}
+
+#table-container {
+    overflow-x: auto;
 }
 
 body {
