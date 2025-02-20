@@ -555,6 +555,7 @@ a {
     margin-top: 4px;
     font-size: var(--secondary-size);
     font-family: 'Roboto Mono', 'Courier New', monospace;
+    word-break: break-word;
 }
 
 .think-content.expanded {
@@ -634,6 +635,10 @@ a {
 .markdown table th,
 .markdown table td {
     padding: 4px;
+}
+
+#table-container {
+    overflow-x: auto;
 }
 
 body {
