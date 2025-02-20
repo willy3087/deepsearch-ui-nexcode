@@ -64,7 +64,7 @@ themeToggle.addEventListener('click', () => {
 
   themeLightIcon.style.display = newTheme === 'dark' ? 'block' : 'none';
   themeDarkIcon.style.display = newTheme === 'light' ? 'block' : 'none';
-  
+
   const hlTheme = newTheme === 'light' ? 'vs' : 'vs2015';
   const hlThemeElement = document.getElementById('hljs-theme');
   if (hlThemeElement) {
@@ -150,7 +150,7 @@ function createCopyButton(content) {
   copyButton.innerHTML = copyIcon;
 
   buttonContainer.appendChild(copyButton);
-  
+
   copyButton.addEventListener('click', () => {
     navigator.clipboard.writeText(content)
       .then(() => {
@@ -226,7 +226,7 @@ if (window.markdownit) {
                  '</code></pre>';
         } catch (__) {}
       }
-  
+
       return '<pre><code class="hljs">' + md.utils.escapeHtml(str) + '</code></pre>';
     }
   })
@@ -247,7 +247,7 @@ function renderMarkdown(content) {
                    '</code></pre>';
           } catch (__) {}
         }
-    
+
         return '<pre><code class="hljs">' + md.utils.escapeHtml(str) + '</code></pre>';
       }
     })
@@ -291,6 +291,8 @@ async function sendMessage() {
   displayMessage('user', query);
   existingMessages.push({ role: 'user', content: query });
   messageInput.value = '';
+  // To clear the badge
+  clearFaviconBadge();
 
   const assistantMessageDiv = displayMessage('assistant', '');
 
@@ -412,7 +414,7 @@ async function sendMessage() {
                         if (thinkHeaderElement) {
                           thinkHeaderElement.textContent = UI_STRINGS.think.toggle;
                           thinkHeaderElement.classList.remove('expanded');
-                        }                      
+                        }
                       }
                     } else {
                       thinkContent += tempContent;
@@ -468,6 +470,9 @@ async function sendMessage() {
           role: 'assistant',
           content: markdownContent,
         });
+        // Check if the Favicon Badge API is supported
+        setFaviconBadge();
+        playNotificationSound();
       }
     } else {
       const jsonResult = await res.json();
@@ -599,4 +604,75 @@ function handleApiKeySave() {
     toggleApiKeyBtnText.textContent = UI_STRINGS.buttons.addKey;
   }
   apiKeyDialog.classList.remove('visible');
+}
+
+function setFaviconBadge() {
+  const favicon = document.querySelector('link[rel="icon"]');
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+
+  // Load original favicon as base
+  const img = new Image();
+  img.onload = function() {
+    // Draw original favicon
+    canvas.width = img.width;
+    canvas.height = img.height;
+    ctx.drawImage(img, 0, 0);
+
+    // Add notification dot (bigger size)
+    const dotSize = Math.max(8, canvas.width / 4);
+    ctx.fillStyle = '#FF0000';
+    ctx.beginPath();
+    ctx.arc(canvas.width - dotSize/2, dotSize/2, dotSize/2, 0, 2 * Math.PI);
+    ctx.fill();
+
+    // Update favicon
+    favicon.href = canvas.toDataURL('image/png');
+  };
+  img.src = favicon.href || '/favicon.ico';
+}
+
+function clearFaviconBadge() {
+  const favicon = document.querySelector('link[rel="icon"]');
+  favicon.href = '/favicon.ico';
+}
+
+
+function playNotificationSound() {
+  // Create audio context
+  const AudioContext = window.AudioContext || window.webkitAudioContext;
+  const audioCtx = new AudioContext();
+
+  // Create two oscillators for a pleasant harmonious sound
+  const osc1 = audioCtx.createOscillator();
+  const osc2 = audioCtx.createOscillator();
+
+  // Create gain node for volume control
+  const gainNode = audioCtx.createGain();
+
+  // Configure oscillators
+  osc1.type = 'sine';
+  osc2.type = 'sine';
+
+  // Apple-like gentle ascending perfect fifth (C6 to G6)
+  osc1.frequency.setValueAtTime(1046.50, audioCtx.currentTime); // C6
+  osc2.frequency.setValueAtTime(1567.98, audioCtx.currentTime); // G6
+
+  // Connect nodes
+  osc1.connect(gainNode);
+  osc2.connect(gainNode);
+  gainNode.connect(audioCtx.destination);
+
+  // Create a subtle, gentle envelope
+  gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+  gainNode.gain.linearRampToValueAtTime(0.15, audioCtx.currentTime + 0.02); // Gentle attack
+  gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime + 0.15);
+  gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35); // Smooth release
+
+  // Play sound
+  osc1.start(audioCtx.currentTime);
+  osc2.start(audioCtx.currentTime + 0.05); // Slight delay for second note
+
+  osc1.stop(audioCtx.currentTime + 0.4);
+  osc2.stop(audioCtx.currentTime + 0.4);
 }
