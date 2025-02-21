@@ -640,6 +640,10 @@ table, th, td {
     padding: 0;
 }
 
+ol.footnotes-list {
+    padding-left: 1.5rem;
+}
+
 .markdown code {
     white-space: pre-line;
     font-size: var(--body-size);
