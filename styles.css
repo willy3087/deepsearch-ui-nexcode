@@ -455,17 +455,19 @@ a {
     color: var(--negative);
 }
 
+.error-message span {
+    line-height: 1.5rem;
+}
+
 .error-message {
     color: var(--negative);
     text-align: center;
+    justify-items: center;
     padding: 8px;
     margin-top: 8px;
     font-size: var(--body-size);
 }
 
-.error-message span {
-    line-height: 3rem;
-}
 
 /* References section styles */
 .references-header::before {

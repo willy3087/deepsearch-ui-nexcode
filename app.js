@@ -253,7 +253,7 @@ function initializeMarkdown() {
                    '</code></pre>';
           } catch (__) {}
         }
-  
+
         return '<pre><code class="hljs">' + md.utils.escapeHtml(str) + '</code></pre>';
       }
     })
@@ -290,13 +290,13 @@ function renderMarkdown(content, returnElement = false) {
   if (md) {
     const rendered = md.render(content);
     tempDiv.innerHTML = rendered;
-    
+
     const footnotes = tempDiv.querySelector('.footnotes');
     if (footnotes) {
       const referencesSection = createReferencesSection(footnotes.innerHTML);
       footnotes.replaceWith(referencesSection);
     }
-    
+
   }
   return returnElement ? tempDiv : tempDiv.innerHTML;
 }
@@ -468,12 +468,12 @@ async function sendMessage() {
                         thinkContentElement.textContent = thinkContent;
                         thinkContentElement.classList.add('auto-scrolling');
                         thinkContentElement.scrollTop = thinkContentElement.scrollHeight;
-                        setTimeout(() => thinkContentElement.classList.remove('auto-scrolling'), 1000);
                         const animationElement = thinkSectionElement.querySelector('#thinking-animation');
                         if (!animationElement) {
                           thinkContentElement.appendChild(thinkingAnimation);
                         }
                         thinkContentElement.style.display = 'block';
+                        setTimeout(() => thinkContentElement.classList.remove('auto-scrolling'), 1000);
                       }
                       tempContent = "";
                     }
@@ -496,6 +496,10 @@ async function sendMessage() {
                       if (thinkHeaderElement) {
                         thinkHeaderElement.textContent = UI_STRINGS.think.initial;
                       }
+                      const animationElement = thinkSectionElement.querySelector('#thinking-animation');
+                        if (!animationElement) {
+                          thinkContentElement.appendChild(thinkingAnimation);
+                        }
                     } else {
                       markdownContent += tempContent;
                       markdownDiv.innerHTML = renderMarkdown(markdownContent);
