@@ -556,7 +556,11 @@ a {
     font-size: var(--secondary-size);
     font-family: 'Roboto Mono', 'Courier New', monospace;
     word-break: break-word;
+    max-height: 30vh;
+    overflow-y: auto;
+    position: relative;
 }
+
 
 .think-content.expanded {
     display: block;
@@ -568,6 +572,15 @@ a {
 
 .markdown {
     padding: 1rem;
+}
+
+table {
+    width: 100%;
+}
+
+table, th, td {
+    border: 1px solid var(--bg-color-100);
+    border-collapse: collapse;
 }
 
 .markdown .footnotes-sep {
