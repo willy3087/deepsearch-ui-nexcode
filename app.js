@@ -198,7 +198,6 @@ function displayMessage(role, content) {
     messageDiv.textContent = content;
   }
 
-  messageDiv.style.textAlign = role === 'user' ? 'right' : 'left';
   chatContainer.appendChild(messageDiv);
   updateEmptyState();
   scrollToBottom();
