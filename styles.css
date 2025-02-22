@@ -277,6 +277,7 @@ a {
     border: unset;
     background: unset;
     height: auto; /* Modified: Allow height to adjust in empty state */
+    top: -10%;
 }
 
 /* Adjust input width when chat is empty */
