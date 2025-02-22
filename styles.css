@@ -147,7 +147,7 @@ button:focus {
 
 
 .footer button {
-    background-color: var(--bg-color-opacity);
+    background-color: unset;
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     -moz-backdrop-filter: blur(20px);
@@ -155,7 +155,7 @@ button:focus {
 }
 
 .footer button:hover {
-    background-color: rgba(var(--bg-color-200), 0.5);
+    background-color: var(--bg-color-opacity);
 }
 
 .footer .buttons-group {
