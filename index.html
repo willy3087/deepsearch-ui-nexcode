@@ -41,21 +41,23 @@
 <div id="chat-app" class="empty-chat">
     <div id="input-area">
         <svg id="logo" viewBox="0 0 240 100" xmlns="http://www.w3.org/2000/svg">
-          <circle fill="#E85F5F" cx="16" cy="84" r="16"/>
-          <circle fill="#F9C964" cx="100" cy="16" r="16"/>
-          <path fill="#008F8F" d="M64 36c2.2 0 4 1.8 4 4v28c0 16.6-13.4 30-30 30h-2V68 40c0-2.2 1.8-4 4-4h24zm48 0c2.2 0 4 1.8 4 4v40c0 2.2-1.8 4-4 4H88c-2.2 0-4-1.8-4-4V40c0-2.2 1.8-4 4-4h24zm36 0h2c16 0 28 12 28 28v16c0 2.2-1.8 4-4 4h-38c-2.2 0-4-1.8-4-4V40c0-2.2 1.8-4 4-4h12zm64 48c-12.8-0.8-22-11.2-22-24 0-13.2 10.8-24 24-24 12.8 0 23.2 9.2 24 22v22c0 2.2-1.8 4-4 4h-22z"/>
+            <circle fill="#E85F5F" cx="16" cy="84" r="16"/>
+            <circle fill="#F9C964" cx="100" cy="16" r="16"/>
+            <path fill="#008F8F"
+                  d="M64 36c2.2 0 4 1.8 4 4v28c0 16.6-13.4 30-30 30h-2V68 40c0-2.2 1.8-4 4-4h24zm48 0c2.2 0 4 1.8 4 4v40c0 2.2-1.8 4-4 4H88c-2.2 0-4-1.8-4-4V40c0-2.2 1.8-4 4-4h24zm36 0h2c16 0 28 12 28 28v16c0 2.2-1.8 4-4 4h-38c-2.2 0-4-1.8-4-4V40c0-2.2 1.8-4 4-4h12zm64 48c-12.8-0.8-22-11.2-22-24 0-13.2 10.8-24 24-24 12.8 0 23.2 9.2 24 22v22c0 2.2-1.8 4-4 4h-22z"/>
         </svg>
         <svg id="small-logo" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg">
-          <g transform="translate(49, 56)">
-            <circle fill="#E85F5F" cx="52" cy="155" r="52"/>
-            <path fill="#008F8F" d="M207 0c7 0 13 6 13 13v90c0 54-43 98-97 98h-6V13c0-7 6-13 13-13h77z"/>
-          </g>
+            <g transform="translate(49, 56)">
+                <circle fill="#E85F5F" cx="52" cy="155" r="52"/>
+                <path fill="#008F8F" d="M207 0c7 0 13 6 13 13v90c0 54-43 98-97 98h-6V13c0-7 6-13 13-13h77z"/>
+            </g>
         </svg>
         <input type="search" id="message-input" maxlength="2000"
                autocomplete="off" autocapitalize="off" spellcheck="false" data-form-type="other"
                placeholder="Type your question here"
                aria-label="Search query input"
                enterkeyhint="search"
+
         />
         <button id="send-button" aria-label="Deep Search">Deep Search</button>
         <button id="clear-button" aria-label="Clear search">
@@ -88,6 +90,19 @@
                 </svg>
                 <span class="sr-only">Help</span>
             </button>
+            <button id="settings-button" aria-label="Settings">
+                <svg class="action-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                     aria-hidden="true">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+                <span class="sr-only">Settings</span>
+            </button>
+
+
+        </div>
+        <div class="footer-text">
             <button id="toggle-api-key" class="icon-button" aria-label="Upgrade to higher rate limit">
                 <svg class="action-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -96,33 +111,6 @@
                 </svg>
                 <span>Upgrade</span>
             </button>
-            <!-- Fixed: Added descriptive text and aria-label -->
-            <button id="theme-toggle" aria-label="Toggle dark/light theme">
-                <svg id="dark-icon" class="action-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                     stroke-linejoin="round" aria-hidden="true">
-                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                </svg>
-                <svg id="light-icon" style="display: none" class="action-icon" xmlns="http://www.w3.org/2000/svg"
-                     width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <circle cx="12" cy="12" r="5"></circle>
-                    <line x1="12" y1="1" x2="12" y2="3"></line>
-                    <line x1="12" y1="21" x2="12" y2="23"></line>
-                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                    <line x1="1" y1="12" x2="3" y2="12"></line>
-                    <line x1="21" y1="12" x2="23" y2="12"></line>
-                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                </svg>
-                <span class="sr-only">Toggle theme</span>
-            </button>
-        </div>
-        <div class="footer-text">
-            <a href="https://jina.ai" target="_blank">
-                <button id="about-jina" class="link-button" aria-label="About Jina AI">About Jina AI</button>
-            </a>
         </div>
     </div>
 </div>
@@ -136,8 +124,7 @@
         </div>
         <div class="dialog-content">
             <p id="free-user-rpm">You can send <b>3 requests per minute</b>.</p>
-            <p class="dialog-description">Use your Jina API key to access higher rate limit. You
-                can get a free API key and know more about the rate limit from our website.</p>
+            <p class="dialog-description">Use your Jina API key to access a higher rate limit. You can get a free API key and learn more about rate limits on our website.</p>
             <input type="password" id="api-key-input" placeholder="Enter your API key" autocomplete="new-password"
                    aria-label="API key input">
         </div>
@@ -156,7 +143,7 @@
 <div class="dialog-overlay" id="help-dialog" role="dialog" aria-labelledby="help-dialog-title" aria-modal="true">
     <div class="dialog">
         <div class="dialog-header">
-            <span class="dialog-title" id="help-dialog-title">Enjoy Pure & Deep</span>
+            <span class="dialog-title" id="help-dialog-title">Enjoy Pure &amp; Deep</span>
             <button class="dialog-close" aria-label="Close help dialog">&times;</button>
         </div>
         <div class="dialog-content">
@@ -164,8 +151,8 @@
                 <li>No ads, no login, no bullet points, no lengthy report, no nonsense design.</li>
                 <li>Free users get 3 search requests per minute. Provide an API key to get a higher rate limit.</li>
                 <li>Add to your browser's search engines via <code>https://search.jina.ai/?q={YOUR_QUERY}</code></li>
-                <li>This <i>is</i> our product, not a POC or hype-chasing gimmick. Interested in on-prem deploy?
-                    Contact us.
+                <li>This <i>is</i> our product, not a POC or hype-chasing gimmick. Interested in on-prem deploy? Contact
+                    us.
                 </li>
             </ul>
         </div>
@@ -184,5 +171,39 @@
         </div>
     </div>
 </div>
+<script async src="preload.js"></script>
+<script defer src="app.js"></script>
+<script defer src="hljs.js"></script>
+<!-- Settings dialog -->
+<div class="dialog-overlay" id="settings-dialog" role="dialog" aria-labelledby="settings-dialog-title"
+     aria-modal="true">
+    <div class="dialog">
+        <div class="dialog-header">
+            <span class="dialog-title" id="settings-dialog-title">Settings</span>
+            <button class="dialog-close" aria-label="Close settings dialog">&times;</button>
+        </div>
+        <div class="dialog-content">
+            <div class="settings-option search-bar-bottom">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="search-bar-bottom">
+                    <span class="toggle-slider"></span>
+                    <span class="toggle-label">Search bar at bottom</span>
+                </label>
+            </div>
+            <div class="settings-option">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="theme-toggle-input">
+                    <span class="toggle-slider"></span>
+                    <span class="toggle-label">Use dark theme</span>
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script async src="preload.js"></script>
+<script defer src="app.js"></script>
+<script defer src="hljs.js"></script>
+
 </body>
 </html>

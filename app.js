@@ -1,4 +1,3 @@
-// UI Strings
 const UI_STRINGS = {
     buttons: {
         send: 'Deep Search',
@@ -24,9 +23,7 @@ const UI_STRINGS = {
 };
 
 // DOM Elements - grouped at the top for better organization
-const themeToggle = document.getElementById('theme-toggle');
-const themeLightIcon = document.getElementById('light-icon');
-const themeDarkIcon = document.getElementById('dark-icon');
+
 const logo = document.getElementById('logo');
 const mainContainer = document.getElementById('main-container');
 const chatContainer = document.getElementById('chat-container');
@@ -42,6 +39,9 @@ const freeUserRPMInfo = document.getElementById('free-user-rpm');
 const apiKeyDialog = document.getElementById('api-key-dialog');
 const helpButton = document.getElementById('help-button');
 const helpDialog = document.getElementById('help-dialog');
+const settingsButton = document.getElementById('settings-button');
+const settingsDialog = document.getElementById('settings-dialog');
+const searchBarBottom = document.getElementById('search-bar-bottom');
 const dialogCloseBtns = document.querySelectorAll('.dialog-close');
 
 const loadingSvg = `<svg id="thinking-animation-icon" width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><style>.spinner_mHwL{animation:spinner_OeFQ .75s cubic-bezier(0.56,.52,.17,.98) infinite; fill:currentColor}.spinner_ote2{animation:spinner_ZEPt .75s cubic-bezier(0.56,.52,.17,.98) infinite;fill:currentColor}@keyframes spinner_OeFQ{0%{cx:4px;r:3px}50%{cx:9px;r:8px}}@keyframes spinner_ZEPt{0%{cx:15px;r:8px}50%{cx:20px;r:3px}}</style><defs><filter id="spinner-gF00"><feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="y"/><feColorMatrix in="y" mode="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 18 -7" result="z"/><feBlend in="SourceGraphic" in2="z"/></filter></defs><g filter="url(#spinner-gF00)"><circle class="spinner_mHwL" cx="4" cy="12" r="3"/><circle class="spinner_ote2" cx="15" cy="12" r="8"/></g></svg>`;
@@ -53,24 +53,7 @@ let abortController = null;
 let existingMessages = [];
 let md;
 
-// Theme toggle handler - fixed logic
-themeToggle.addEventListener('click', () => {
-  const currentTheme = document.documentElement.getAttribute('data-theme');
-  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
 
-  document.documentElement.setAttribute('data-theme', newTheme);
-  localStorage.setItem('theme', newTheme);
-  // Show the opposite icon of new theme to indicate what you'll switch to next
-
-  themeLightIcon.style.display = newTheme === 'dark' ? 'block' : 'none';
-  themeDarkIcon.style.display = newTheme === 'light' ? 'block' : 'none';
-
-  const hlTheme = newTheme === 'light' ? 'vs' : 'vs2015';
-  const hlThemeElement = document.getElementById('hljs-theme');
-  if (hlThemeElement) {
-    hlThemeElement.href = `https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/${hlTheme}.min.css`;
-  }
-});
 
 // API Key Management
 function initializeApiKey() {
@@ -557,6 +540,55 @@ async function sendMessage() {
 
 // Initialize empty state
 updateEmptyState();
+
+// Settings functionality
+function initializeSettings() {
+    // Initialize search bar position
+    const isSearchBarBottom = localStorage.getItem('search_bar_bottom') === 'true';
+    searchBarBottom.checked = isSearchBarBottom;
+    document.body.classList.toggle('search-bar-bottom', isSearchBarBottom);
+
+    // Initialize theme
+    const savedTheme = localStorage.getItem('theme') || getCurrentColorScheme();
+    const themeToggleInput = document.getElementById('theme-toggle-input');
+    themeToggleInput.checked = savedTheme === 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+}
+
+settingsButton.addEventListener('click', () => {
+    settingsDialog.classList.add('visible');
+});
+
+// Close dialog when clicking close button
+dialogCloseBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        const dialog = btn.closest('.dialog-overlay');
+        dialog.classList.remove('visible');
+    });
+});
+
+searchBarBottom.addEventListener('change', (e) => {
+    const isBottom = e.target.checked;
+    localStorage.setItem('search_bar_bottom', isBottom);
+    document.body.classList.toggle('search-bar-bottom', isBottom);
+});
+
+const themeToggleInput = document.getElementById('theme-toggle-input');
+themeToggleInput.addEventListener('change', (e) => {
+    const theme = e.target.checked ? 'dark' : 'light';
+    localStorage.setItem('theme', theme);
+    document.documentElement.setAttribute('data-theme', theme);
+    document.getElementById('dark-icon').style.display = theme === 'dark' ? 'block' : 'none';
+    document.getElementById('light-icon').style.display = theme === 'dark' ? 'none' : 'block';
+    const hlTheme = theme === 'light' ? 'vs' : 'vs2015';
+    const hlThemeElement = document.getElementById('hljs-theme');
+    if (hlThemeElement) {
+        hlThemeElement.href = `third-party/${hlTheme}.min.css`;
+    }
+});
+
+// Initialize settings on load
+initializeSettings();
 
 
 // Event Listeners

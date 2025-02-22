@@ -137,12 +137,18 @@ button:focus {
     justify-content: space-between;
     gap: 10px;
     padding: 5px 10px;
-    background: var(--bg-color-100);
-    border-top: 1px solid var(--bg-color-200);
     z-index: 1000;
     height: 44px;
 }
 
+
+.footer button {
+    background-color: var(--bg-color);
+}
+
+.footer button:hover {
+    background-color: var(--bg-color-100);
+}
 
 .footer .buttons-group {
     display: flex;
@@ -201,7 +207,6 @@ a {
     #chat-app:not(.empty-chat) .footer {
         bottom: unset;
         top: 0;
-        border-bottom: 1px solid var(--bg-color-200);
         border-top: none;
     }
 
@@ -746,21 +751,19 @@ button,
     right: 0;
     bottom: 0;
     background: rgba(0, 0, 0, 0.6);
-    z-index: 1000;
+    z-index: 2000;
     align-items: center;
     justify-content: center;
 
     /* Change display to be always flex, but use visibility and opacity for animation */
-    display: flex;
-    visibility: hidden;
+    display: none;
     opacity: 0;
-    transition: opacity 0.225s cubic-bezier(0.4, 0, 0.2, 1),
-    visibility 0.225s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: opacity 0.225s cubic-bezier(0.4, 0, 0.2, 1);
     pointer-events: none;
 }
 
 .dialog-overlay.visible {
-    visibility: visible;
+    display: flex;
     opacity: 1;
     pointer-events: auto;
 }
@@ -778,6 +781,7 @@ button,
     opacity: 0;
     transition: transform 0.225s cubic-bezier(0.0, 0.0, 0.2, 1),
     opacity 0.225s cubic-bezier(0.0, 0.0, 0.2, 1);
+    pointer-events: auto;
 }
 
 .dialog-overlay.visible .dialog {
@@ -795,4 +799,89 @@ button,
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border-width: 0;
+}
+
+/* Bottom search bar layout */
+body.search-bar-bottom #input-area {
+    top: unset;
+    bottom: 0;
+    border-top: 1px solid var(--bg-color-200);
+    border-bottom: none;
+    z-index: 10;
+}
+
+body.search-bar-bottom .footer {
+    bottom: unset;
+    top: 0;
+    border-top: none;
+    z-index: 10;
+}
+
+body.search-bar-bottom #main-container {
+    padding-top: 54px;
+    padding-bottom: 86px;
+    position: relative;
+    z-index: 5;
+}
+
+/* Toggle switch styles */
+.settings-option {
+    display: flex;
+    align-items: center;
+    margin: 12px 0;
+}
+
+@media (max-width: 768px) {
+    .settings-option.search-bar-bottom {
+        display: none;
+    }
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 24px;
+    background-color: var(--bg-color-200);
+    border-radius: 24px;
+    margin-right: 12px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.toggle-slider:before {
+    content: "";
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    left: 2px;
+    bottom: 2px;
+    background-color: var(--bg-color);
+    border-radius: 50%;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+input:checked + .toggle-slider {
+    background-color: var(--primary);
+}
+
+input:checked + .toggle-slider:before {
+    transform: translateX(16px);
+}
+
+.toggle-label {
+    color: var(--text-color);
+    font-size: var(--body-size);
 }
