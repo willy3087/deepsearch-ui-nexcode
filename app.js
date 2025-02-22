@@ -52,7 +52,6 @@ let isLoading = false;
 let abortController = null;
 let existingMessages = [];
 let md;
-let visitedURLs = [];
 
 
 
@@ -107,15 +106,20 @@ function createReferencesSection(content, visitedURLs = []) {
 
         const faviconList = document.createElement('div');
         faviconList.classList.add('favicon-list');
-
+        const existingDomains = new Set();
         visitedURLs.forEach(url => {
+            const domain = new URL(url).hostname;
+            if (existingDomains.has(domain)) {
+                return;
+            }
+            existingDomains.add(domain);
             const faviconItem = document.createElement('div');
             faviconItem.classList.add('favicon-item');
             faviconItem.setAttribute('data-url', url);
 
             const img = document.createElement('img');
             try {
-                const domain = new URL(url).hostname;
+
                 img.src = `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
                 img.onerror = () => {
                     img.src = 'favicon.ico'; // Fallback to default favicon
@@ -446,6 +450,7 @@ async function sendMessage() {
 
       const decoder = new TextDecoder();
       let partialBrokenData = '';
+      let visitedURLs = [];
 
       while (true) {
         const { done, value } = await reader.read();
@@ -554,20 +559,6 @@ async function sendMessage() {
       }
 
       if (markdownContent) {
-        // Extract URLs from the markdown content
-        const urlRegex = /\[.*?\]\((https?:\/\/[^\s)]+)\)/g;
-        const matches = markdownContent.matchAll(urlRegex);
-        visitedURLs = Array.from(matches, m => m[1]);
-
-        // If no URLs found in markdown links, try extracting raw URLs
-        if (visitedURLs.length === 0) {
-          const rawUrlRegex = /(https?:\/\/[^\s]+)/g;
-          const rawMatches = markdownContent.match(rawUrlRegex);
-          if (rawMatches) {
-            visitedURLs = rawMatches;
-          }
-        }
-
         const markdown = renderMarkdown(markdownContent, true, visitedURLs);
         markdownDiv.replaceChildren(markdown);
         const copyButton = createCopyButton(markdownContent);

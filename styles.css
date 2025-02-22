@@ -14,7 +14,7 @@
     --subtitle-size: 16px;
     --body-size: 14px;
     --secondary-size: 12px;
-    --bg-color-opacity: rgba(0, 0, 0, 0.1);
+    --bg-color-opacity: rgba(0, 0, 0, 0.05);
 
 }
 
@@ -27,7 +27,7 @@
     --text-color: #e8eaed;
     --text-secondary: #969ba1;
     --input-focus-shadow: rgba(232, 234, 237, 0.16);
-    --bg-color-opacity: rgba(255, 255, 255, 0.1);
+    --bg-color-opacity: rgba(255, 255, 255, 0.05);
 }
 
 body {
@@ -715,7 +715,7 @@ ol.footnotes-list {
 
 .favicon-list {
     display: flex;
-    gap: 8px;
+    gap: 1px;
     flex-wrap: wrap;
 }
 
