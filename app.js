@@ -52,6 +52,7 @@ let isLoading = false;
 let abortController = null;
 let existingMessages = [];
 let md;
+let visitedURLs = [];
 
 
 
@@ -72,7 +73,12 @@ initializeApiKey();
 saveApiKeyBtn.addEventListener('click', handleApiKeySave);
 
 // Message display functions
-function createReferencesSection(content) {
+function createReferencesSection(content, visitedURLs = []) {
+    // Don't create section if no content and no URLs
+    if (!content && (!visitedURLs || visitedURLs.length === 0)) {
+        return null;
+    }
+
     const section = document.createElement('div');
     section.classList.add('references-section');
 
@@ -81,18 +87,56 @@ function createReferencesSection(content) {
     header.textContent = 'References';
 
     const contentDiv = document.createElement('div');
-    contentDiv.classList.add('references-content');
+    contentDiv.classList.add('references-content', 'hidden');
     contentDiv.innerHTML = content;
 
     header.addEventListener('click', (e) => {
         e.stopPropagation();
-        contentDiv.classList.toggle('expanded');
+        contentDiv.classList.toggle('hidden');
         header.classList.toggle('expanded');
-        contentDiv.style.display = contentDiv.classList.contains('expanded') ? 'block' : 'none';
+        contentDiv.style.display = contentDiv.classList.contains('hidden') ? 'none' : 'block';
     });
 
     section.appendChild(header);
     section.appendChild(contentDiv);
+
+    // Add favicons section if URLs exist
+    if (visitedURLs?.length > 0) {
+        const faviconContainer = document.createElement('div');
+        faviconContainer.classList.add('references-favicons');
+
+        const faviconList = document.createElement('div');
+        faviconList.classList.add('favicon-list');
+
+        visitedURLs.forEach(url => {
+            const faviconItem = document.createElement('div');
+            faviconItem.classList.add('favicon-item');
+            faviconItem.setAttribute('data-url', url);
+
+            const img = document.createElement('img');
+            try {
+                const domain = new URL(url).hostname;
+                img.src = `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
+                img.onerror = () => {
+                    img.src = 'favicon.ico'; // Fallback to default favicon
+                };
+            } catch (e) {
+                img.src = 'favicon.ico'; // Fallback for invalid URLs
+            }
+
+            faviconItem.appendChild(img);
+            faviconList.appendChild(faviconItem);
+        });
+
+        const sourcesCount = document.createElement('div');
+        sourcesCount.classList.add('sources-count');
+        sourcesCount.textContent = `${visitedURLs.length} sources`;
+
+        faviconContainer.appendChild(faviconList);
+        faviconContainer.appendChild(sourcesCount);
+        section.appendChild(faviconContainer);
+    }
+
     return section;
 }
 
@@ -263,7 +307,7 @@ function markdownItTableWrapper(md) {
   };
 }
 
-function renderMarkdown(content, returnElement = false) {
+function renderMarkdown(content, returnElement = false, visitedURLs = []) {
   if (!md) {
     initializeMarkdown();
   }
@@ -274,11 +318,19 @@ function renderMarkdown(content, returnElement = false) {
     tempDiv.innerHTML = rendered;
 
     const footnotes = tempDiv.querySelector('.footnotes');
-    if (footnotes) {
-      const referencesSection = createReferencesSection(footnotes.innerHTML);
-      footnotes.replaceWith(referencesSection);
+    const footnoteContent = footnotes ? footnotes.innerHTML : '';
+    
+    // Create references section if there are footnotes or visitedURLs
+    const referencesSection = createReferencesSection(footnoteContent, visitedURLs);
+    if (referencesSection) {
+      if (footnotes) {
+        footnotes.replaceWith(referencesSection);
+      } else {
+        tempDiv.appendChild(referencesSection);
+      }
+    } else if (footnotes) {
+      footnotes.remove();
     }
-
   }
   return returnElement ? tempDiv : tempDiv.innerHTML;
 }
@@ -412,7 +464,11 @@ async function sendMessage() {
               if (partialBrokenData) {
                 const json = JSON.parse(partialBrokenData);
                 partialBrokenData = '';
-                const content = json.choices[0].delta.content;
+                const content = json.choices[0]?.delta?.content || '';
+                // Store visitedURLs from the final chunk if provided
+                if (json.visitedURLs) {
+                    visitedURLs = json.visitedURLs;
+                }
                 removeLoadingIndicator(assistantMessageDiv);
 
                 let tempContent = content;
@@ -498,7 +554,21 @@ async function sendMessage() {
       }
 
       if (markdownContent) {
-        const markdown = renderMarkdown(markdownContent, true);
+        // Extract URLs from the markdown content
+        const urlRegex = /\[.*?\]\((https?:\/\/[^\s)]+)\)/g;
+        const matches = markdownContent.matchAll(urlRegex);
+        visitedURLs = Array.from(matches, m => m[1]);
+
+        // If no URLs found in markdown links, try extracting raw URLs
+        if (visitedURLs.length === 0) {
+          const rawUrlRegex = /(https?:\/\/[^\s]+)/g;
+          const rawMatches = markdownContent.match(rawUrlRegex);
+          if (rawMatches) {
+            visitedURLs = rawMatches;
+          }
+        }
+
+        const markdown = renderMarkdown(markdownContent, true, visitedURLs);
         markdownDiv.replaceChildren(markdown);
         const copyButton = createCopyButton(markdownContent);
         assistantMessageDiv.appendChild(copyButton);
