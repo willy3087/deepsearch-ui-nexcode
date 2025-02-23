@@ -135,9 +135,9 @@ function createReferencesSection(content, visitedURLs = []) {
         const sourcesCount = document.createElement('div');
         sourcesCount.classList.add('sources-count');
         sourcesCount.textContent = `${visitedURLs.length} sources`;
+        faviconList.appendChild(sourcesCount);
 
         faviconContainer.appendChild(faviconList);
-        faviconContainer.appendChild(sourcesCount);
         section.appendChild(faviconContainer);
     }
 
