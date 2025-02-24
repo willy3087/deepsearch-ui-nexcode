@@ -743,7 +743,6 @@ ol.footnotes-list {
     bottom: 100%;
     left: 50%;
     max-width: 200px;
-    word-break: break-all;
     overflow-wrap: break-word;
     transform: translateX(-50%);
     background: var(--bg-color-300);
