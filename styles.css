@@ -87,8 +87,8 @@ header {
 
 #small-logo {
     display: none;
-    width: 32px;
-    height: 32px;
+    width: 24px;
+    height: 24px;
 }
 
 [data-theme="dark"] #logo circle,
@@ -204,17 +204,18 @@ a {
         display: none;
     }
 
-    #chat-app:not(.empty-chat) #small-logo {
-        display: flex;
-        align-items: center;
-        flex-shrink: 0;
-    }
+    /*#chat-app:not(.empty-chat) #small-logo {*/
+    /*    display: flex;*/
+    /*    align-items: center;*/
+    /*    flex-shrink: 0;*/
+    /*}*/
 
     #chat-app:not(.empty-chat) #input-area {
         top: unset;
         bottom: 0;
         border-top: 1px solid var(--bg-color-200);
         border-bottom: none;
+        gap: 5px;
     }
 
 

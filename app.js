@@ -115,67 +115,94 @@ function createReferencesSection(content, visitedURLs = []) {
 }
 
 const renderFaviconList = async (visitedURLs) => {
+    // Create DOM elements and data structures
     const faviconList = document.createElement('div');
     faviconList.classList.add('favicon-list');
 
-    // Process unique domains while keeping original URLs
-    const domainToUrls = new Map();
-    visitedURLs.forEach(url => {
+    // Process URLs and create Map of domain -> {urls, element data}
+    const domainMap = visitedURLs.reduce((map, url) => {
         try {
             const domain = new URL(url).hostname;
-            if (!domainToUrls.has(domain)) {
-                domainToUrls.set(domain, []);
+            if (!map.has(domain)) {
+                const img = document.createElement('img');
+                const item = document.createElement('div');
+
+                img.src = 'favicon.ico';
+                img.width = img.height = 16;
+                img.alt = domain;
+
+                item.classList.add('favicon-item');
+                item.setAttribute('data-url', url);
+                item.appendChild(img);
+                faviconList.appendChild(item);
+
+                map.set(domain, {
+                    urls: [url],
+                    img,
+                    item
+                });
+            } else {
+                map.get(domain).urls.push(url);
             }
-            domainToUrls.get(domain).push(url);
+
+            // Update tooltip with URL count
+            const data = map.get(domain);
+            data.item.setAttribute('title', `${domain}\n${data.urls.length} URLs`);
         } catch (e) {
             console.error('Invalid URL:', url);
         }
-    });
+        return map;
+    }, new Map());
 
-    // Create placeholder items first for better UX
-    const itemMap = new Map();
-    for (const [domain, urls] of domainToUrls) {
-        const faviconItem = document.createElement('div');
-        faviconItem.classList.add('favicon-item');
-        faviconItem.setAttribute('data-url', urls[0]); // Set first URL as data-url
-        faviconItem.setAttribute('title', `${domain}\n${urls.length} URLs`); // Show domain and count in tooltip
+    // Add sources count
+    faviconList.appendChild(
+        Object.assign(document.createElement('div'), {
+            className: 'sources-count',
+            textContent: `${visitedURLs.length} sources`
+        })
+    );
 
-        const img = document.createElement('img');
-        img.src = 'favicon.ico'; // Default placeholder
-        img.width = 16;
-        img.height = 16;
-        img.alt = domain;
-
-        faviconItem.appendChild(img);
-        faviconList.appendChild(faviconItem);
-        itemMap.set(domain, { img, item: faviconItem, urls });
-    }
-
-    // Add count immediately
-    const sourcesCount = document.createElement('div');
-    sourcesCount.classList.add('sources-count');
-    sourcesCount.textContent = `${visitedURLs.length} sources`;
-    faviconList.appendChild(sourcesCount);
-
-    // Fetch favicons in batches of 10
-    const BATCH_SIZE = 32;
-    const domains = Array.from(domainToUrls.keys());
-    for (let i = 0; i < domains.length; i += BATCH_SIZE) {
-        const batchDomains = domains.slice(i, i + BATCH_SIZE);
+    // Favicon fetching function with retry support
+    const fetchFavicons = async (domains) => {
+        const failedDomains = [];
         try {
-            const response = await fetch(`https://favicon-fetcher.jina.ai/?domains=${batchDomains.join(',')}&timeout=3000`);
+            const response = await fetch(
+                `https://favicon-fetcher.jina.ai/?domains=${domains.join(',')}&timeout=3000`
+            );
             if (!response.ok) throw new Error('Favicon fetch failed');
 
             const favicons = await response.json();
             favicons.forEach(({ domain, favicon, type }) => {
-                const itemData = itemMap.get(domain);
-                if (itemData && favicon) {
-                    itemData.img.src = `data:${type};base64,${favicon}`;
+                if (domainMap.has(domain) && favicon) {
+                    domainMap.get(domain).img.src = `data:${type};base64,${favicon}`;
+                } else {
+                    failedDomains.push(domain);
                 }
             });
         } catch (error) {
             console.error('Error fetching favicons:', error);
-            // On error, affected images will keep showing the default favicon
+            failedDomains.push(...domains);
+        }
+        return failedDomains;
+    };
+
+    // Process domains in batches with retry
+    const BATCH_SIZE = 16;
+    const domains = Array.from(domainMap.keys());
+    let failedDomains = [];
+
+    // Initial batch processing
+    for (let i = 0; i < domains.length; i += BATCH_SIZE) {
+        failedDomains.push(
+            ...await fetchFavicons(domains.slice(i, i + BATCH_SIZE))
+        );
+    }
+
+    // Retry failed domains
+    if (failedDomains.length > 0) {
+        console.log(`Retrying ${failedDomains.length} failed domains...`);
+        for (let i = 0; i < failedDomains.length; i += BATCH_SIZE) {
+            await fetchFavicons(failedDomains.slice(i, i + BATCH_SIZE));
         }
     }
 
