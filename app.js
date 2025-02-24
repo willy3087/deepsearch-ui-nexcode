@@ -82,17 +82,18 @@ function createReferencesSection(content, visitedURLs = []) {
 
     const header = document.createElement('div');
     header.classList.add('references-header');
+    header.classList.add('collapsed');
     header.textContent = 'References';
 
     const contentDiv = document.createElement('div');
-    contentDiv.classList.add('references-content', 'hidden');
+    contentDiv.classList.add('references-content');
     contentDiv.innerHTML = content;
 
     header.addEventListener('click', (e) => {
         e.stopPropagation();
-        contentDiv.classList.toggle('hidden');
+        contentDiv.classList.toggle('expanded');
         header.classList.toggle('expanded');
-        contentDiv.style.display = contentDiv.style.display === 'none' ? 'block' : 'none';
+        header.classList.toggle('collapsed');
     });
 
     section.appendChild(header);
@@ -199,25 +200,15 @@ function createThinkSection(messageDiv) {
     if (expanded) {
         thinkHeader.classList.add('expanded');
         thinkContent.classList.add('expanded');
-        thinkContent.style.display = 'block';
     } else {
         thinkHeader.classList.add('collapsed');
-        thinkContent.style.display = 'none';
     }
 
     thinkSection.addEventListener('click', (e) => {
         e.stopPropagation();
         thinkContent.classList.toggle('expanded');
-
-        if (thinkContent.classList.contains('expanded')) {
-            thinkHeader.classList.add('expanded');
-            thinkHeader.classList.remove('collapsed');
-        } else {
-            thinkHeader.classList.remove('expanded');
-            thinkHeader.classList.add('collapsed');
-        }
-
-        thinkContent.style.display = thinkContent.classList.contains('expanded') ? 'block' : 'none';
+        thinkHeader.classList.toggle('expanded');
+        thinkHeader.classList.toggle('collapsed');
         localStorage.setItem('think_section_expanded', thinkContent.classList.contains('expanded'));
     });
 
@@ -533,7 +524,6 @@ async function sendMessage() {
                                             tempContent = tempContent.substring(thinkEndIndex + "</think>".length);
                                             if (thinkSectionElement) {
                                                 const thinkContentElement = thinkSectionElement.querySelector('.think-content');
-                                                thinkContentElement.style.display = 'none';
                                                 thinkContentElement.classList.remove('expanded');
 
                                                 if (thinkHeaderElement) {
@@ -552,7 +542,7 @@ async function sendMessage() {
                                                 if (!animationElement) {
                                                     thinkContentElement.appendChild(thinkingAnimation);
                                                 }
-                                                thinkContentElement.style.display = 'block';
+                                                thinkContentElement.classList.add('expanded');
                                                 setTimeout(() => thinkContentElement.classList.remove('auto-scrolling'), 1000);
                                             }
                                             tempContent = "";
@@ -571,7 +561,7 @@ async function sendMessage() {
                                             const thinkContentElement = thinkSectionElement.querySelector('.think-content');
                                             thinkContentElement.textContent = thinkContent;
                                             thinkContentElement.scrollTop = thinkContentElement.scrollHeight;
-                                            thinkContentElement.style.display = 'block';
+                                            thinkContentElement.classList.add('expanded');
 
                                             if (thinkHeaderElement) {
                                                 thinkHeaderElement.textContent = UI_STRINGS.think.initial;
@@ -694,11 +684,6 @@ messageInput.addEventListener('keydown', (event) => {
     if (event.key === "Enter") {
         sendMessage();
     }
-});
-
-// Help dialog event listeners
-helpButton.addEventListener('click', () => {
-    helpDialog.style.display = 'flex';
 });
 
 // Close dialogs when clicking outside
@@ -898,8 +883,9 @@ function handleFootnoteClick(event) {
 
     // Expand the references section if it's not already expanded
     if (!referencesHeader.classList.contains('expanded')) {
-      referencesHeader.classList.add('expanded');
-      referencesContent.style.display = 'block';
+      referencesHeader.classList.toggle('expanded');
+      referencesHeader.classList.toggle('collapsed');
+      referencesContent.classList.toggle('expanded');
     }
 
     // Find and highlight the target footnote
