@@ -489,7 +489,6 @@ a {
     text-align: center;
     justify-items: center;
     padding: 8px;
-    margin-top: 8px;
     font-size: var(--body-size);
 }
 
@@ -743,13 +742,15 @@ ol.footnotes-list {
     position: absolute;
     bottom: 100%;
     left: 50%;
+    max-width: 200px;
+    word-break: break-all;
+    overflow-wrap: break-word;
     transform: translateX(-50%);
     background: var(--bg-color-300);
     color: var(--text-color);
     padding: 4px 8px;
     border-radius: 4px;
     font-size: var(--secondary-size);
-    white-space: nowrap;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     z-index: 1;
 }

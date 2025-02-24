@@ -133,6 +133,15 @@ const renderFaviconList = async (visitedURLs) => {
                 item.classList.add('favicon-item');
                 item.setAttribute('data-url', url);
                 item.appendChild(img);
+
+                // Add click handler for favicon
+                item.addEventListener('click', () => {
+                    window.open(url, '_blank');
+                });
+
+                // Add cursor pointer style
+                item.style.cursor = 'pointer';
+
                 faviconList.appendChild(item);
 
                 map.set(domain, {
@@ -171,7 +180,7 @@ const renderFaviconList = async (visitedURLs) => {
             if (!response.ok) throw new Error('Favicon fetch failed');
 
             const favicons = await response.json();
-            favicons.forEach(({ domain, favicon, type }) => {
+            favicons.forEach(({domain, favicon, type}) => {
                 if (domainMap.has(domain) && favicon) {
                     domainMap.get(domain).img.src = `data:${type};base64,${favicon}`;
                 } else {
@@ -650,16 +659,25 @@ async function sendMessage() {
 
 
     } catch (error) {
+        removeLoadingIndicator(assistantMessageDiv);
+        const errorText = document.createElement('span');
+        const errorIcon = `<svg id="error-icon" class="action-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>`;
         if (error.name !== 'AbortError') {
-            assistantMessageDiv.textContent = `Error: ${error.message || String(error)}`;
+            errorText.innerHTML = errorIcon + `Error: ${error.message || String(error)}`;
+
         } else {
             if (assistantMessageDiv) {
-                assistantMessageDiv.textContent = "Request cancelled.";
+                errorText.innerHTML = errorIcon + `Error: Request cancelled.`;
             }
         }
+        const errorContainer = document.createElement('div');
+        errorContainer.className = 'error-message';
+        errorContainer.appendChild(errorText);
+        assistantMessageDiv.appendChild(errorContainer);
     } finally {
         isLoading = false;
         sendButton.disabled = false;
+        makeAllLinksOpenInNewTab();
     }
 }
 
@@ -907,43 +925,56 @@ function playNotificationSound() {
 
 // Function to handle footnote clicks
 function handleFootnoteClick(event) {
-  // Check if the clicked element is a footnote reference
-  if (event.target.matches('.footnote-ref a') || event.target.matches('.footnote-backref')) {
-    event.preventDefault();
+    // Check if the clicked element is a footnote reference
+    if (event.target.matches('.footnote-ref a') || event.target.matches('.footnote-backref')) {
+        event.preventDefault();
 
-    // Extract the footnote ID from the href
-    const href = event.target.getAttribute('href');
-    const footnoteId = href.replace('#', '');
+        // Extract the footnote ID from the href
+        const href = event.target.getAttribute('href');
+        const footnoteId = href.replace('#', '');
 
-    // Find the references section
-    const referencesSection = event.target.closest('.message').querySelector('.references-section');
-    if (!referencesSection) return;
+        // Find the references section
+        const referencesSection = event.target.closest('.message').querySelector('.references-section');
+        if (!referencesSection) return;
 
-    // Get the header and content elements
-    const referencesHeader = referencesSection.querySelector('.references-header');
-    const referencesContent = referencesSection.querySelector('.references-content');
+        // Get the header and content elements
+        const referencesHeader = referencesSection.querySelector('.references-header');
+        const referencesContent = referencesSection.querySelector('.references-content');
 
-    // Expand the references section if it's not already expanded
-    if (!referencesHeader?.classList.contains('expanded') || referencesContent?.style.display === 'none') {
-      referencesHeader.classList.add('expanded');
-      referencesContent.style.display = 'block';
+        // Expand the references section if it's not already expanded
+        if (!referencesHeader?.classList.contains('expanded') || referencesContent?.style.display === 'none') {
+            referencesHeader.classList.add('expanded');
+            referencesContent.style.display = 'block';
+        }
+
+        // Find and highlight the target footnote
+        const targetFootnote = referencesContent.querySelector(`#${footnoteId}`);
+        if (targetFootnote) {
+            // Remove any existing highlights
+            const existingHighlights = referencesContent.querySelectorAll('.footnote-highlight');
+            existingHighlights.forEach(el => el.classList.remove('footnote-highlight'));
+
+            // Add highlight class to trigger animation
+            targetFootnote.classList.add('footnote-highlight');
+
+            // Scroll the footnote into view
+            targetFootnote.scrollIntoView({behavior: 'smooth', block: 'center'});
+        }
     }
-
-    // Find and highlight the target footnote
-    const targetFootnote = referencesContent.querySelector(`#${footnoteId}`);
-    if (targetFootnote) {
-      // Remove any existing highlights
-      const existingHighlights = referencesContent.querySelectorAll('.footnote-highlight');
-      existingHighlights.forEach(el => el.classList.remove('footnote-highlight'));
-
-      // Add highlight class to trigger animation
-      targetFootnote.classList.add('footnote-highlight');
-
-      // Scroll the footnote into view
-      targetFootnote.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-  }
 }
 
 // Add the event listener to the chat container to handle all footnote clicks
 document.getElementById('chat-container').addEventListener('click', handleFootnoteClick);
+
+const makeAllLinksOpenInNewTab = () => {
+    // Select all <a> tags on the page
+    const links = document.querySelectorAll('a');
+
+    // Add target="_blank" to each link
+    links.forEach(link => {
+        link.setAttribute('target', '_blank');
+
+        // Add rel="noopener" for security best practices
+        link.setAttribute('rel', 'noopener');
+    });
+};
