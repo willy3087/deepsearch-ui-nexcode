@@ -828,38 +828,29 @@ function handleVisibilityChange() {
     }
 }
 
+
 function setFaviconBadge() {
     if (document.visibilityState === 'visible') {
-        // dont set favicon badge if the tab is already visible
+        clearFaviconBadge();
         return;
     }
+
     const favicon = document.querySelector('link[rel="icon"]');
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
+    clearFaviconBadge();
 
-    // Load original favicon as base
-    const img = new Image();
-    img.onload = function () {
-        // Draw original favicon
-        canvas.width = img.width;
-        canvas.height = img.height;
-        ctx.drawImage(img, 0, 0);
+    // Organic double-pulse heartbeat pattern
+    const pattern = [400, 700, 400, 1500];  // pulse, pause, pulse, rest
+    let step = 0;
 
-        // Add notification dot (bigger size)
-        const dotSize = Math.max(8, canvas.width / 4);
-        ctx.fillStyle = '#FF0000';
-        ctx.beginPath();
-        ctx.arc(canvas.width - dotSize / 2, dotSize / 2, dotSize / 2, 0, 2 * Math.PI);
-        ctx.fill();
-
-        // Update favicon
-        favicon.href = canvas.toDataURL('image/png');
-    };
-    img.src = favicon.href || '/favicon.ico';
+    favicon.pulseInterval = setInterval(() => {
+        favicon.href = step % 2 ? '/favicon.ico' : '/favicon-empty.ico';
+        step = (step + 1) % pattern.length;
+    }, pattern[0]);
 }
 
 function clearFaviconBadge() {
     const favicon = document.querySelector('link[rel="icon"]');
+    clearInterval(favicon.pulseInterval);
     favicon.href = '/favicon.ico';
 }
 
