@@ -92,7 +92,7 @@ function createReferencesSection(content, visitedURLs = []) {
         e.stopPropagation();
         contentDiv.classList.toggle('hidden');
         header.classList.toggle('expanded');
-        contentDiv.style.display = contentDiv.classList.contains('hidden') ? 'none' : 'block';
+        contentDiv.style.display = contentDiv.style.display === 'none' ? 'block' : 'none';
     });
 
     section.appendChild(header);
@@ -876,3 +876,47 @@ function playNotificationSound() {
     osc1.stop(audioCtx.currentTime + 0.4);
     osc2.stop(audioCtx.currentTime + 0.4);
 }
+
+
+// Function to handle footnote clicks
+function handleFootnoteClick(event) {
+  // Check if the clicked element is a footnote reference
+  if (event.target.matches('.footnote-ref a') || event.target.matches('.footnote-backref')) {
+    event.preventDefault();
+
+    // Extract the footnote ID from the href
+    const href = event.target.getAttribute('href');
+    const footnoteId = href.replace('#', '');
+
+    // Find the references section
+    const referencesSection = event.target.closest('.message').querySelector('.references-section');
+    if (!referencesSection) return;
+
+    // Get the header and content elements
+    const referencesHeader = referencesSection.querySelector('.references-header');
+    const referencesContent = referencesSection.querySelector('.references-content');
+
+    // Expand the references section if it's not already expanded
+    if (!referencesHeader.classList.contains('expanded')) {
+      referencesHeader.classList.add('expanded');
+      referencesContent.style.display = 'block';
+    }
+
+    // Find and highlight the target footnote
+    const targetFootnote = referencesContent.querySelector(`#${footnoteId}`);
+    if (targetFootnote) {
+      // Remove any existing highlights
+      const existingHighlights = referencesContent.querySelectorAll('.footnote-highlight');
+      existingHighlights.forEach(el => el.classList.remove('footnote-highlight'));
+
+      // Add highlight class to trigger animation
+      targetFootnote.classList.add('footnote-highlight');
+
+      // Scroll the footnote into view
+      targetFootnote.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+}
+
+// Add the event listener to the chat container to handle all footnote clicks
+document.getElementById('chat-container').addEventListener('click', handleFootnoteClick);

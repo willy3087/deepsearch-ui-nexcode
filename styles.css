@@ -6,6 +6,7 @@
     --bg-color-300: #d3d3d3;
     --primary: #008F8F;
     --negative: #E85F5F;
+    --warning: #F9C964;
     --disabled: #f2f2f2;
     --text-color: #202124;
     --text-secondary: #5f6368;
@@ -958,4 +959,16 @@ input:checked + .toggle-slider:before {
 .toggle-label {
     color: var(--text-color);
     font-size: var(--body-size);
+}
+
+@keyframes highlightFootnote {
+    0% { background-color: transparent; }
+    10% { background-color: var(--warning); }
+    90% { background-color: var(--warning); }
+    100% { background-color: transparent; }
+}
+
+.footnote-highlight {
+    animation: highlightFootnote 2s ease-out;
+    border-radius: 5px;
 }
