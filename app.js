@@ -54,14 +54,13 @@ let existingMessages = [];
 let md;
 
 
-
 // API Key Management
 function initializeApiKey() {
-  const savedKey = localStorage.getItem('api_key') || '';
-  apiKeyInput.value = savedKey;
-  getApiKeyBtn.style.display = savedKey ? 'none' : 'block';
-  freeUserRPMInfo.style.display = savedKey ? 'none' : 'block';
-  toggleApiKeyBtnText.textContent = savedKey ? UI_STRINGS.buttons.updateKey : UI_STRINGS.buttons.addKey;
+    const savedKey = localStorage.getItem('api_key') || '';
+    apiKeyInput.value = savedKey;
+    getApiKeyBtn.style.display = savedKey ? 'none' : 'block';
+    freeUserRPMInfo.style.display = savedKey ? 'none' : 'block';
+    toggleApiKeyBtnText.textContent = savedKey ? UI_STRINGS.buttons.updateKey : UI_STRINGS.buttons.addKey;
 }
 
 
@@ -104,499 +103,537 @@ function createReferencesSection(content, visitedURLs = []) {
         const faviconContainer = document.createElement('div');
         faviconContainer.classList.add('references-favicons');
 
-        const faviconList = document.createElement('div');
-        faviconList.classList.add('favicon-list');
-        const existingDomains = new Set();
-        visitedURLs.forEach(url => {
-            const domain = new URL(url).hostname;
-            if (existingDomains.has(domain)) {
-                return;
-            }
-            existingDomains.add(domain);
-            const faviconItem = document.createElement('div');
-            faviconItem.classList.add('favicon-item');
-            faviconItem.setAttribute('data-url', url);
-
-            const img = document.createElement('img');
-            try {
-
-                img.src = `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
-                img.onerror = () => {
-                    img.src = 'favicon.ico'; // Fallback to default favicon
-                };
-            } catch (e) {
-                img.src = 'favicon.ico'; // Fallback for invalid URLs
-            }
-
-            faviconItem.appendChild(img);
-            faviconList.appendChild(faviconItem);
+        renderFaviconList(visitedURLs).then(faviconList => {
+            faviconContainer.appendChild(faviconList);
+            section.appendChild(faviconContainer);
         });
 
-        const sourcesCount = document.createElement('div');
-        sourcesCount.classList.add('sources-count');
-        sourcesCount.textContent = `${visitedURLs.length} sources`;
-        faviconList.appendChild(sourcesCount);
-
-        faviconContainer.appendChild(faviconList);
-        section.appendChild(faviconContainer);
     }
 
     return section;
 }
 
-function createThinkSection(messageDiv) {
-  const thinkSection = document.createElement('div');
-  thinkSection.classList.add('think-section');
+const renderFaviconList = async (visitedURLs) => {
+    const faviconList = document.createElement('div');
+    faviconList.classList.add('favicon-list');
 
-  const thinkHeader = document.createElement('div');
-  thinkHeader.classList.add('think-header');
-  thinkHeader.classList.add('expanded');
+    // Process unique domains while keeping original URLs
+    const domainToUrls = new Map();
+    visitedURLs.forEach(url => {
+        try {
+            const domain = new URL(url).hostname;
+            if (!domainToUrls.has(domain)) {
+                domainToUrls.set(domain, []);
+            }
+            domainToUrls.get(domain).push(url);
+        } catch (e) {
+            console.error('Invalid URL:', url);
+        }
+    });
 
-  thinkHeader.appendChild(document.createTextNode(UI_STRINGS.think.initial));
-  thinkSection.appendChild(thinkHeader);
+    // Create placeholder items first for better UX
+    const itemMap = new Map();
+    for (const [domain, urls] of domainToUrls) {
+        const faviconItem = document.createElement('div');
+        faviconItem.classList.add('favicon-item');
+        faviconItem.setAttribute('data-url', urls[0]); // Set first URL as data-url
+        faviconItem.setAttribute('title', `${domain}\n${urls.length} URLs`); // Show domain and count in tooltip
 
-  const thinkContent = document.createElement('div');
-  thinkContent.classList.add('think-content');
+        const img = document.createElement('img');
+        img.src = 'favicon.ico'; // Default placeholder
+        img.width = 16;
+        img.height = 16;
+        img.alt = domain;
 
-  const expanded = localStorage.getItem('think_section_expanded') === 'true';
-  if (expanded) {
-    thinkHeader.classList.add('expanded');
-    thinkContent.classList.add('expanded');
-    thinkContent.style.display = 'block';
-  } else {
-    thinkHeader.classList.add('collapsed');
-    thinkContent.style.display = 'none';
-  }
-
-  thinkHeader.addEventListener('click', (e) => {
-    e.stopPropagation();
-    thinkContent.classList.toggle('expanded');
-
-    if (thinkContent.classList.contains('expanded')) {
-      thinkHeader.classList.add('expanded');
-      thinkHeader.classList.remove('collapsed');
-    } else {
-      thinkHeader.classList.remove('expanded');
-      thinkHeader.classList.add('collapsed');
+        faviconItem.appendChild(img);
+        faviconList.appendChild(faviconItem);
+        itemMap.set(domain, { img, item: faviconItem, urls });
     }
 
-    thinkContent.style.display = thinkContent.classList.contains('expanded') ? 'block' : 'none';
-    localStorage.setItem('think_section_expanded', thinkContent.classList.contains('expanded'));
-  });
+    // Add count immediately
+    const sourcesCount = document.createElement('div');
+    sourcesCount.classList.add('sources-count');
+    sourcesCount.textContent = `${visitedURLs.length} sources`;
+    faviconList.appendChild(sourcesCount);
 
-  // thinkSection.appendChild(thinkHeader);
-  thinkSection.appendChild(thinkContent);
-  messageDiv.prepend(thinkSection);
-  return thinkSection;
+    // Fetch favicons in batches of 10
+    const BATCH_SIZE = 32;
+    const domains = Array.from(domainToUrls.keys());
+    for (let i = 0; i < domains.length; i += BATCH_SIZE) {
+        const batchDomains = domains.slice(i, i + BATCH_SIZE);
+        try {
+            const response = await fetch(`https://favicon-fetcher.jina.ai/?domains=${batchDomains.join(',')}&timeout=3000`);
+            if (!response.ok) throw new Error('Favicon fetch failed');
+
+            const favicons = await response.json();
+            favicons.forEach(({ domain, favicon, type }) => {
+                const itemData = itemMap.get(domain);
+                if (itemData && favicon) {
+                    itemData.img.src = `data:${type};base64,${favicon}`;
+                }
+            });
+        } catch (error) {
+            console.error('Error fetching favicons:', error);
+            // On error, affected images will keep showing the default favicon
+        }
+    }
+
+    return faviconList;
+};
+
+function createThinkSection(messageDiv) {
+    const thinkSection = document.createElement('div');
+    thinkSection.classList.add('think-section');
+
+    const thinkHeader = document.createElement('div');
+    thinkHeader.classList.add('think-header');
+    thinkHeader.classList.add('expanded');
+
+    thinkHeader.appendChild(document.createTextNode(UI_STRINGS.think.initial));
+    thinkSection.appendChild(thinkHeader);
+
+    const thinkContent = document.createElement('div');
+    thinkContent.classList.add('think-content');
+
+    const expanded = localStorage.getItem('think_section_expanded') === 'true';
+    if (expanded) {
+        thinkHeader.classList.add('expanded');
+        thinkContent.classList.add('expanded');
+        thinkContent.style.display = 'block';
+    } else {
+        thinkHeader.classList.add('collapsed');
+        thinkContent.style.display = 'none';
+    }
+
+    thinkSection.addEventListener('click', (e) => {
+        e.stopPropagation();
+        thinkContent.classList.toggle('expanded');
+
+        if (thinkContent.classList.contains('expanded')) {
+            thinkHeader.classList.add('expanded');
+            thinkHeader.classList.remove('collapsed');
+        } else {
+            thinkHeader.classList.remove('expanded');
+            thinkHeader.classList.add('collapsed');
+        }
+
+        thinkContent.style.display = thinkContent.classList.contains('expanded') ? 'block' : 'none';
+        localStorage.setItem('think_section_expanded', thinkContent.classList.contains('expanded'));
+    });
+
+    // thinkSection.appendChild(thinkHeader);
+    thinkSection.appendChild(thinkContent);
+    messageDiv.prepend(thinkSection);
+    return thinkSection;
 }
 
 function scrollToBottom() {
-  mainContainer.scrollTop = mainContainer.scrollHeight;
+    mainContainer.scrollTop = mainContainer.scrollHeight;
 }
 
 function createCopyButton(content) {
-  const buttonContainer = document.createElement('div');
-  buttonContainer.classList.add('buttons-container');
-  const copyButton = document.createElement('button');
-  copyButton.classList.add('copy-button');
-  copyButton.innerHTML = UI_STRINGS.buttons.copy;
-  const copyIcon = `<svg class="action-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
-  const checkIcon = `<svg class="action-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
-  copyButton.innerHTML = copyIcon;
+    const buttonContainer = document.createElement('div');
+    buttonContainer.classList.add('buttons-container');
+    const copyButton = document.createElement('button');
+    copyButton.classList.add('copy-button');
+    copyButton.innerHTML = UI_STRINGS.buttons.copy;
+    const copyIcon = `<svg class="action-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
+    const checkIcon = `<svg class="action-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+    copyButton.innerHTML = copyIcon;
 
-  buttonContainer.appendChild(copyButton);
+    buttonContainer.appendChild(copyButton);
 
-  copyButton.addEventListener('click', () => {
-    navigator.clipboard.writeText(content)
-      .then(() => {
-        copyButton.innerHTML = checkIcon;
-        setTimeout(() => {
-          copyButton.innerHTML = copyIcon;
-        }, 2000);
-      });
-  });
+    copyButton.addEventListener('click', () => {
+        navigator.clipboard.writeText(content)
+            .then(() => {
+                copyButton.innerHTML = checkIcon;
+                setTimeout(() => {
+                    copyButton.innerHTML = copyIcon;
+                }, 2000);
+            });
+    });
 
-  return buttonContainer;
+    return buttonContainer;
 }
 
 function displayMessage(role, content) {
-  const messageDiv = document.createElement('div');
-  messageDiv.classList.add('message', `${role}-message`);
+    const messageDiv = document.createElement('div');
+    messageDiv.classList.add('message', `${role}-message`);
 
-  if (role === 'assistant') {
-    messageDiv.innerHTML = `<div id="loading-indicator">${loadingSvg}</div>`;
-  } else {
-    messageDiv.textContent = content;
-  }
+    if (role === 'assistant') {
+        messageDiv.innerHTML = `<div id="loading-indicator">${loadingSvg}</div>`;
+    } else {
+        messageDiv.textContent = content;
+    }
 
-  chatContainer.appendChild(messageDiv);
-  updateEmptyState();
-  scrollToBottom();
-  return messageDiv;
+    chatContainer.appendChild(messageDiv);
+    updateEmptyState();
+    scrollToBottom();
+    return messageDiv;
 }
 
 function removeLoadingIndicator(messageDiv) {
-  const loadingIndicator = messageDiv.querySelector('#loading-indicator');
-  if (loadingIndicator) {
-    loadingIndicator.remove();
-  }
+    const loadingIndicator = messageDiv.querySelector('#loading-indicator');
+    if (loadingIndicator) {
+        loadingIndicator.remove();
+    }
 }
 
 function showErrorWithAction(message, buttonText, onClick) {
-  const messageDiv = document.createElement('div');
-  messageDiv.classList.add('message', 'assistant-message');
+    const messageDiv = document.createElement('div');
+    messageDiv.classList.add('message', 'assistant-message');
 
-  const errorContainer = document.createElement('div');
-  errorContainer.className = 'error-message';
+    const errorContainer = document.createElement('div');
+    errorContainer.className = 'error-message';
 
-  const errorIcon = `<svg id="error-icon" class="action-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>`;
+    const errorIcon = `<svg id="error-icon" class="action-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>`;
 
-  const errorText = document.createElement('span');
-  errorText.innerHTML = errorIcon + message;
+    const errorText = document.createElement('span');
+    errorText.innerHTML = errorIcon + message;
 
-  const actionButton = document.createElement('button');
-  actionButton.textContent = buttonText;
-  actionButton.className = 'action-button';
-  actionButton.addEventListener('click', onClick);
+    const actionButton = document.createElement('button');
+    actionButton.textContent = buttonText;
+    actionButton.className = 'action-button';
+    actionButton.addEventListener('click', onClick);
 
-  errorContainer.appendChild(errorText);
-  errorContainer.appendChild(actionButton);
-  messageDiv.appendChild(errorContainer);
-  chatContainer.appendChild(messageDiv);
+    errorContainer.appendChild(errorText);
+    errorContainer.appendChild(actionButton);
+    messageDiv.appendChild(errorContainer);
+    chatContainer.appendChild(messageDiv);
 
-  scrollToBottom();
+    scrollToBottom();
 }
 
 
-
 function initializeMarkdown() {
-  if (window.markdownit) {
-    md = window.markdownit({
-      html: true,
-      linkify: true,
-      typographer: true,
-      highlight: function (str, lang) {
-        if (lang && hljs.getLanguage(lang)) {
-          try {
-            return '<pre><code class="hljs">' +
-                   hljs.highlight(str, { language: lang, ignoreIllegals: true }).value +
-                   '</code></pre>';
-          } catch (__) {}
-        }
+    if (window.markdownit) {
+        md = window.markdownit({
+            html: true,
+            linkify: true,
+            typographer: true,
+            highlight: function (str, lang) {
+                if (lang && hljs.getLanguage(lang)) {
+                    try {
+                        return '<pre><code class="hljs">' +
+                            hljs.highlight(str, {language: lang, ignoreIllegals: true}).value +
+                            '</code></pre>';
+                    } catch (__) {
+                    }
+                }
 
-        return '<pre><code class="hljs">' + md.utils.escapeHtml(str) + '</code></pre>';
-      }
-    })
-    .use(window.markdownitFootnote).use(markdownItTableWrapper);
-  }
+                return '<pre><code class="hljs">' + md.utils.escapeHtml(str) + '</code></pre>';
+            }
+        })
+            .use(window.markdownitFootnote).use(markdownItTableWrapper);
+    }
 }
 
 initializeMarkdown();
 
 function markdownItTableWrapper(md) {
-  const defaultTableRenderer = md.renderer.rules.table_open || function(tokens, idx, options, env, self) {
-    return self.renderToken(tokens, idx, options, env, self);
-  };
+    const defaultTableRenderer = md.renderer.rules.table_open || function (tokens, idx, options, env, self) {
+        return self.renderToken(tokens, idx, options, env, self);
+    };
 
-  md.renderer.rules.table_open = function(tokens, idx, options, env, self) {
-    return '<div id="table-container">\n' + defaultTableRenderer(tokens, idx, options, env, self);
-  };
+    md.renderer.rules.table_open = function (tokens, idx, options, env, self) {
+        return '<div id="table-container">\n' + defaultTableRenderer(tokens, idx, options, env, self);
+    };
 
-  const defaultTableCloseRenderer = md.renderer.rules.table_close || function(tokens, idx, options, env, self) {
-    return self.renderToken(tokens, idx, options, env, self);
-  };
+    const defaultTableCloseRenderer = md.renderer.rules.table_close || function (tokens, idx, options, env, self) {
+        return self.renderToken(tokens, idx, options, env, self);
+    };
 
-  md.renderer.rules.table_close = function(tokens, idx, options, env, self) {
-    return defaultTableCloseRenderer(tokens, idx, options, env, self) + '\n</div>';
-  };
+    md.renderer.rules.table_close = function (tokens, idx, options, env, self) {
+        return defaultTableCloseRenderer(tokens, idx, options, env, self) + '\n</div>';
+    };
 }
 
 function renderMarkdown(content, returnElement = false, visitedURLs = []) {
-  if (!md) {
-    initializeMarkdown();
-  }
-  const tempDiv = document.createElement('div');
-  tempDiv.innerHTML = content;
-  if (md) {
-    const rendered = md.render(content);
-    tempDiv.innerHTML = rendered;
-
-    const footnotes = tempDiv.querySelector('.footnotes');
-    const footnoteContent = footnotes ? footnotes.innerHTML : '';
-    
-    // Create references section if there are footnotes or visitedURLs
-    const referencesSection = createReferencesSection(footnoteContent, visitedURLs);
-    if (referencesSection) {
-      if (footnotes) {
-        footnotes.replaceWith(referencesSection);
-      } else {
-        tempDiv.appendChild(referencesSection);
-      }
-    } else if (footnotes) {
-      footnotes.remove();
+    if (!md) {
+        initializeMarkdown();
     }
-  }
-  return returnElement ? tempDiv : tempDiv.innerHTML;
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = content;
+    if (md) {
+        const rendered = md.render(content);
+        tempDiv.innerHTML = rendered;
+
+        const footnotes = tempDiv.querySelector('.footnotes');
+        const footnoteContent = footnotes ? footnotes.innerHTML : '';
+
+        // Create references section if there are footnotes or visitedURLs
+        const referencesSection = createReferencesSection(footnoteContent, visitedURLs);
+        if (referencesSection) {
+            if (footnotes) {
+                footnotes.replaceWith(referencesSection);
+            } else {
+                tempDiv.appendChild(referencesSection);
+            }
+        } else if (footnotes) {
+            footnotes.remove();
+        }
+    }
+    return returnElement ? tempDiv : tempDiv.innerHTML;
 }
 
 // Message handling functions
 // Update empty state class
 function updateEmptyState() {
-  const chatApp = document.getElementById('chat-app');
-  if (chatContainer.innerHTML.trim() === '') {
-    chatApp.classList.add('empty-chat');
-  } else {
-    chatApp.classList.remove('empty-chat');
-  }
+    const chatApp = document.getElementById('chat-app');
+    if (chatContainer.innerHTML.trim() === '') {
+        chatApp.classList.add('empty-chat');
+    } else {
+        chatApp.classList.remove('empty-chat');
+    }
 }
 
 
 function clearMessages() {
-  chatContainer.innerHTML = '';
-  existingMessages = [];
-  abortController?.abort();
-  updateEmptyState();
+    chatContainer.innerHTML = '';
+    existingMessages = [];
+    abortController?.abort();
+    updateEmptyState();
 }
 
 async function sendMessage() {
-  const query = messageInput.value.trim();
+    const query = messageInput.value.trim();
 
-  if (!query || isLoading) return;
+    if (!query || isLoading) return;
 
-  abortController = new AbortController();
-  isLoading = true;
-  sendButton.disabled = true;
+    abortController = new AbortController();
+    isLoading = true;
+    sendButton.disabled = true;
 
-  displayMessage('user', query);
-  existingMessages.push({ role: 'user', content: query });
-  messageInput.value = '';
-  // To clear the badge
-  clearFaviconBadge();
+    displayMessage('user', query);
+    existingMessages.push({role: 'user', content: query});
+    messageInput.value = '';
+    // To clear the badge
+    clearFaviconBadge();
 
-  const assistantMessageDiv = displayMessage('assistant', '');
+    const assistantMessageDiv = displayMessage('assistant', '');
 
-  let markdownContent = '';
-  let thinkContent = '';
-  let inThinkSection = false;
-  let thinkSectionElement = null;
-  let thinkHeaderElement = null;
+    let markdownContent = '';
+    let thinkContent = '';
+    let inThinkSection = false;
+    let thinkSectionElement = null;
+    let thinkHeaderElement = null;
 
-  try {
-    const headers = {
-      'Content-Type': 'application/json',
-    };
+    try {
+        const headers = {
+            'Content-Type': 'application/json',
+        };
 
-    const apiKey = localStorage.getItem('api_key');
-    if (apiKey) {
-      headers['Authorization'] = `Bearer ${apiKey}`;
-    }
-
-    const res = await fetch(`${BASE_ORIGIN}/v1/chat/completions`, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({
-        messages: existingMessages,
-        stream: true,
-        reasoning_effort: 'medium',
-      }),
-      signal: abortController.signal,
-    });
-
-    if (!res.ok) {
-      const errorResponse = await res.json().catch(() => ({}));
-      const errorMsg = errorResponse.message || 'Unknown error occurred';
-
-      assistantMessageDiv.remove();
-
-      switch (res.status) {
-        case 401:
-          showErrorWithAction(
-            UI_STRINGS.errors.invalidKey,
-            UI_STRINGS.buttons.updateKey,
-            () => apiKeyDialog.classList.add('visible')
-          );
-          break;
-        case 402:
-          showErrorWithAction(
-            UI_STRINGS.errors.insufficientTokens,
-            UI_STRINGS.buttons.purchase,
-            () => window.open('https://jina.ai/api-dashboard/key-manager?login=true', '_blank')
-          );
-          break;
-        case 429:
-          showErrorWithAction(
-            UI_STRINGS.errors.rateLimit,
-            UI_STRINGS.buttons.addKey,
-            () => apiKeyDialog.classList.add('visible')
-          );
-          break;
-        default:
-          const errorMessageDiv = document.createElement('div');
-          errorMessageDiv.classList.add('message', 'assistant-message');
-          errorMessageDiv.textContent = `Error: ${errorMsg}`;
-          chatContainer.appendChild(errorMessageDiv);
-      }
-
-      throw new Error(errorMsg);
-    }
-
-    const markdownDiv = document.createElement('div');
-    markdownDiv.classList.add('markdown');
-    assistantMessageDiv.appendChild(markdownDiv);
-
-    if (res.headers.get('content-type')?.includes('text/event-stream')) {
-      const reader = res.body?.getReader();
-      if (!reader) throw new Error('No readable stream available');
-
-      const decoder = new TextDecoder();
-      let partialBrokenData = '';
-      let visitedURLs = [];
-
-      while (true) {
-        const { done, value } = await reader.read();
-
-        if (done) break;
-
-        if (value) {
-          const streamData = decoder.decode(value);
-          const events = streamData.split('\n\ndata:').filter(Boolean);
-
-          for (const event of events) {
-            const data = event.replace(/data: /, '').trim();
-            partialBrokenData += data;
-
-            try {
-              if (partialBrokenData) {
-                const json = JSON.parse(partialBrokenData);
-                partialBrokenData = '';
-                const content = json.choices[0]?.delta?.content || '';
-                // Store visitedURLs from the final chunk if provided
-                if (json.visitedURLs) {
-                    visitedURLs = json.visitedURLs;
-                }
-                removeLoadingIndicator(assistantMessageDiv);
-
-                let tempContent = content;
-                const thinkingAnimation = document.createElement('span');
-                thinkingAnimation.id = 'thinking-animation';
-                thinkingAnimation.innerHTML = loadingSvg;
-                while (tempContent.length > 0) {
-                  if (inThinkSection) {
-                    const thinkEndIndex = tempContent.indexOf("</think>");
-                    if (thinkEndIndex !== -1) {
-                      thinkContent += tempContent.substring(0, thinkEndIndex);
-                      if (thinkSectionElement) {
-                        const thinkContentElement = thinkSectionElement.querySelector('.think-content');
-                        thinkContentElement.textContent = thinkContent;
-                        thinkContentElement.classList.add('auto-scrolling');
-                        thinkContentElement.scrollTop = thinkContentElement.scrollHeight;
-                        setTimeout(() => thinkContentElement.classList.remove('auto-scrolling'), 1000);
-                      }
-                      inThinkSection = false;
-                      tempContent = tempContent.substring(thinkEndIndex + "</think>".length);
-                      if (thinkSectionElement) {
-                        const thinkContentElement = thinkSectionElement.querySelector('.think-content');
-                        thinkContentElement.style.display = 'none';
-                        thinkContentElement.classList.remove('expanded');
-
-                        if (thinkHeaderElement) {
-                          thinkHeaderElement.textContent = UI_STRINGS.think.toggle;
-                          thinkHeaderElement.classList.remove('expanded');
-                        }
-                      }
-                    } else {
-                      thinkContent += tempContent;
-                      if (thinkSectionElement) {
-                        const thinkContentElement = thinkSectionElement.querySelector('.think-content');
-                        thinkContentElement.textContent = thinkContent;
-                        thinkContentElement.classList.add('auto-scrolling');
-                        thinkContentElement.scrollTop = thinkContentElement.scrollHeight;
-                        const animationElement = thinkSectionElement.querySelector('#thinking-animation');
-                        if (!animationElement) {
-                          thinkContentElement.appendChild(thinkingAnimation);
-                        }
-                        thinkContentElement.style.display = 'block';
-                        setTimeout(() => thinkContentElement.classList.remove('auto-scrolling'), 1000);
-                      }
-                      tempContent = "";
-                    }
-                  } else {
-                    const thinkStartIndex = tempContent.indexOf("<think>");
-                    if (thinkStartIndex !== -1) {
-                      markdownContent += tempContent.substring(0, thinkStartIndex);
-                      markdownDiv.innerHTML = renderMarkdown(markdownContent);
-
-                      inThinkSection = true;
-                      thinkContent = "";
-                      tempContent = tempContent.substring(thinkStartIndex + "<think>".length);
-                      thinkSectionElement = createThinkSection(assistantMessageDiv);
-                      thinkHeaderElement = thinkSectionElement.querySelector('.think-header');
-                      const thinkContentElement = thinkSectionElement.querySelector('.think-content');
-                      thinkContentElement.textContent = thinkContent;
-                      thinkContentElement.scrollTop = thinkContentElement.scrollHeight;
-                      thinkContentElement.style.display = 'block';
-
-                      if (thinkHeaderElement) {
-                        thinkHeaderElement.textContent = UI_STRINGS.think.initial;
-                      }
-                      const animationElement = thinkSectionElement.querySelector('#thinking-animation');
-                        if (!animationElement) {
-                          thinkContentElement.appendChild(thinkingAnimation);
-                        }
-                    } else {
-                      markdownContent += tempContent;
-                      markdownDiv.innerHTML = renderMarkdown(markdownContent);
-                      tempContent = "";
-                    }
-                  }
-                }
-              }
-            } catch (e) {
-              console.error('Error parsing JSON:', e);
-            }
-          }
+        const apiKey = localStorage.getItem('api_key');
+        if (apiKey) {
+            headers['Authorization'] = `Bearer ${apiKey}`;
         }
-      }
 
-      if (markdownContent) {
-        const markdown = renderMarkdown(markdownContent, true, visitedURLs);
-        markdownDiv.replaceChildren(markdown);
-        const copyButton = createCopyButton(markdownContent);
-        assistantMessageDiv.appendChild(copyButton);
-        existingMessages.push({
-          role: 'assistant',
-          content: markdownContent,
+        const res = await fetch(`${BASE_ORIGIN}/v1/chat/completions`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({
+                messages: existingMessages,
+                stream: true,
+                reasoning_effort: 'medium',
+            }),
+            signal: abortController.signal,
         });
-        // Check if the Favicon Badge API is supported
-        setFaviconBadge();
-        playNotificationSound();
-      }
-    } else {
-      const jsonResult = await res.json();
-      if (jsonResult) {
-        assistantMessageDiv.textContent = jsonResult.choices[0].message.content;
-        existingMessages.push({
-          role: 'assistant',
-          content: jsonResult.choices[0].message.content
-        });
-      } else {
-        throw new Error('Empty response from server.');
-      }
-    }
+
+        if (!res.ok) {
+            const errorResponse = await res.json().catch(() => ({}));
+            const errorMsg = errorResponse.message || 'Unknown error occurred';
+
+            assistantMessageDiv.remove();
+
+            switch (res.status) {
+                case 401:
+                    showErrorWithAction(
+                        UI_STRINGS.errors.invalidKey,
+                        UI_STRINGS.buttons.updateKey,
+                        () => apiKeyDialog.classList.add('visible')
+                    );
+                    break;
+                case 402:
+                    showErrorWithAction(
+                        UI_STRINGS.errors.insufficientTokens,
+                        UI_STRINGS.buttons.purchase,
+                        () => window.open('https://jina.ai/api-dashboard/key-manager?login=true', '_blank')
+                    );
+                    break;
+                case 429:
+                    showErrorWithAction(
+                        UI_STRINGS.errors.rateLimit,
+                        UI_STRINGS.buttons.addKey,
+                        () => apiKeyDialog.classList.add('visible')
+                    );
+                    break;
+                default:
+                    const errorMessageDiv = document.createElement('div');
+                    errorMessageDiv.classList.add('message', 'assistant-message');
+                    errorMessageDiv.textContent = `Error: ${errorMsg}`;
+                    chatContainer.appendChild(errorMessageDiv);
+            }
+
+            throw new Error(errorMsg);
+        }
+
+        const markdownDiv = document.createElement('div');
+        markdownDiv.classList.add('markdown');
+        assistantMessageDiv.appendChild(markdownDiv);
+
+        if (res.headers.get('content-type')?.includes('text/event-stream')) {
+            const reader = res.body?.getReader();
+            if (!reader) throw new Error('No readable stream available');
+
+            const decoder = new TextDecoder();
+            let partialBrokenData = '';
+            let visitedURLs = [];
+
+            while (true) {
+                const {done, value} = await reader.read();
+
+                if (done) break;
+
+                if (value) {
+                    const streamData = decoder.decode(value);
+                    const events = streamData.split('\n\ndata:').filter(Boolean);
+
+                    for (const event of events) {
+                        const data = event.replace(/data: /, '').trim();
+                        partialBrokenData += data;
+
+                        try {
+                            if (partialBrokenData) {
+                                const json = JSON.parse(partialBrokenData);
+                                partialBrokenData = '';
+                                const content = json.choices[0]?.delta?.content || '';
+                                // Store visitedURLs from the final chunk if provided
+                                if (json.visitedURLs) {
+                                    visitedURLs = json.visitedURLs;
+                                }
+                                removeLoadingIndicator(assistantMessageDiv);
+
+                                let tempContent = content;
+                                const thinkingAnimation = document.createElement('span');
+                                thinkingAnimation.id = 'thinking-animation';
+                                thinkingAnimation.innerHTML = loadingSvg;
+                                while (tempContent.length > 0) {
+                                    if (inThinkSection) {
+                                        const thinkEndIndex = tempContent.indexOf("</think>");
+                                        if (thinkEndIndex !== -1) {
+                                            thinkContent += tempContent.substring(0, thinkEndIndex);
+                                            if (thinkSectionElement) {
+                                                const thinkContentElement = thinkSectionElement.querySelector('.think-content');
+                                                thinkContentElement.textContent = thinkContent;
+                                                thinkContentElement.classList.add('auto-scrolling');
+                                                thinkContentElement.scrollTop = thinkContentElement.scrollHeight;
+                                                setTimeout(() => thinkContentElement.classList.remove('auto-scrolling'), 1000);
+                                            }
+                                            inThinkSection = false;
+                                            tempContent = tempContent.substring(thinkEndIndex + "</think>".length);
+                                            if (thinkSectionElement) {
+                                                const thinkContentElement = thinkSectionElement.querySelector('.think-content');
+                                                thinkContentElement.style.display = 'none';
+                                                thinkContentElement.classList.remove('expanded');
+
+                                                if (thinkHeaderElement) {
+                                                    thinkHeaderElement.textContent = UI_STRINGS.think.toggle;
+                                                    thinkHeaderElement.classList.remove('expanded');
+                                                }
+                                            }
+                                        } else {
+                                            thinkContent += tempContent;
+                                            if (thinkSectionElement) {
+                                                const thinkContentElement = thinkSectionElement.querySelector('.think-content');
+                                                thinkContentElement.textContent = thinkContent;
+                                                thinkContentElement.classList.add('auto-scrolling');
+                                                thinkContentElement.scrollTop = thinkContentElement.scrollHeight;
+                                                const animationElement = thinkSectionElement.querySelector('#thinking-animation');
+                                                if (!animationElement) {
+                                                    thinkContentElement.appendChild(thinkingAnimation);
+                                                }
+                                                thinkContentElement.style.display = 'block';
+                                                setTimeout(() => thinkContentElement.classList.remove('auto-scrolling'), 1000);
+                                            }
+                                            tempContent = "";
+                                        }
+                                    } else {
+                                        const thinkStartIndex = tempContent.indexOf("<think>");
+                                        if (thinkStartIndex !== -1) {
+                                            markdownContent += tempContent.substring(0, thinkStartIndex);
+                                            markdownDiv.innerHTML = renderMarkdown(markdownContent);
+
+                                            inThinkSection = true;
+                                            thinkContent = "";
+                                            tempContent = tempContent.substring(thinkStartIndex + "<think>".length);
+                                            thinkSectionElement = createThinkSection(assistantMessageDiv);
+                                            thinkHeaderElement = thinkSectionElement.querySelector('.think-header');
+                                            const thinkContentElement = thinkSectionElement.querySelector('.think-content');
+                                            thinkContentElement.textContent = thinkContent;
+                                            thinkContentElement.scrollTop = thinkContentElement.scrollHeight;
+                                            thinkContentElement.style.display = 'block';
+
+                                            if (thinkHeaderElement) {
+                                                thinkHeaderElement.textContent = UI_STRINGS.think.initial;
+                                            }
+                                            const animationElement = thinkSectionElement.querySelector('#thinking-animation');
+                                            if (!animationElement) {
+                                                thinkContentElement.appendChild(thinkingAnimation);
+                                            }
+                                        } else {
+                                            markdownContent += tempContent;
+                                            markdownDiv.innerHTML = renderMarkdown(markdownContent);
+                                            tempContent = "";
+                                        }
+                                    }
+                                }
+                            }
+                        } catch (e) {
+                            console.error('Error parsing JSON:', e);
+                        }
+                    }
+                }
+            }
+
+            if (markdownContent) {
+                const markdown = renderMarkdown(markdownContent, true, visitedURLs);
+                markdownDiv.replaceChildren(markdown);
+                const copyButton = createCopyButton(markdownContent);
+                assistantMessageDiv.appendChild(copyButton);
+                existingMessages.push({
+                    role: 'assistant',
+                    content: markdownContent,
+                });
+                // Check if the Favicon Badge API is supported
+                setFaviconBadge();
+                playNotificationSound();
+            }
+        } else {
+            const jsonResult = await res.json();
+            if (jsonResult) {
+                assistantMessageDiv.textContent = jsonResult.choices[0].message.content;
+                existingMessages.push({
+                    role: 'assistant',
+                    content: jsonResult.choices[0].message.content
+                });
+            } else {
+                throw new Error('Empty response from server.');
+            }
+        }
 
 
-  } catch (error) {
-    if (error.name !== 'AbortError') {
-        assistantMessageDiv.textContent = `Error: ${error.message || String(error)}`;
-    } else {
-      if (assistantMessageDiv) {
-        assistantMessageDiv.textContent = "Request cancelled.";
-      }
+    } catch (error) {
+        if (error.name !== 'AbortError') {
+            assistantMessageDiv.textContent = `Error: ${error.message || String(error)}`;
+        } else {
+            if (assistantMessageDiv) {
+                assistantMessageDiv.textContent = "Request cancelled.";
+            }
+        }
+    } finally {
+        isLoading = false;
+        sendButton.disabled = false;
     }
-  } finally {
-    isLoading = false;
-    sendButton.disabled = false;
-  }
 }
 
 // Initialize empty state
@@ -639,8 +676,6 @@ themeToggleInput.addEventListener('change', (e) => {
     const theme = e.target.checked ? 'dark' : 'light';
     localStorage.setItem('theme', theme);
     document.documentElement.setAttribute('data-theme', theme);
-    document.getElementById('dark-icon').style.display = theme === 'dark' ? 'block' : 'none';
-    document.getElementById('light-icon').style.display = theme === 'dark' ? 'none' : 'block';
     const hlTheme = theme === 'light' ? 'vs' : 'vs2015';
     const hlThemeElement = document.getElementById('hljs-theme');
     if (hlThemeElement) {
@@ -656,101 +691,100 @@ initializeSettings();
 sendButton.addEventListener('click', sendMessage);
 clearButton.addEventListener('click', clearMessages);
 messageInput.addEventListener('keydown', (event) => {
-  if (event.key === "Enter") {
-    sendMessage();
-  }
+    if (event.key === "Enter") {
+        sendMessage();
+    }
 });
 
 // Help dialog event listeners
 helpButton.addEventListener('click', () => {
-  helpDialog.style.display = 'flex';
+    helpDialog.style.display = 'flex';
 });
 
 // Close dialogs when clicking outside
 [apiKeyDialog, helpDialog].forEach(dialog => {
-  dialog.addEventListener('click', (e) => {
-    if (e.target === dialog) {
-      dialog.classList.remove('visible');
-    }
-  });
+    dialog.addEventListener('click', (e) => {
+        if (e.target === dialog) {
+            dialog.classList.remove('visible');
+        }
+    });
 });
 
 
 // URL Parameter handling
 document.addEventListener('DOMContentLoaded', () => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const queryParam = urlParams.get('q');
+    const urlParams = new URLSearchParams(window.location.search);
+    const queryParam = urlParams.get('q');
 
-  if (queryParam && messageInput) {
-    messageInput.value = decodeURIComponent(queryParam);
-    sendMessage();
-  }
+    if (queryParam && messageInput) {
+        messageInput.value = decodeURIComponent(queryParam);
+        sendMessage();
+    }
 });
 
 let autoScrollEnabled = true; // Flag to track auto-scroll state
 // Auto-scroll setup
 const observer = new MutationObserver((mutations) => {
-  if (!autoScrollEnabled) return;
-  mutations.forEach((mutation) => {
-    if (mutation.type === 'childList') {
-      scrollToBottom();
-    }
-  });
+    if (!autoScrollEnabled) return;
+    mutations.forEach((mutation) => {
+        if (mutation.type === 'childList') {
+            scrollToBottom();
+        }
+    });
 });
 
-observer.observe(chatContainer, { childList: true, subtree: true });
+observer.observe(chatContainer, {childList: true, subtree: true});
 
 mainContainer.addEventListener('scroll', () => {
-  // Check if the user has scrolled up from the bottom
-  const isAtBottom = mainContainer.scrollTop + mainContainer.clientHeight >= mainContainer.scrollHeight;
+    // Check if the user has scrolled up from the bottom
+    const isAtBottom = mainContainer.scrollTop + mainContainer.clientHeight >= mainContainer.scrollHeight;
 
-  // If the user has scrolled up, disable auto-scroll
-  if (!isAtBottom) {
-    autoScrollEnabled = false;
-  } else {
-    // If the user scrolls back to the bottom, re-enable auto-scroll
-    autoScrollEnabled = true;
-    scrollToBottom(); // Ensure it's scrolled to the bottom when re-enabled
-  }
+    // If the user has scrolled up, disable auto-scroll
+    if (!isAtBottom) {
+        autoScrollEnabled = false;
+    } else {
+        // If the user scrolls back to the bottom, re-enable auto-scroll
+        autoScrollEnabled = true;
+        scrollToBottom(); // Ensure it's scrolled to the bottom when re-enabled
+    }
 });
 
 // Update toggleApiKeyBtn click handler
 toggleApiKeyBtn.addEventListener('click', () => {
-  apiKeyDialog.classList.add('visible');
+    apiKeyDialog.classList.add('visible');
 });
 
 // Update dialog close handlers
 dialogCloseBtns.forEach(btn => {
-  btn.addEventListener('click', () => {
-    const dialog = btn.closest('.dialog-overlay');
-    if (dialog) {
-      dialog.classList.remove('visible');
-    }
-  });
+    btn.addEventListener('click', () => {
+        const dialog = btn.closest('.dialog-overlay');
+        if (dialog) {
+            dialog.classList.remove('visible');
+        }
+    });
 });
-
 
 
 // Update help button click handler
 helpButton.addEventListener('click', () => {
-  helpDialog.classList.add('visible');
+    helpDialog.classList.add('visible');
 });
 
 // Update handleApiKeySave function
 function handleApiKeySave() {
-  const key = apiKeyInput.value.trim();
-  if (key) {
-    localStorage.setItem('api_key', key);
-    getApiKeyBtn.style.display = 'none';
-    freeUserRPMInfo.style.display = 'none';
-    toggleApiKeyBtnText.textContent = UI_STRINGS.buttons.updateKey;
-  } else {
-    localStorage.removeItem('api_key');
-    getApiKeyBtn.style.display = 'block';
-    freeUserRPMInfo.style.display = 'block';
-    toggleApiKeyBtnText.textContent = UI_STRINGS.buttons.addKey;
-  }
-  apiKeyDialog.classList.remove('visible');
+    const key = apiKeyInput.value.trim();
+    if (key) {
+        localStorage.setItem('api_key', key);
+        getApiKeyBtn.style.display = 'none';
+        freeUserRPMInfo.style.display = 'none';
+        toggleApiKeyBtnText.textContent = UI_STRINGS.buttons.updateKey;
+    } else {
+        localStorage.removeItem('api_key');
+        getApiKeyBtn.style.display = 'block';
+        freeUserRPMInfo.style.display = 'block';
+        toggleApiKeyBtnText.textContent = UI_STRINGS.buttons.addKey;
+    }
+    apiKeyDialog.classList.remove('visible');
 }
 
 // Set up event listeners for visibility and focus changes
@@ -759,86 +793,86 @@ window.addEventListener('focus', clearFaviconBadge);
 
 // Function to handle visibility change
 function handleVisibilityChange() {
-  if (document.visibilityState === 'visible') {
-    clearFaviconBadge();
-  }
+    if (document.visibilityState === 'visible') {
+        clearFaviconBadge();
+    }
 }
 
 function setFaviconBadge() {
-  if (document.visibilityState === 'visible') {
-    // dont set favicon badge if the tab is already visible
-    return;
-  }
-  const favicon = document.querySelector('link[rel="icon"]');
-  const canvas = document.createElement('canvas');
-  const ctx = canvas.getContext('2d');
+    if (document.visibilityState === 'visible') {
+        // dont set favicon badge if the tab is already visible
+        return;
+    }
+    const favicon = document.querySelector('link[rel="icon"]');
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
 
-  // Load original favicon as base
-  const img = new Image();
-  img.onload = function() {
-    // Draw original favicon
-    canvas.width = img.width;
-    canvas.height = img.height;
-    ctx.drawImage(img, 0, 0);
+    // Load original favicon as base
+    const img = new Image();
+    img.onload = function () {
+        // Draw original favicon
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
 
-    // Add notification dot (bigger size)
-    const dotSize = Math.max(8, canvas.width / 4);
-    ctx.fillStyle = '#FF0000';
-    ctx.beginPath();
-    ctx.arc(canvas.width - dotSize/2, dotSize/2, dotSize/2, 0, 2 * Math.PI);
-    ctx.fill();
+        // Add notification dot (bigger size)
+        const dotSize = Math.max(8, canvas.width / 4);
+        ctx.fillStyle = '#FF0000';
+        ctx.beginPath();
+        ctx.arc(canvas.width - dotSize / 2, dotSize / 2, dotSize / 2, 0, 2 * Math.PI);
+        ctx.fill();
 
-    // Update favicon
-    favicon.href = canvas.toDataURL('image/png');
-  };
-  img.src = favicon.href || '/favicon.ico';
+        // Update favicon
+        favicon.href = canvas.toDataURL('image/png');
+    };
+    img.src = favicon.href || '/favicon.ico';
 }
 
 function clearFaviconBadge() {
-  const favicon = document.querySelector('link[rel="icon"]');
-  favicon.href = '/favicon.ico';
+    const favicon = document.querySelector('link[rel="icon"]');
+    favicon.href = '/favicon.ico';
 }
 
 
 function playNotificationSound() {
-  if (document.visibilityState === 'visible') {
-    // dont play sound if the tab is already visible
-    return;
-  }
-  // Create audio context
-  const AudioContext = window.AudioContext || window.webkitAudioContext;
-  const audioCtx = new AudioContext();
+    if (document.visibilityState === 'visible') {
+        // dont play sound if the tab is already visible
+        return;
+    }
+    // Create audio context
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    const audioCtx = new AudioContext();
 
-  // Create two oscillators for a pleasant harmonious sound
-  const osc1 = audioCtx.createOscillator();
-  const osc2 = audioCtx.createOscillator();
+    // Create two oscillators for a pleasant harmonious sound
+    const osc1 = audioCtx.createOscillator();
+    const osc2 = audioCtx.createOscillator();
 
-  // Create gain node for volume control
-  const gainNode = audioCtx.createGain();
+    // Create gain node for volume control
+    const gainNode = audioCtx.createGain();
 
-  // Configure oscillators
-  osc1.type = 'sine';
-  osc2.type = 'sine';
+    // Configure oscillators
+    osc1.type = 'sine';
+    osc2.type = 'sine';
 
-  // Apple-like gentle ascending perfect fifth (C6 to G6)
-  osc1.frequency.setValueAtTime(1046.50, audioCtx.currentTime); // C6
-  osc2.frequency.setValueAtTime(1567.98, audioCtx.currentTime); // G6
+    // Apple-like gentle ascending perfect fifth (C6 to G6)
+    osc1.frequency.setValueAtTime(1046.50, audioCtx.currentTime); // C6
+    osc2.frequency.setValueAtTime(1567.98, audioCtx.currentTime); // G6
 
-  // Connect nodes
-  osc1.connect(gainNode);
-  osc2.connect(gainNode);
-  gainNode.connect(audioCtx.destination);
+    // Connect nodes
+    osc1.connect(gainNode);
+    osc2.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
 
-  // Create a subtle, gentle envelope
-  gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
-  gainNode.gain.linearRampToValueAtTime(0.15, audioCtx.currentTime + 0.02); // Gentle attack
-  gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime + 0.15);
-  gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35); // Smooth release
+    // Create a subtle, gentle envelope
+    gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+    gainNode.gain.linearRampToValueAtTime(0.15, audioCtx.currentTime + 0.02); // Gentle attack
+    gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime + 0.15);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35); // Smooth release
 
-  // Play sound
-  osc1.start(audioCtx.currentTime);
-  osc2.start(audioCtx.currentTime + 0.05); // Slight delay for second note
+    // Play sound
+    osc1.start(audioCtx.currentTime);
+    osc2.start(audioCtx.currentTime + 0.05); // Slight delay for second note
 
-  osc1.stop(audioCtx.currentTime + 0.4);
-  osc2.stop(audioCtx.currentTime + 0.4);
+    osc1.stop(audioCtx.currentTime + 0.4);
+    osc2.stop(audioCtx.currentTime + 0.4);
 }
