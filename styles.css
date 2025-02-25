@@ -179,9 +179,17 @@ a {
     flex-grow: 1;
     position: relative;
     min-height: 50px; /* Ensure container has height even when empty */
-    padding: 20px 20px 20px 0;
+    padding: 20px;
     max-width: 868px;
-    margin-left: 125px;
+    margin-left: 105px;
+}
+
+/* Media query for smaller screens */
+@media (max-width: 868px) {
+    #chat-container {
+        margin-left: auto;
+        margin-right: auto;
+    }
 }
 
 
@@ -191,10 +199,6 @@ a {
 
 /* Modified: Updated mobile styles to adjust main container padding */
 @media (max-width: 768px) {
-    #chat-container {
-        margin-left: 25px;
-    }
-
     #logo {
         width: 50px;
         margin: unset;
