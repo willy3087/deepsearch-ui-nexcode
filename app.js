@@ -63,6 +63,21 @@ function initializeApiKey() {
     toggleApiKeyBtnText.textContent = savedKey ? UI_STRINGS.buttons.updateKey : UI_STRINGS.buttons.addKey;
 }
 
+// Chat Message Persistence
+function saveChatMessages() {
+    localStorage.setItem('chat_messages', JSON.stringify(existingMessages));
+}
+
+function loadChatMessages() {
+    const savedMessages = localStorage.getItem('chat_messages');
+    try {
+        return savedMessages ? JSON.parse(savedMessages) : [];
+    } catch (e) {
+        console.error('Error parsing saved messages:', e);
+        return [];
+    }
+}
+
 
 // Initialize API key
 initializeApiKey();
@@ -234,9 +249,10 @@ function createThinkSection(messageDiv) {
 
     const expanded = localStorage.getItem('think_section_expanded') === 'true';
     if (expanded) {
-        thinkHeader.classList.add('expanded');
+        thinkHeader.classList.remove('collapsed');
         thinkContent.classList.add('expanded');
     } else {
+        thinkHeader.classList.remove('expanded');
         thinkHeader.classList.add('collapsed');
     }
 
@@ -419,8 +435,23 @@ function clearMessages() {
     chatContainer.innerHTML = '';
     existingMessages = [];
     abortController?.abort();
+    // Clear messages from localStorage
+    localStorage.removeItem('chat_messages');
     updateEmptyState();
 }
+
+const makeAllLinksOpenInNewTab = () => {
+    // Select all <a> tags on the page
+    const links = document.querySelectorAll('a');
+
+    // Add target="_blank" to each link
+    links.forEach(link => {
+        link.setAttribute('target', '_blank');
+
+        // Add rel="noopener" for security best practices
+        link.setAttribute('rel', 'noopener');
+    });
+};
 
 async function sendMessage() {
     const query = messageInput.value.trim();
@@ -436,6 +467,8 @@ async function sendMessage() {
     messageInput.value = '';
     // To clear the badge
     clearFaviconBadge();
+    // Save messages to localStorage
+    saveChatMessages();
 
     const assistantMessageDiv = displayMessage('assistant', '');
 
@@ -626,10 +659,15 @@ async function sendMessage() {
                 markdownDiv.replaceChildren(markdown);
                 const copyButton = createCopyButton(markdownContent);
                 assistantMessageDiv.appendChild(copyButton);
+                
                 existingMessages.push({
                     role: 'assistant',
                     content: markdownContent,
+                    think: thinkContent
                 });
+
+                // Save messages to localStorage
+                saveChatMessages();
                 // Check if the Favicon Badge API is supported
                 setFaviconBadge();
                 playNotificationSound();
@@ -642,6 +680,8 @@ async function sendMessage() {
                     role: 'assistant',
                     content: jsonResult.choices[0].message.content
                 });
+                // Save messages to localStorage
+                saveChatMessages();
             } else {
                 throw new Error('Empty response from server.');
             }
@@ -670,6 +710,58 @@ async function sendMessage() {
         makeAllLinksOpenInNewTab();
     }
 }
+
+// Load and display saved messages
+function loadAndDisplaySavedMessages() {
+    existingMessages = loadChatMessages();
+    
+    if (existingMessages.length > 0) {
+        // Display saved messages
+        existingMessages.forEach(message => {
+            const messageDiv = displayMessage(message.role, message.content);
+            
+            if (message.role === 'assistant') {
+                // Remove loading indicator
+                removeLoadingIndicator(messageDiv);
+                
+                // Create markdown div
+                const markdownDiv = document.createElement('div');
+                markdownDiv.classList.add('markdown');
+                messageDiv.appendChild(markdownDiv);
+                
+                // Render markdown content
+                const markdown = renderMarkdown(message.content, true);
+                markdownDiv.replaceChildren(markdown);
+                
+                // Add copy button
+                const copyButton = createCopyButton(message.content);
+                messageDiv.appendChild(copyButton);
+                
+                // Check for think content
+                if (message.think) {
+                    const thinkSectionElement = createThinkSection(messageDiv);
+                    const thinkContentElement = thinkSectionElement.querySelector('.think-content');
+                    thinkContentElement.textContent = message.think;
+                    
+                    const thinkHeaderElement = thinkSectionElement.querySelector('.think-header');
+                    if (thinkHeaderElement) {
+                        thinkHeaderElement.textContent = UI_STRINGS.think.toggle;
+                    }
+                }
+            } else if (message.role === 'user') {
+                // Ensure user message content is displayed
+                messageDiv.textContent = message.content;
+            }
+        });
+        makeAllLinksOpenInNewTab();
+    
+        // Scroll to bottom
+        scrollToBottom();
+    }
+}
+
+// Call the function to load and display saved messages
+loadAndDisplaySavedMessages();
 
 // Initialize empty state
 updateEmptyState();
@@ -748,6 +840,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (queryParam && messageInput) {
         messageInput.value = decodeURIComponent(queryParam);
+        clearMessages();
         sendMessage();
     }
 });
@@ -920,7 +1013,7 @@ function handleFootnoteClick(event) {
         // Expand the references section if it's not already expanded
         if (!referencesHeader.classList.contains('expanded')) {
             referencesHeader.classList.toggle('expanded');
-      referencesHeader.classList.toggle('collapsed');
+            referencesHeader.classList.toggle('collapsed');
             referencesContent.classList.toggle('expanded');
         }
 
@@ -943,15 +1036,3 @@ function handleFootnoteClick(event) {
 // Add the event listener to the chat container to handle all footnote clicks
 document.getElementById('chat-container').addEventListener('click', handleFootnoteClick);
 
-const makeAllLinksOpenInNewTab = () => {
-    // Select all <a> tags on the page
-    const links = document.querySelectorAll('a');
-
-    // Add target="_blank" to each link
-    links.forEach(link => {
-        link.setAttribute('target', '_blank');
-
-        // Add rel="noopener" for security best practices
-        link.setAttribute('rel', 'noopener');
-    });
-};
