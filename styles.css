@@ -146,7 +146,9 @@ button:focus {
 }
 
 
-.footer button {
+#clear-button,
+.footer button,
+.buttons-container button {
     background-color: unset;
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
@@ -154,8 +156,10 @@ button:focus {
     -o-backdrop-filter: blur(20px);
 }
 
+#clear-button:hover,
+.buttons-container button:hover,
 .footer button:hover {
-    background-color: var(--bg-color-opacity);
+    background-color: var(--bg-color-100);
 }
 
 .footer .buttons-group {
@@ -193,9 +197,6 @@ a {
 }
 
 
-#chat-app:not(.empty-chat) #input-area button {
-    background: unset;
-}
 
 /* Modified: Updated mobile styles to adjust main container padding */
 @media (max-width: 768px) {
@@ -213,7 +214,6 @@ a {
     /*    align-items: center;*/
     /*    flex-shrink: 0;*/
     /*}*/
-
     #chat-app:not(.empty-chat) #input-area {
         top: unset;
         bottom: 0;
@@ -257,7 +257,6 @@ a {
     align-items: center;
     display: flex;
     gap: 10px;
-    background-color: var(--bg-color-opacity);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     -moz-backdrop-filter: blur(20px);
@@ -353,7 +352,6 @@ a {
     max-width: 90%;
     line-height: 1.5;
     width: fit-content;
-    background-color: var(--bg-color-100);
 }
 
 .user-message {
@@ -528,9 +526,9 @@ a {
 
 .think-section:hover,
 .references-section:hover {
-    background-color: var(--bg-color-200);
+    background-color: var(--bg-color-100);
     box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
-    border-color: var(--bg-color-400);
+    border-color: var(--bg-color-200);
 }
 
 .think-header,
@@ -623,7 +621,8 @@ a {
 }
 
 .markdown {
-    padding: 1rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
 }
 
 table {
@@ -887,7 +886,7 @@ button,
 body.search-bar-bottom #input-area {
     top: unset;
     bottom: 0;
-    border-top: 1px solid var(--bg-color-200);
+    /*border-top: 1px solid var(--bg-color-200);*/
     border-bottom: none;
     z-index: 10;
 }
@@ -969,10 +968,18 @@ input:checked + .toggle-slider:before {
 }
 
 @keyframes highlightFootnote {
-    0% { background-color: transparent; }
-    10% { background-color: var(--warning); }
-    90% { background-color: var(--warning); }
-    100% { background-color: transparent; }
+    0% {
+        background-color: transparent;
+    }
+    10% {
+        background-color: var(--warning);
+    }
+    90% {
+        background-color: var(--warning);
+    }
+    100% {
+        background-color: transparent;
+    }
 }
 
 .footnote-highlight {
