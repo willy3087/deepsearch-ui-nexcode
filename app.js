@@ -29,7 +29,7 @@ const mainContainer = document.getElementById('main-container');
 const chatContainer = document.getElementById('chat-container');
 const messageInput = document.getElementById('message-input');
 const sendButton = document.getElementById('send-button');
-const clearButton = document.getElementById('clear-button');
+const newChatButton = document.getElementById('new-chat-button');
 const apiKeyInput = document.getElementById('api-key-input');
 const saveApiKeyBtn = document.getElementById('save-api-key');
 const toggleApiKeyBtn = document.getElementById('toggle-api-key');
@@ -41,7 +41,6 @@ const helpButton = document.getElementById('help-button');
 const helpDialog = document.getElementById('help-dialog');
 const settingsButton = document.getElementById('settings-button');
 const settingsDialog = document.getElementById('settings-dialog');
-const searchBarBottom = document.getElementById('search-bar-bottom');
 const dialogCloseBtns = document.querySelectorAll('.dialog-close');
 
 const loadingSvg = `<svg id="thinking-animation-icon" width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><style>.spinner_mHwL{animation:spinner_OeFQ .75s cubic-bezier(0.56,.52,.17,.98) infinite; fill:currentColor}.spinner_ote2{animation:spinner_ZEPt .75s cubic-bezier(0.56,.52,.17,.98) infinite;fill:currentColor}@keyframes spinner_OeFQ{0%{cx:4px;r:3px}50%{cx:9px;r:8px}}@keyframes spinner_ZEPt{0%{cx:15px;r:8px}50%{cx:20px;r:3px}}</style><defs><filter id="spinner-gF00"><feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="y"/><feColorMatrix in="y" mode="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 18 -7" result="z"/><feBlend in="SourceGraphic" in2="z"/></filter></defs><g filter="url(#spinner-gF00)"><circle class="spinner_mHwL" cx="4" cy="12" r="3"/><circle class="spinner_ote2" cx="15" cy="12" r="8"/></g></svg>`;
@@ -769,11 +768,6 @@ updateEmptyState();
 
 // Settings functionality
 function initializeSettings() {
-    // Initialize search bar position
-    const isSearchBarBottom = localStorage.getItem('search_bar_bottom') === 'true';
-    searchBarBottom.checked = isSearchBarBottom;
-    document.body.classList.toggle('search-bar-bottom', isSearchBarBottom);
-
     // Initialize theme
     const savedTheme = localStorage.getItem('theme') || (window.getCurrentColorScheme && getCurrentColorScheme());
     const themeToggleInput = document.getElementById('theme-toggle-input');
@@ -791,12 +785,6 @@ dialogCloseBtns.forEach(btn => {
         const dialog = btn.closest('.dialog-overlay');
         dialog.classList.remove('visible');
     });
-});
-
-searchBarBottom.addEventListener('change', (e) => {
-    const isBottom = e.target.checked;
-    localStorage.setItem('search_bar_bottom', isBottom);
-    document.body.classList.toggle('search-bar-bottom', isBottom);
 });
 
 const themeToggleInput = document.getElementById('theme-toggle-input');
@@ -817,7 +805,7 @@ initializeSettings();
 
 // Event Listeners
 sendButton.addEventListener('click', sendMessage);
-clearButton.addEventListener('click', clearMessages);
+newChatButton.addEventListener('click', clearMessages);
 messageInput.addEventListener('keydown', (event) => {
     if (event.key === "Enter" && !event.shiftKey) {
         event.preventDefault();
