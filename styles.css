@@ -143,7 +143,7 @@ textarea::placeholder {
     border-top: none;
 }
 
-#clear-button,
+
 #settings-container button,
 .buttons-container button {
     background-color: unset;
@@ -153,7 +153,6 @@ textarea::placeholder {
     -o-backdrop-filter: blur(20px);
 }
 
-#clear-button:hover,
 .buttons-container button:hover,
 #settings-container button:hover {
     background-color: var(--bg-color-100);
@@ -231,7 +230,7 @@ textarea::placeholder {
 }
 
 /* Hide clear button when chat is empty */
-#chat-app.empty-chat #clear-button {
+#chat-app.empty-chat #new-chat-button {
     display: none;
 }
 
@@ -278,14 +277,6 @@ textarea::placeholder {
 
 #send-button {
     display: none;
-}
-
-#clear-button {
-    color: var(--negative);
-}
-
-#clear-button .action-icon {
-    color: inherit;
 }
 
 #loading-indicator {
@@ -915,10 +906,6 @@ input:checked + .toggle-slider:before {
         border-top: 1px solid var(--bg-color-200);
         border-bottom: none;
         gap: 5px;
-    }
-
-    .settings-option.search-bar-bottom {
-        display: none;
     }
 }
 
