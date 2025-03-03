@@ -167,6 +167,11 @@ textarea::placeholder {
     display: flex;
 }
 
+.buttons-group button {
+    padding: 0 8px;
+    height: 32px;
+}
+
 #chat-container {
     flex-grow: 1;
     position: relative;
