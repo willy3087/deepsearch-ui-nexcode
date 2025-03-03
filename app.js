@@ -273,9 +273,9 @@ function scrollToBottom() {
     mainContainer.scrollTop = mainContainer.scrollHeight;
 }
 
-function createCopyButton(content) {
+function createActionButton(content) {
     const buttonContainer = document.createElement('div');
-    buttonContainer.classList.add('buttons-container');
+    buttonContainer.classList.add('action-buttons-container');
     const copyButton = document.createElement('button');
     copyButton.classList.add('copy-button');
     copyButton.innerHTML = UI_STRINGS.buttons.copy;
@@ -286,7 +286,7 @@ function createCopyButton(content) {
     buttonContainer.appendChild(copyButton);
 
     copyButton.addEventListener('click', () => {
-        navigator.clipboard.writeText(content)
+        navigator.clipboard.writeText(content.trim())
             .then(() => {
                 copyButton.innerHTML = checkIcon;
                 setTimeout(() => {
@@ -335,7 +335,7 @@ function showErrorWithAction(message, buttonText, onClick) {
 
     const actionButton = document.createElement('button');
     actionButton.textContent = buttonText;
-    actionButton.className = 'action-button';
+    actionButton.className = 'error-action-button';
     actionButton.addEventListener('click', onClick);
 
     errorContainer.appendChild(errorText);
@@ -663,8 +663,14 @@ async function sendMessage() {
             if (markdownContent) {
                 const markdown = renderMarkdown(markdownContent, true, visitedURLs);
                 markdownDiv.replaceChildren(markdown);
-                const copyButton = createCopyButton(markdownContent);
-                assistantMessageDiv.appendChild(copyButton);
+
+                const copyButton = createActionButton(markdownContent);
+                const referencesSection = markdownDiv.querySelector('.references-section');
+                if (referencesSection) {
+                    referencesSection.insertAdjacentElement('beforebegin', copyButton);
+                } else {
+                    markdownDiv.appendChild(copyButton);
+                }
 
                 existingMessages.push({
                     role: 'assistant',
@@ -739,8 +745,13 @@ function loadAndDisplaySavedMessages() {
                 markdownDiv.replaceChildren(markdown);
 
                 // Add copy button
-                const copyButton = createCopyButton(message.content);
-                messageDiv.appendChild(copyButton);
+                const copyButton = createActionButton(message.content);
+                const referencesSection = markdownDiv.querySelector('.references-section');
+                if (referencesSection) {
+                    referencesSection.insertAdjacentElement('beforebegin', copyButton);
+                } else {
+                    markdownDiv.appendChild(copyButton);
+                }
 
                 // Check for think content
                 if (message.think) {
