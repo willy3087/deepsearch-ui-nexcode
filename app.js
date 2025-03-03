@@ -349,11 +349,15 @@ function showErrorWithAction(message, buttonText, onClick) {
 
 function initializeMarkdown() {
     if (window.markdownit) {
-        md = window.markdownit({
+        const options = {
             html: true,
             linkify: true,
-            typographer: true,
-            highlight: function (str, lang) {
+            typographer: true
+        };
+
+        // Only add highlighting if hljs is available
+        if (window.hljs) {
+            options.highlight = function (str, lang) {
                 if (lang && hljs.getLanguage(lang)) {
                     try {
                         return '<pre><code class="hljs">' +
@@ -362,15 +366,16 @@ function initializeMarkdown() {
                     } catch (__) {
                     }
                 }
-
                 return '<pre><code class="hljs">' + md.utils.escapeHtml(str) + '</code></pre>';
-            }
-        })
-            .use(window.markdownitFootnote).use(markdownItTableWrapper);
+            };
+        }
+
+        md = window.markdownit(options)
+            .use(window.markdownitFootnote)
+            .use(markdownItTableWrapper);
     }
 }
 
-initializeMarkdown();
 
 function markdownItTableWrapper(md) {
     const defaultTableRenderer = md.renderer.rules.table_open || function (tokens, idx, options, env, self) {
@@ -1050,3 +1055,20 @@ function handleFootnoteClick(event) {
 // Add the event listener to the chat container to handle all footnote clicks
 document.getElementById('chat-container').addEventListener('click', handleFootnoteClick);
 
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Initial initialization
+    initializeMarkdown();
+
+    // Re-initialize when hljs loads
+    if (!window.hljs) {
+        console.log('hljs not loaded yet, waiting...');
+        const hljsScript = document.querySelector('script[src="hljs.js"]');
+        if (hljsScript) {
+            hljsScript.addEventListener('load', function() {
+                // Re-initialize with highlighting support
+                initializeMarkdown();
+            });
+        }
+    }
+});
