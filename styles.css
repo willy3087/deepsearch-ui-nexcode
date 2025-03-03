@@ -638,7 +638,7 @@ ol.footnotes-list {
     font-size: var(--body-size);
     display: inline-block;
     padding: 2px 4px;
-    background-color: var(--bg-color-200);
+    background-color: var(--bg-color-100);
     border-radius: 4px;
     font-family: monospace;
 }
@@ -649,13 +649,13 @@ ol.footnotes-list {
 }
 
 .markdown table {
-    background-color: var(--bg-color-200);
-    border: 1px solid var(--bg-color-300);
+    background-color: var(--bg-color-100);
+    border: 1px solid var(--bg-color-200);
     border-collapse: collapse;
 }
 
 .markdown table thead {
-    background-color: var(--bg-color-300);
+    background-color: var(--bg-color-200);
 }
 
 .markdown table th,
@@ -688,7 +688,7 @@ ol.footnotes-list {
     width: 0.8em;
     height: 0.8em;
     border-radius: 4px;
-    background-color: var(--bg-color-200);
+    background-color: var(--bg-color-100);
     position: relative;
 }
 
