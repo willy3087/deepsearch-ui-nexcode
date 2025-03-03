@@ -781,8 +781,7 @@ function loadAndDisplaySavedMessages() {
     }
 }
 
-// Call the function to load and display saved messages
-loadAndDisplaySavedMessages();
+
 
 // Initialize empty state
 updateEmptyState();
@@ -1071,4 +1070,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     }
+
+    // Call the function to load and display saved messages
+    loadAndDisplaySavedMessages();
 });
