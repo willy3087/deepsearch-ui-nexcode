@@ -27,8 +27,8 @@ const UI_STRINGS = {
 const logo = document.getElementById('logo');
 const mainContainer = document.getElementById('main-container');
 const chatContainer = document.getElementById('chat-container');
+const messageForm = document.getElementById('input-area');
 const messageInput = document.getElementById('message-input');
-const sendButton = document.getElementById('send-button');
 const newChatButton = document.getElementById('new-chat-button');
 const apiKeyInput = document.getElementById('api-key-input');
 const saveApiKeyBtn = document.getElementById('save-api-key');
@@ -430,6 +430,7 @@ function updateEmptyState() {
     const chatApp = document.getElementById('chat-app');
     if (chatContainer.innerHTML.trim() === '') {
         chatApp.classList.add('empty-chat');
+        messageInput.focus();
     } else {
         chatApp.classList.remove('empty-chat');
     }
@@ -465,7 +466,6 @@ async function sendMessage() {
 
     abortController = new AbortController();
     isLoading = true;
-    sendButton.disabled = true;
 
     displayMessage('user', query);
     existingMessages.push({role: 'user', content: query});
@@ -712,7 +712,6 @@ async function sendMessage() {
         assistantMessageDiv.appendChild(errorContainer);
     } finally {
         isLoading = false;
-        sendButton.disabled = false;
         makeAllLinksOpenInNewTab();
     }
 }
@@ -810,13 +809,16 @@ initializeSettings();
 
 
 // Event Listeners
-sendButton.addEventListener('click', sendMessage);
 newChatButton.addEventListener('click', clearMessages);
 messageInput.addEventListener('keydown', (event) => {
     if (event.key === "Enter" && !event.shiftKey) {
         event.preventDefault();
         sendMessage();
     }
+});
+messageForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    sendMessage();
 });
 
 messageInput.addEventListener('input', () => {
