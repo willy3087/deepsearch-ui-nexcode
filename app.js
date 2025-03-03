@@ -782,7 +782,6 @@ function loadAndDisplaySavedMessages() {
 }
 
 
-
 // Initialize empty state
 updateEmptyState();
 
@@ -793,7 +792,7 @@ function initializeSettings() {
     const themeToggleInput = document.getElementById('theme-toggle-input');
     themeToggleInput.checked = savedTheme === 'dark';
     document.documentElement.setAttribute('data-theme', savedTheme);
-    
+
     // Initialize chirp on done setting (default to true)
     const chirpOnDone = localStorage.getItem('chirp_on_done') !== 'false';
     const chirpOnDoneToggleInput = document.getElementById('chirp-on-done-toggle-input');
@@ -1067,22 +1066,33 @@ function handleFootnoteClick(event) {
 document.getElementById('chat-container').addEventListener('click', handleFootnoteClick);
 
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Initial initialization
-    initializeMarkdown();
+function ensureHljsLoaded() {
+    return new Promise((resolve) => {
+        if (window.hljs) {
+            resolve();
+        } else {
+            // Create a small interval to check if hljs has loaded
+            const checkInterval = setInterval(() => {
+                if (window.hljs) {
+                    clearInterval(checkInterval);
+                    resolve();
+                    console.log('loaded!')
+                }
+            }, 50);
 
-    // Re-initialize when hljs loads
-    if (!window.hljs) {
-        console.log('hljs not loaded yet, waiting...');
-        const hljsScript = document.querySelector('script[src="hljs.js"]');
-        if (hljsScript) {
-            hljsScript.addEventListener('load', function() {
-                // Re-initialize with highlighting support
-                initializeMarkdown();
-            });
+            // Add a timeout in case it never loads
+            setTimeout(() => {
+                clearInterval(checkInterval);
+                resolve(); // Resolve anyway after 5 seconds
+            }, 2500);
         }
-    }
+    });
+}
 
-    // Call the function to load and display saved messages
-    loadAndDisplaySavedMessages();
-});
+
+document.addEventListener('DOMContentLoaded', () => {
+    ensureHljsLoaded().then(() => {
+        initializeMarkdown();
+        loadAndDisplaySavedMessages();
+    });
+})
