@@ -1007,6 +1007,10 @@ messageForm.addEventListener('submit', (event) => {
 messageInput.addEventListener('input', () => {
     messageInput.style.height = 'auto';
     messageInput.style.height = `${messageInput.scrollHeight - 28}px`;
+    if (messageInput.value === '') {
+        messageInput.style.height = 'unset';
+    }
+
     const computedStyle = window.getComputedStyle(messageInput);
     const maxHeight = parseInt(computedStyle.maxHeight, 10);
     if (messageInput.scrollHeight >= maxHeight) {
