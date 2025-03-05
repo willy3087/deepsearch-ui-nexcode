@@ -20,7 +20,8 @@
       "toggle": "Thoughts"
     },
     "references": {
-      "title": "References"
+      "title": "References",
+      "sources": "Sources"
     },
     "errors": {
       "invalidKey": "Invalid API key. Please update your key by click the button below\".",
@@ -75,7 +76,8 @@
       "toggle": "思考过程"
     },
     "references": {
-      "title": "参考资料"
+      "title": "参考资料",
+      "sources": "来源"
     },
     "errors": {
       "invalidKey": "无效的API密钥。请点击下方按钮更新您的密钥。",
@@ -130,7 +132,8 @@
       "toggle": "思考過程"
     },
     "references": {
-      "title": "參考資料"
+      "title": "參考資料",
+      "sources": "來源"
     },
     "errors": {
       "invalidKey": "API 金鑰有問題喔。請按下面的按鈕更新金鑰。",
@@ -185,7 +188,8 @@
       "toggle": "思考プロセス"
     },
     "references": {
-      "title": "参考資料"
+      "title": "参考資料",
+      "sources": "ソース"
     },
     "errors": {
       "invalidKey": "無効なAPIキーです。以下のボタンをクリックしてキーを更新してください。",
@@ -240,7 +244,8 @@
       "toggle": "Processus de réflexion"
     },
     "references": {
-      "title": "Références"
+      "title": "Références",
+      "sources": "Sources"
     },
     "errors": {
       "invalidKey": "Clé API invalide. Veuillez mettre à jour votre clé en cliquant sur le bouton ci-dessous.",
@@ -295,7 +300,8 @@
       "toggle": "Denkprozess"
     },
     "references": {
-      "title": "Referenzen"
+      "title": "Referenzen",
+      "sources": "Quellen"
     },
     "errors": {
       "invalidKey": "Ungültiger API-Schlüssel. Bitte aktualisieren Sie Ihren Schlüssel, indem Sie auf die Schaltfläche unten klicken.",
@@ -350,7 +356,8 @@
       "toggle": "사고 과정"
     },
     "references": {
-      "title": "참조"
+      "title": "참조",
+      "sources": "출처"
     },
     "errors": {
       "invalidKey": "유효하지 않은 API 키입니다. 아래 버튼을 클릭하여 키를 업데이트하세요.",

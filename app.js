@@ -14,7 +14,8 @@ let UI_STRINGS = {
         toggle: () => 'Thoughts',
     },
     references: {
-        title: () => 'References'
+        title: () => 'References',
+        sources: () => 'Sources'
     },
     errors: {
         invalidKey: () => 'Invalid API key. Please update your key by click the button below.',
@@ -145,6 +146,7 @@ function applyTranslations() {
         },
         references: {
           title: () => t('references.title'),
+          sources: () => t('references.sources')
         },
         errors: {
           invalidKey: () => t('errors.invalidKey'),
@@ -311,12 +313,16 @@ const renderFaviconList = async (visitedURLs) => {
     }, new Map());
 
     // Add sources count
-    faviconList.appendChild(
-        Object.assign(document.createElement('div'), {
-            className: 'sources-count',
-            textContent: `${visitedURLs.length} sources`
-        })
-    );
+    const sourceCount = document.createElement('div');
+    sourceCount.classList.add('sources-count');
+    sourceCount.textContent = `${visitedURLs.length} `;
+
+    const label = document.createElement('span');
+    label.setAttribute('data-label', 'references.sources');
+    label.textContent = UI_STRINGS.references.sources();
+
+    sourceCount.appendChild(label);
+    faviconList.appendChild(sourceCount);
 
     // Favicon fetching function with retry support
     const fetchFavicons = async (domains) => {
