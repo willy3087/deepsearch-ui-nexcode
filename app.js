@@ -419,13 +419,65 @@ function scrollToBottom() {
 function createActionButton(content) {
     const buttonContainer = document.createElement('div');
     buttonContainer.classList.add('action-buttons-container');
+
+    // redo button
+    const redoButton = document.createElement('button');
+    redoButton.classList.add('redo-button');
+    const redoIcon = `<svg class="action-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-cw"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>`;
+    redoButton.innerHTML = redoIcon;
+
+    // copy button
     const copyButton = document.createElement('button');
     copyButton.classList.add('copy-button');
     const copyIcon = `<svg class="action-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
     const checkIcon = `<svg class="action-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
     copyButton.innerHTML = copyIcon;
 
+    buttonContainer.appendChild(redoButton);
     buttonContainer.appendChild(copyButton);
+
+    redoButton.addEventListener('click', () => {
+        if (isLoading) return;
+
+        // Find the current message element
+        const messageElement = redoButton.closest('.message');
+        if (!messageElement) {
+            console.error('Current message not found');
+            return;
+        };
+
+        const currentMessageId = messageElement.getAttribute('id');
+        const currentMessageIndex = existingMessages.findIndex(m => m.id === currentMessageId);
+
+        if (currentMessageIndex < 0) {
+            console.error('Current message not found in existing messages');
+            return;
+        };
+
+        // Get the previous user message
+        let userMessageIndex = currentMessageIndex - 1;
+        while (userMessageIndex >= 0 && existingMessages[userMessageIndex].role !== 'user') {
+            userMessageIndex--;
+        }
+        const userMessage = existingMessages[userMessageIndex]?.content;
+        if (!userMessage) {
+            console.error('No user message found to redo');
+            return;
+        };
+
+        const allMessages = Array.from(chatContainer.querySelectorAll('.message'));
+        const startIndex = allMessages.findIndex(m => m.id === currentMessageId);
+        if (startIndex < 0) return;
+
+        // Remove all messages after the current message
+        allMessages.slice(startIndex).forEach(m => m.remove());
+
+        // Remove messages from existingMessages and localStorage
+        existingMessages.splice(currentMessageIndex);
+        saveChatMessages();
+
+        sendMessage(userMessage, true);
+    });
 
     copyButton.addEventListener('click', () => {
         navigator.clipboard.writeText(content.trim())
@@ -440,9 +492,11 @@ function createActionButton(content) {
     return buttonContainer;
 }
 
-function displayMessage(role, content) {
+function displayMessage(role, content, messageId = null) {
     const messageDiv = document.createElement('div');
-    messageDiv.classList.add('message', `${role}-message`);
+    messageDiv.classList.add('message', `${role}-message`)
+    const id = messageId || `message-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+    messageDiv.id = id;
 
     if (role === 'assistant') {
         messageDiv.innerHTML = `<div id="loading-indicator">${loadingSvg}</div>`;
@@ -617,16 +671,19 @@ const makeAllLinksOpenInNewTab = () => {
     });
 };
 
-async function sendMessage() {
-    const query = messageInput.value.trim();
+async function sendMessage(q = '', redo = false) {
+    const query = messageInput.value.trim() || q;
 
     if (!query || isLoading) return;
 
     abortController = new AbortController();
     isLoading = true;
 
-    displayMessage('user', query);
-    existingMessages.push({role: 'user', content: query});
+    if (!redo) {
+        const userMessageId = `message-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+        displayMessage('user', query, userMessageId);
+        existingMessages.push({role: 'user', content: query, id: userMessageId});
+    }
     messageInput.value = '';
     messageInput.style.height = 'auto';
     // To clear the badge
@@ -634,7 +691,8 @@ async function sendMessage() {
     // Save messages to localStorage
     saveChatMessages();
 
-    const assistantMessageDiv = displayMessage('assistant', '');
+    const assistantMessageId = `message-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+    const assistantMessageDiv = displayMessage('assistant', '', assistantMessageId);
 
     let markdownContent = '';
     let thinkContent = '';
@@ -656,7 +714,7 @@ async function sendMessage() {
             method: 'POST',
             headers,
             body: JSON.stringify({
-                messages: existingMessages,
+                messages: existingMessages.map(({role, content}) => ({role, content})),
                 stream: true,
                 reasoning_effort: 'medium',
             }),
@@ -833,7 +891,8 @@ async function sendMessage() {
                 existingMessages.push({
                     role: 'assistant',
                     content: markdownContent,
-                    think: thinkContent
+                    think: thinkContent,
+                    id: assistantMessageId,
                 });
 
                 // Save messages to localStorage
@@ -848,7 +907,7 @@ async function sendMessage() {
                 assistantMessageDiv.textContent = jsonResult.choices[0].message.content;
                 existingMessages.push({
                     role: 'assistant',
-                    content: jsonResult.choices[0].message.content
+                    content: jsonResult.choices[0].message.content,
                 });
                 // Save messages to localStorage
                 saveChatMessages();
@@ -887,7 +946,10 @@ function loadAndDisplaySavedMessages() {
     if (existingMessages.length > 0) {
         // Display saved messages
         existingMessages.forEach(message => {
-            const messageDiv = displayMessage(message.role, message.content);
+            if (!message.id) {
+                message.id = `message-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+            }
+            const messageDiv = displayMessage(message.role, message.content, message.id);
 
             if (message.role === 'assistant') {
                 // Remove loading indicator
@@ -927,6 +989,7 @@ function loadAndDisplaySavedMessages() {
                 messageDiv.replaceChildren(renderMarkdown(message.content, true, [], 'user'));
             }
         });
+        saveChatMessages();
         makeAllLinksOpenInNewTab();
 
         // Scroll to bottom
