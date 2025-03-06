@@ -15,6 +15,14 @@
       "purchase": "Purchase More Tokens",
       "contactUs": "Contact Us"
     },
+    "tooltips": {
+      "copy": "Copy",
+      "redo": "Regenerate",
+      "settings": "Settings",
+      "help": "Support",
+      "new": "Clear and start a new conversation",
+      "upgrade": "Upgrade to higher rate limit"
+    },
     "think": {
       "initial": "Thinking...",
       "toggle": "Thoughts"
@@ -70,6 +78,14 @@
       "saveKey": "保存",
       "purchase": "购买更多词元",
       "contactUs": "联系我们"
+    },
+    "tooltips": {
+      "copy": "复制",
+      "redo": "重新生成",
+      "settings": "设置",
+      "help": "帮助",
+      "new": "清除并开始新对话",
+      "upgrade": "升级到更高的速率限制"
     },
     "think": {
       "initial": "思考中...",
@@ -127,6 +143,14 @@
       "purchase": "買更多詞元",
       "contactUs": "聯絡我們"
     },
+    "tooltips": {
+      "copy": "複製",
+      "redo": "重新生成",
+      "settings": "設定",
+      "help": "帮助",
+      "new": "清除並開始新對話",
+      "upgrade": "升級到更高的速度限制"
+    },
     "think": {
       "initial": "思考中...",
       "toggle": "思考過程"
@@ -182,6 +206,14 @@
       "saveKey": "保存",
       "purchase": "トークンを購入",
       "contactUs": "お問い合わせ"
+    },
+    "tooltips": {
+      "copy": "コピー",
+      "redo": "再生成",
+      "settings": "設定",
+      "help": "サポート",
+      "new": "クリアして新しい会話を開始",
+      "upgrade": "上限を引き上げる"
     },
     "think": {
       "initial": "思考中...",
@@ -239,6 +271,14 @@
       "purchase": "Acheter plus de jetons",
       "contactUs": "Nous contacter"
     },
+    "tooltips": {
+      "copy": "Copier",
+      "redo": "Régénérer",
+      "settings": "Paramètres",
+      "help": "Support",
+      "new": "Effacer et commencer une nouvelle conversation",
+      "upgrade": "Passer à une limite de taux supérieure"
+    },
     "think": {
       "initial": "Réflexion en cours...",
       "toggle": "Processus de réflexion"
@@ -295,6 +335,14 @@
       "purchase": "Weitere Token kaufen",
       "contactUs": "Kontaktieren Sie uns"
     },
+    "tooltips": {
+      "copy": "Kopieren",
+      "redo": "Neu generieren",
+      "settings": "Einstellungen",
+      "help": "Support",
+      "new": "Löschen und neue Konversation starten",
+      "upgrade": "Auf höhere Ratenbegrenzung aktualisieren"
+    },
     "think": {
       "initial": "Denke nach...",
       "toggle": "Denkprozess"
@@ -350,6 +398,14 @@
       "saveKey": "저장",
       "purchase": "토큰 더 구매",
       "contactUs": "문의하기"
+    },
+    "tooltips": {
+      "copy": "복사",
+      "redo": "재생성",
+      "settings": "설정",
+      "help": "지원",
+      "new": "지우고 새 대화 시작",
+      "upgrade": "높은 요금제로 업그레이드"
     },
     "think": {
       "initial": "생각 중...",
