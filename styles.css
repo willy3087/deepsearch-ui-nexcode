@@ -726,9 +726,9 @@ ol.footnotes-list {
     max-width: 200px;
     overflow-wrap: break-word;
     transform: translateX(-50%);
-    background: var(--bg-color-300);
-    color: var(--text-color);
-    padding: 4px 8px;
+    background-color: var(--text-color);
+    color: var(--bg-color);
+    padding: 8px 12px;
     border-radius: 4px;
     font-size: var(--secondary-size);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
