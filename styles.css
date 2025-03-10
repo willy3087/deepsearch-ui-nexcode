@@ -1102,13 +1102,13 @@ input:checked + .toggle-slider:before {
 }
 
 .file-preview-item .file-name {
-    font-size: 0.7em;
+    font-size: 0.6em;
     color: var(--text-secondary);
     text-align: center;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    width: 90%;
+    width: 80%;
     position: absolute;
     bottom: 6px;
 }
