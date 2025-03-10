@@ -48,7 +48,6 @@ button {
     border-radius: 4px;
     border: 1px solid transparent;
     font-size: var(--body-size);
-    font-weight: 500;
     cursor: pointer;
     background-color: var(--bg-color-100);
     font-family: arial, sans-serif;
