@@ -1024,7 +1024,7 @@ async function sendMessage(redo = false) {
             method: 'POST',
             headers,
             body: JSON.stringify({
-                messages: existingMessages.map(({role, content}) => ({role, content})),
+                messages: existingMessages.map(({role, content}) => ({role, content: typeof content === 'string' ? content : content.filter(c => c.text || c.image || c.data)})),
                 stream: true,
                 reasoning_effort: 'medium',
             }),
