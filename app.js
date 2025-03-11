@@ -726,12 +726,11 @@ function createStopButton() {
     if (!isLoading) return;
     const buttonContainer = document.createElement('div');
     buttonContainer.classList.add('action-buttons-container');
-    buttonContainer.id = 'stop-message';
 
     const stopButton = document.createElement('button');
     stopButton.classList.add('stop-button', 'tooltip-container');
     stopButton.setAttribute('data-tooltip', 'tooltips.stop');
-    const stopIcon = `<svg class="action-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-pause"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>`;
+    const stopIcon = `<svg id="stop-message" class="action-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-pause"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>`;
     stopButton.innerHTML = stopIcon;
 
     buttonContainer.appendChild(stopButton);
@@ -1071,7 +1070,7 @@ async function sendMessage(redo = false) {
             method: 'POST',
             headers,
             body: JSON.stringify({
-                messages: existingMessages.map(({role, content}) => ({role, content: typeof content === 'string' ? content : content.filter(c => c.text || c.image || c.data)})),
+                messages: existingMessages.filter(({content}) => content).map(({role, content}) => ({role, content: typeof content === 'string' ? content : content.filter(c => c.text || c.image || c.data)})),
                 stream: true,
                 reasoning_effort: 'medium',
             }),

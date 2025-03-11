@@ -1182,3 +1182,7 @@ input:checked + .toggle-slider:before {
     font-size: 0.7em;
     padding-left: 0.2rem;
 }
+
+#stop-message {
+    color: var(--negative);
+}
