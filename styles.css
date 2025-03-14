@@ -1250,7 +1250,12 @@ input:checked + .toggle-slider:before {
 /* Override the existing table border styles */
 table, th, td {
     border: none; /* Remove default borders first */
-    font-size: 0.87em;
+    font-size: 0.9em;
+}
+
+table th .footnote-ref a,
+table td .footnote-ref a {
+  background-color: var(--bg-color-200);
 }
 
 /* Rounded table corners */
