@@ -647,11 +647,6 @@ table {
     width: 100%;
 }
 
-table, th, td {
-    border: 1px solid var(--bg-color);
-    border-collapse: collapse;
-    font-size: 0.9em;
-}
 
 .markdown-inner .footnotes-sep {
     display: none;
@@ -1257,4 +1252,56 @@ input:checked + .toggle-slider:before {
 
 #stop-icon {
     color: var(--negative);
+}
+/* Override the existing table border styles */
+table, th, td {
+    border: none; /* Remove default borders first */
+    font-size: 0.87em;
+}
+
+/* Rounded table corners */
+.markdown-inner table {
+    border-radius: 8px;
+    overflow: hidden; /* This is important to keep the border-radius visible */
+    border-collapse: separate; /* Required for border-radius to work */
+    border-spacing: 0; /* Ensures no gaps between cells */
+    border: 1px solid var(--bg-color-200); /* Single border around the entire table */
+}
+
+/* Add subtle borders between cells */
+.markdown-inner table td,
+.markdown-inner table th {
+    border-right: 1px solid var(--bg-color-200);
+    border-bottom: 1px solid var(--bg-color-200);
+    padding: 8px; /* Add some padding for better readability */
+    text-align: left; /* Left-align all table content by default */
+}
+
+/* Remove right border from last column */
+.markdown-inner table td:last-child,
+.markdown-inner table th:last-child {
+    border-right: none;
+}
+
+/* Remove bottom border from last row */
+.markdown-inner table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Optional: Adjust the table header cell corners */
+.markdown-inner table thead th:first-child {
+    border-top-left-radius: 8px;
+}
+
+.markdown-inner table thead th:last-child {
+    border-top-right-radius: 8px;
+}
+
+/* Optional: Adjust the table bottom row cell corners */
+.markdown-inner table tr:last-child td:first-child {
+    border-bottom-left-radius: 8px;
+}
+
+.markdown-inner table tr:last-child td:last-child {
+    border-bottom-right-radius: 8px;
 }
