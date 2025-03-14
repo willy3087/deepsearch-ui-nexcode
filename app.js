@@ -357,7 +357,7 @@ fileInput.addEventListener('change', e => handleFileUpload(e.target.files));
 saveApiKeyBtn.addEventListener('click', handleApiKeySave);
 
 // Message display functions
-function createReferencesSection(content, visitedURLs = []) {
+function createReferencesSection(content, visitedURLs = [], numURLs=0) {
     // Don't create section if no content and no URLs
     if (!content && (!visitedURLs || visitedURLs.length === 0)) {
         return null;
@@ -391,7 +391,7 @@ function createReferencesSection(content, visitedURLs = []) {
         const faviconContainer = document.createElement('div');
         faviconContainer.classList.add('references-favicons');
 
-        renderFaviconList(visitedURLs).then(faviconList => {
+        renderFaviconList(visitedURLs, numURLs).then(faviconList => {
             faviconContainer.appendChild(faviconList);
             section.appendChild(faviconContainer);
         });
@@ -401,7 +401,7 @@ function createReferencesSection(content, visitedURLs = []) {
     return section;
 }
 
-const renderFaviconList = async (visitedURLs) => {
+const renderFaviconList = async (visitedURLs, numURLs) => {
     // Create DOM elements and data structures
     const faviconList = document.createElement('div');
     faviconList.classList.add('favicon-list');
@@ -454,7 +454,7 @@ const renderFaviconList = async (visitedURLs) => {
     // Add sources count
     const sourceCount = document.createElement('div');
     sourceCount.classList.add('sources-count');
-    sourceCount.textContent = `${visitedURLs.length} `;
+    sourceCount.textContent = `${visitedURLs.length}${numURLs > visitedURLs.length?'+':''} `;
 
     const label = document.createElement('span');
     label.setAttribute('data-label', 'references.sources');
@@ -878,7 +878,7 @@ function markdownItTableWrapper(md) {
     };
 }
 
-function renderMarkdown(content, returnElement = false, visitedURLs = [], role = 'assistant') {
+function renderMarkdown(content, returnElement = false, visitedURLs = [], role = 'assistant', numURLs = 0) {
     if (!md) {
         initializeMarkdown();
     }
@@ -900,7 +900,7 @@ function renderMarkdown(content, returnElement = false, visitedURLs = [], role =
             const footnoteContent = footnotes ? footnotes.innerHTML : '';
 
             // Create references section if there are footnotes or visitedURLs
-            const referencesSection = createReferencesSection(footnoteContent, visitedURLs);
+            const referencesSection = createReferencesSection(footnoteContent, visitedURLs, numURLs);
             if (referencesSection) {
                 if (footnotes) {
                     footnotes.replaceWith(referencesSection);
@@ -1119,6 +1119,7 @@ async function sendMessage(redo = false) {
             const decoder = new TextDecoder();
             let partialBrokenData = '';
             let visitedURLs = [];
+            let numURLs = 0;
 
             while (true) {
                 const {done, value} = await reader.read();
@@ -1141,6 +1142,9 @@ async function sendMessage(redo = false) {
                                 // Store visitedURLs from the final chunk if provided
                                 if (json.visitedURLs) {
                                     visitedURLs = json.visitedURLs;
+                                }
+                                if (json.numURLs) {
+                                    numURLs = json.numURLs;
                                 }
                                 removeLoadingIndicator(assistantMessageDiv);
 
@@ -1228,7 +1232,7 @@ async function sendMessage(redo = false) {
             toggleStopMessage(false);
 
             if (markdownContent) {
-                const markdown = renderMarkdown(markdownContent, true, visitedURLs);
+                const markdown = renderMarkdown(markdownContent, true, visitedURLs, 'assistant', numURLs);
                 markdownDiv.replaceChildren(markdown);
 
                 const copyButton = createActionButton(markdownContent);
