@@ -1109,6 +1109,7 @@ input:checked + .toggle-slider:before {
     align-items: center;
 }
 
+#stop-message-button:hover,
 #file-upload-button:hover {
     background-color: var(--bg-color-100);
 }
