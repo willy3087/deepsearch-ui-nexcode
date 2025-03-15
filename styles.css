@@ -1339,7 +1339,6 @@ table td .footnote-ref a {
     border-radius: 4px;
     padding: 2px 4px;
     font-family: 'Roboto Mono', 'Courier New', monospace;
-    font-size: 0.9em;
     color: var(--text-color);
 }
 
