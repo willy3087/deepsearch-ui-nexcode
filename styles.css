@@ -552,6 +552,9 @@ a {
     visibility: visible;
 }
 
+#clear-all-sessions {
+    font-size: 0.8rem;
+}
 .delete-session:hover,
 #clear-all-sessions:hover,
 .delete:hover {
@@ -559,17 +562,16 @@ a {
 }
 
 #sessions-header {
-    padding: 16px 12px 0;
+    padding: 8px 10px 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
     color: var(--text-secondary);
-    font-size: var(--body-size);
+    font-size: 0.8rem;
 }
 
 #sessions-footer {
     padding: 8px;
-    border-top: 1px solid var(--bg-color-200);
     display: flex;
     justify-content: flex-end;
 }
