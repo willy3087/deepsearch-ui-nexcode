@@ -60,6 +60,28 @@
                 <span data-label="buttons.new">New</span>
                 <span class="tooltip" data-label="tooltips.new">Clear and start a new conversation</span>
             </button>
+            <div id="recent-sessions-container" class="tooltip-container">
+                <button id="recent-sessions-button" aria-label="Recent Sessions" class="icon-button">
+                    <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                    <span class="tooltip" data-label="tooltips.recent">View recent conversations</span>
+                </button>
+                <div id="sessions-dropdown">
+                    <div id="sessions-header">
+                        <span data-label="labels.recent">Recent</span>
+                    </div>
+                    <ul id="sessions-list">
+                        <!-- Sessions will be dynamically added here -->
+                    </ul>
+                    <div id="sessions-footer">
+                        <button id="clear-all-sessions">
+                            <span data-label="buttons.clearAll">Clear All</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="buttons-group">
             <button id="toggle-api-key" class="icon-button tooltip-container" aria-label="Upgrade to higher rate limit">
@@ -226,6 +248,36 @@
                     <option value="de">Deutsch</option>
                 </select>
             </div>
+        </div>
+    </div>
+</div>
+<!-- Delete session dialog -->
+<div class="dialog-overlay" id="delete-session-dialog" role="dialog" aria-labelledby="delete-session-dialog-title" aria-modal="true">
+    <div class="dialog">
+        <div class="dialog-header">
+            <span class="dialog-title" id="delete-session-dialog-title" data-label="dialogs.deleteSession.title">Delete session?</span>
+            <button class="dialog-close" aria-label="Close dialog">&times;</button>
+        </div>
+        <div class="dialog-content">
+            <p id="free-user-rpm" data-html="dialogs.deleteSession.description">Are you sure to delete the session?</p>
+        </div>
+        <div class="dialog-footer">
+            <button class="delete" aria-label="Delete" data-label="buttons.delete">Delete</button>
+        </div>
+    </div>
+</div>
+<!-- Delete all sessions dialog -->
+<div class="dialog-overlay" id="delete-all-sessions-dialog" role="dialog" aria-labelledby="delete-all-dialog-title" aria-modal="true">
+    <div class="dialog">
+        <div class="dialog-header">
+            <span class="dialog-title" id="delete-all-dialog-title" data-label="dialogs.deleteAllSessions.title">Delete all sessions?</span>
+            <button class="dialog-close" aria-label="Close dialog">&times;</button>
+        </div>
+        <div class="dialog-content">
+            <p id="free-user-rpm" data-html="dialogs.deleteAllSessions.description">Are you sure to delete all the sessions?</p>
+        </div>
+        <div class="dialog-footer">
+            <button class="delete" aria-label="Delete" data-label="buttons.delete">Delete</button>
         </div>
     </div>
 </div>

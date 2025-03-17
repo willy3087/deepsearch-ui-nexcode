@@ -464,6 +464,10 @@ a {
     margin-top: 20px;
 }
 
+.dialog-footer .delete {
+    margin-left: auto;
+}
+
 
 .icon-button .action-icon {
     margin-right: 8px;
@@ -472,6 +476,102 @@ a {
 #help-button {
     display: flex;
     align-items: center;
+}
+
+/* Recent sessions styles */
+#recent-sessions-container {
+    position: relative;
+    display: none;
+}
+
+#recent-sessions-button {
+    display: flex;
+    align-items: center;
+}
+
+.chevron-icon {
+    transition: transform 0.3s ease;
+}
+
+.chevron-icon.rotated {
+    transform: rotate(180deg);
+}
+
+#sessions-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 250px;
+    max-height: 60vh;
+    background-color: var(--bg-color);
+    border: 1px solid var(--bg-color-200);
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: none;
+    overflow-y: auto;
+}
+
+#sessions-dropdown.show {
+    display: block;
+}
+
+#sessions-list {
+    padding: 8px 0;
+    margin: 0;
+    list-style-type: none;
+}
+
+.session-item {
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.session-item:hover {
+    background-color: var(--bg-color-100);
+}
+
+.session-title {
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--text-color);
+    font-size: var(--body-size);
+}
+
+.delete-session {
+    visibility: hidden;
+}
+
+.session-item:hover .delete-session {
+    visibility: visible;
+}
+
+.delete-session:hover,
+#clear-all-sessions:hover,
+.delete:hover {
+    color: var(--negative);
+}
+
+#sessions-header {
+    padding: 16px 12px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--text-secondary);
+    font-size: var(--body-size);
+}
+
+#sessions-footer {
+    padding: 8px;
+    border-top: 1px solid var(--bg-color-200);
+    display: flex;
+    justify-content: flex-end;
 }
 
 .help-list {
@@ -1002,6 +1102,10 @@ input:checked + .toggle-slider:before {
     #main-container {
         padding-inline-start: 0;
     }
+
+    .delete-session {
+        visibility: visible;
+    }
 }
 
 .footnote-ref a {
@@ -1250,6 +1354,7 @@ input:checked + .toggle-slider:before {
 #stop-icon {
     color: var(--negative);
 }
+
 /* Override the existing table border styles */
 table, th, td {
     border: none; /* Remove default borders first */
