@@ -42,7 +42,7 @@
     "errors": {
       "invalidKey": "Invalid API key. Please update your key by click the button below\".",
       "insufficientTokens": "Insufficient tokens in your API key. Please purchase more tokens or swap to another key.",
-      "rateLimit": "You have reached the rate limit. Please try again later. You can also upgrade to a higher plan by clicking the button below.",
+      "rateLimit": "You have reached the rate limit, please try later. You can also upgrade to a higher plan by clicking the button below.",
       "fileSizeLimit": "Total file size exceeds 10MB limit",
       "fileTypeNotSupported": "File type not supported"
     },
@@ -61,8 +61,9 @@
         "list": [
           "No ads, no login, no bullet points, no lengthy report, no nonsense design.",
           "Free users get 2 search requests per minute. Provide an API key to get a higher rate limit.",
+          "Ask meaningful questions. Avoid wasting your rate limit on trivial greetings or trick questions.",
           "Add to your browser's search engines via <code>https://search.jina.ai/?q={YOUR_QUERY}</code>",
-          "This <i>is</i> our product, not a POC or hype-chasing gimmick. Interested in on-prem deploy? Contact us."
+          "Interested in on-prem deploy? Contact us."
         ]
       },
       "settings": {
@@ -143,7 +144,8 @@
         "list": [
           "无登录，无广告，去冗长报告，去废话设计。",
           "免费用户每分钟可发送2个搜索请求。提供API密钥以获得更高的速率限制。",
-          "通过<code>https://search.jina.ai/?q={YOUR_QUERY}</code>添加到您的浏览器搜索引擎",
+          "问深点！不要浪费宝贵的生命在那些简单问题和脑筋急转弯上，不要在无聊时用此寻求慰藉。",
+          "通过<code>https://search.jina.ai/?q={YOUR_QUERY}</code>添加到您的浏览器搜索引擎。",
           "这<i>就是</i>我们的产品，不是蹭热点。对私有化部署感兴趣？联系我们。"
         ]
       },
@@ -225,8 +227,9 @@
         "list": [
           "免登入、沒廣告、沒有長篇大論、沒有廢話設計。",
           "免費用戶一分鐘可以送三次搜尋請求。提供 API 金鑰可以提高速度限制。",
+          "問深點！不要浪費寶貴的生命在那些簡單問題和腦筋急轉彎上，不要在無聊時用此尋求慰藉。",
           "用<code>https://search.jina.ai/?q={YOUR_QUERY}</code>加到你的瀏覽器搜尋引擎裡",
-          "這<i>就是</i>我們的產品，不是來蹭熱度的。對私有化部署有興趣嗎？聯絡我們。"
+          "對私有化部署有興趣嗎？聯絡我們。"
         ]
       },
       "settings": {
@@ -307,8 +310,9 @@
         "list": [
           "ログイン不要、広告なし、箇条書きなし、冗長なレポートなし、無駄のないデザイン。",
           "無料ユーザーは1分あたり2件の検索リクエストを送信できます。APIキーを提供すると、レート制限を引き上げることができます。",
-          "<code>[https://search.jina.ai/?q=](https://www.google.com/url?sa=E&source=gmail&q=https://search.jina.ai/?q=){YOUR_QUERY}</code>を使用して、ブラウザの検索エンジンに追加します。",
-          "これは、まさに当社の製品であり、POCや誇大広告を追いかけるギミックではありません。オンプレミス展開にご興味がありますか？お問い合わせください。"
+          "深い質問をしてください！簡単な質問やなぞなぞに貴重な時間を無駄にせず、退屈なときにこれを使って楽しもうとしないでください。",
+          "<code>https://search.jina.ai/?q={YOUR_QUERY}</code>を使用して、ブラウザの検索エンジンに追加します。",
+          "オンプレミス展開にご興味がありますか？お問い合わせください。"
         ]
       },
       "settings": {
@@ -389,8 +393,9 @@
         "list": [
           "Pas de publicité, pas de connexion, pas de puces, pas de rapports longs, pas de design superflu.",
           "Les utilisateurs gratuits peuvent envoyer 2 requêtes de recherche par minute. Fournissez une clé API pour obtenir une limite de taux plus élevée.",
+          "Posez des questions profondes ! Ne gaspillez pas votre précieuse vie avec des questions simples ou des casse-têtes, et ne cherchez pas de réconfort ici quand vous vous ennuyez.",
           "Ajoutez à vos moteurs de recherche de navigateur via <code>https://search.jina.ai/?q={YOUR_QUERY}</code>",
-          "C'est <i>vraiment</i> notre produit, pas un POC ou un gadget à la mode. Intéressé par un déploiement sur site ? Contactez-nous."
+          "Intéressé par un déploiement sur site ? Contactez-nous."
         ]
       },
       "settings": {
@@ -468,8 +473,9 @@
         "list": [
           "Keine Werbung, keine Anmeldung, keine Aufzählungspunkte, keine langen Berichte, kein unnötiges Design.",
           "Kostenlose Benutzer können 2 Suchanfragen pro Minute senden. Geben Sie einen API-Schlüssel an, um eine höhere Ratenbegrenzung zu erhalten.",
+          "Stellen Sie tiefgründige Fragen! Verschwenden Sie nicht Ihre wertvolle Zeit mit einfachen Fragen oder Rätseln, und nutzen Sie dies nicht zur Unterhaltung, wenn Ihnen langweilig ist.",
           "Fügen Sie Ihre Browser-Suchmaschinen über <code>https://search.jina.ai/?q={YOUR_QUERY}</code> hinzu",
-          "Dies <i>ist</i> unser Produkt, kein POC oder ein Hype-Gimmick. Interessiert an einer On-Premise-Bereitstellung? Kontaktieren Sie uns."
+          "Interessiert an einer On-Premise-Bereitstellung? Kontaktieren Sie uns."
         ]
       },
       "settings": {
@@ -547,8 +553,9 @@
         "list": [
           "광고 없음, 로그인 없음, 요점 없음, 긴 보고서 없음, 불필요한 디자인 없음.",
           "무료 사용자는 분당 2개의 검색 요청을 보낼 수 있습니다. 더 높은 요청 제한을 받으려면 API 키를 제공하세요.",
+          "깊이 있는 질문을 하세요! 간단한 질문이나 수수께끼에 소중한 시간을 낭비하지 말고, 지루할 때 이것을 사용하여 즐기려고 하지 마세요。",
           "<code>https://search.jina.ai/?q={YOUR_QUERY}</code>를 통해 브라우저 검색 엔진에 추가하세요.",
-          "이것은 <i>정말로</i> 저희 제품이며, POC나 유행을 쫓는 속임수가 아닙니다. 온프레미스 배포에 관심이 있으신가요? 문의하세요."
+          "온프레미스 배포에 관심이 있으신가요? 문의하세요."
         ]
       },
       "settings": {
