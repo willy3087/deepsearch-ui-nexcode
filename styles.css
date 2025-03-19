@@ -771,15 +771,15 @@ a {
 
 .think-content,
 .references-content {
-  padding: 12px;
-  display: none;
-  margin-top: 4px;
-  font-size: var(--secondary-size);
-  word-break: break-word;
-  max-height: 30vh;
-  overflow-y: auto;
-  overflow-x: hidden;
-  position: relative;
+    padding: 12px;
+    display: none;
+    margin-top: 4px;
+    font-size: var(--secondary-size);
+    word-break: break-word;
+    max-height: 30vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
 }
 
 .think-content,
@@ -859,10 +859,10 @@ a {
 }
 
 #think-navigation-button {
-  display: flex;
-  flex-shrink: 0;
-  flex-wrap: nowrap;
-  position: relative;
+    display: flex;
+    flex-shrink: 0;
+    flex-wrap: nowrap;
+    position: relative;
 }
 
 #navigation-urls {
