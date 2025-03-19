@@ -749,6 +749,7 @@ a {
     transform: translateY(0);
     max-width: 100%;
     overflow-x: auto;
+    overflow-y: hidden;
 }
 .think-url.hidden {
     opacity: 0;

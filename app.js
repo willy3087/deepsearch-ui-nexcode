@@ -1311,8 +1311,7 @@ function createThinkUrl(assistantMessageDiv) {
     const faviconContainer = document.createElement('div');
     faviconContainer.classList.add('favicon-container');   
     // text
-    const urlLink = document.createElement('a');
-    thinkUrlElement.target = '_blank';
+    const urlLink = document.createElement('span');
     urlLink.classList.add('think-url-link');
 
     handleTooltipEvent(navigationButton);
