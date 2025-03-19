@@ -12,6 +12,7 @@ let UI_STRINGS = {
     think: {
         initial: () => 'Thinking...',
         toggle: () => 'Thoughts',
+        navigation: () => 'Navigating...',
     },
     references: {
         title: () => 'References',
@@ -151,6 +152,7 @@ function applyTranslations() {
         think: {
           initial: () => t('think.initial'),
           toggle: () => t('think.toggle'),
+          navigation: () => t('think.navigation'),
         },
         references: {
           title: () => t('references.title'),
@@ -197,6 +199,7 @@ const sessionsList = document.getElementById('sessions-list');
 const clearAllSessionsButton = document.getElementById('clear-all-sessions');
 const deleteSessionDialog = document.getElementById('delete-session-dialog');
 const deleteAllSessionsDialog = document.getElementById('delete-all-sessions-dialog');
+const navigationDialog = document.getElementById('navigation-dialog');
 
 const loadingSvg = `<svg id="thinking-animation-icon" width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><style>.spinner_mHwL{animation:spinner_OeFQ .75s cubic-bezier(0.56,.52,.17,.98) infinite; fill:currentColor}.spinner_ote2{animation:spinner_ZEPt .75s cubic-bezier(0.56,.52,.17,.98) infinite;fill:currentColor}@keyframes spinner_OeFQ{0%{cx:4px;r:3px}50%{cx:9px;r:8px}}@keyframes spinner_ZEPt{0%{cx:15px;r:8px}50%{cx:20px;r:3px}}</style><defs><filter id="spinner-gF00"><feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="y"/><feColorMatrix in="y" mode="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 18 -7" result="z"/><feBlend in="SourceGraphic" in2="z"/></filter></defs><g filter="url(#spinner-gF00)"><circle class="spinner_mHwL" cx="4" cy="12" r="3"/><circle class="spinner_ote2" cx="15" cy="12" r="8"/></g></svg>`;
 const BASE_ORIGIN = 'https://deepsearch.jina.ai';
@@ -231,6 +234,7 @@ let uploadedFiles = [];
 let chatSessions = [];
 const MAX_SESSIONS = 10;
 let isSessionsDropdownOpen = false;
+let renderNavigationListTimer = null;
 
 // API Key Management
 function initializeApiKey() {
@@ -636,10 +640,15 @@ function createReferencesSection(content, visitedURLs = [], numURLs=0) {
     return section;
 }
 
-const renderFaviconList = async (visitedURLs, numURLs) => {
-    // Create DOM elements and data structures
-    const faviconList = document.createElement('div');
-    faviconList.classList.add('favicon-list');
+const renderFaviconList = async (visitedURLs, numURLs, faviconContainer) => {
+    let faviconList;
+    if (faviconContainer) {
+        faviconList = faviconContainer;;
+    } else {
+        // Create DOM elements and data structures
+        faviconList = document.createElement('div');
+        faviconList.classList.add('favicon-list');
+    }
 
     // Process URLs and create Map of domain -> {urls, element data}
     const domainMap = visitedURLs.reduce((map, url) => {
@@ -686,17 +695,19 @@ const renderFaviconList = async (visitedURLs, numURLs) => {
         return map;
     }, new Map());
 
-    // Add sources count
-    const sourceCount = document.createElement('div');
-    sourceCount.classList.add('sources-count');
-    sourceCount.textContent = `${visitedURLs.length}${numURLs > visitedURLs.length?'+':''} `;
+    if (numURLs) {
+        // Add sources count
+        const sourceCount = document.createElement('div');
+        sourceCount.classList.add('sources-count');
+        sourceCount.textContent = `${visitedURLs.length}${numURLs > visitedURLs.length?'+':''} `;
 
-    const label = document.createElement('span');
-    label.setAttribute('data-label', 'references.sources');
-    label.textContent = UI_STRINGS.references.sources();
+        const label = document.createElement('span');
+        label.setAttribute('data-label', 'references.sources');
+        label.textContent = UI_STRINGS.references.sources();
 
-    sourceCount.appendChild(label);
-    faviconList.appendChild(sourceCount);
+        sourceCount.appendChild(label);
+        faviconList.appendChild(sourceCount);
+    }
 
     // Favicon fetching function with retry support
     const fetchFavicons = async (domains) => {
@@ -777,7 +788,6 @@ function createThinkSection(messageDiv) {
         localStorage.setItem('think_section_expanded', thinkContent.classList.contains('expanded'));
     });
 
-    // thinkSection.appendChild(thinkHeader);
     thinkSection.appendChild(thinkContent);
     messageDiv.prepend(thinkSection);
     return thinkSection;
@@ -1274,6 +1284,132 @@ const makeAllLinksOpenInNewTab = () => {
     });
 };
 
+function createThinkUrl(assistantMessageDiv) {
+    const thinkSection = assistantMessageDiv.querySelector('.think-section');
+    if (!thinkSection) return;
+
+    let thinkUrlElement = thinkSection.querySelector('.think-url');
+    if (thinkUrlElement) return thinkUrlElement;
+
+
+    thinkUrlElement = document.createElement('div');
+    thinkUrlElement.classList.add('think-url', 'hidden', 'action-buttons-container');
+
+    // navigation button
+    const icon = `<svg class="action-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-navigation"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>`
+    const navigationButton = document.createElement('button');
+    navigationButton.id = 'think-navigation-button';
+    navigationButton.classList.add('icon-button', 'tooltip-container');
+    navigationButton.setAttribute('data-tooltip', 'tooltips.navigation');
+    const text = document.createElement('span');
+    text.setAttribute('data-label', 'think.navigation');
+    text.textContent = UI_STRINGS.think.navigation();
+    navigationButton.innerHTML = icon;
+    navigationButton.appendChild(text);
+    navigationButton.addEventListener('click', e => handleClickNavigationEvent(e));
+    // favicon container
+    const faviconContainer = document.createElement('div');
+    faviconContainer.classList.add('favicon-container');   
+    // text
+    const urlLink = document.createElement('a');
+    thinkUrlElement.target = '_blank';
+    urlLink.classList.add('think-url-link');
+
+    handleTooltipEvent(navigationButton);
+
+    thinkUrlElement.append(navigationButton, faviconContainer, urlLink);
+    thinkSection?.insertAdjacentElement('afterend', thinkUrlElement);
+    return thinkUrlElement;
+};
+
+function handleClickNavigationEvent(e) {
+    clearInterval(renderNavigationListTimer);
+    const shownUrls = [];
+    const thinkUrlElement = e.target.closest('.think-url');
+    const list = document.getElementById('navigation-urls');
+    list.innerHTML = '';
+
+    const renderUrlList = () => {
+        if (!thinkUrlElement) {
+            return;
+        };
+        const faviconItems = Array.from(thinkUrlElement.querySelectorAll('.favicon-item')).slice(shownUrls.length);
+
+        faviconItems.forEach((item) => {
+            const img = item.querySelector('img');
+            const url = item.getAttribute('data-tooltip');
+
+            const itemContainer = document.createElement('a');
+            itemContainer.classList.add('action-buttons-container');
+            itemContainer.href = url;
+            itemContainer.target = '_blank';
+            const itemButton = document.createElement('button');
+            itemButton.classList.add('navigation-item');
+            const itemIcon = document.createElement('img');
+            itemIcon.classList.add('navigation-icon');
+            itemIcon.src = img.src;
+            itemIcon.alt = img.alt;
+            const itemLink = document.createElement('span');
+            itemLink.classList.add('navigation-link');
+            itemLink.textContent = url;
+            itemButton.append(itemIcon, itemLink);
+            itemContainer.appendChild(itemButton);
+            list.appendChild(itemContainer);
+            shownUrls.push(url);
+        });
+    };
+
+    renderUrlList();
+
+    // update list every 2 seconds
+    renderNavigationListTimer = setInterval(() => {
+        if (!thinkUrlElement) {
+            clearInterval(renderNavigationListTimer);
+            return;
+        }
+        renderUrlList();
+    }, 2000);
+    navigationDialog.classList.add('visible');
+}
+
+async function updateThinkUrl(thinkUrlElement, url, urlQueue, isProcessing) {                               
+    const animateUrlChange = async (url) => {
+        isProcessing = true;
+
+        // Add favicon
+        const faviconContainer = thinkUrlElement.querySelector('.favicon-container');
+        await renderFaviconList([url], 0, faviconContainer);
+
+        // Update URL
+        const thinkUrlLink = thinkUrlElement.querySelector('.think-url-link');
+        thinkUrlLink.textContent = url.replace(/^(https?:\/\/)/, '');
+        thinkUrlLink.href = url;
+    
+        setTimeout(() => {
+            isProcessing = false;
+            processNextUrl();
+        }, 1000);
+    };
+    
+    const processNextUrl = async () => {
+        if (urlQueue.length === 0) return;
+    
+        const url = urlQueue.shift();
+        await animateUrlChange(url);
+    };
+    
+    const updateUrl = async (url) => {
+        urlQueue.push(url);
+        if (!isProcessing) {
+            await processNextUrl();
+        }
+    };
+
+    if (thinkUrlElement && url) {
+        await updateUrl(url);
+    }
+};
+
 async function sendMessage(redo = false) {
     inputErrorMessage.style.display = 'none';
     const queryText = messageInput.value.trim();
@@ -1433,6 +1569,9 @@ async function sendMessage(redo = false) {
             let partialBrokenData = '';
             let visitedURLs = [];
             let numURLs = 0;
+            let hideUrlTimer = 0;
+            const urlQueue = [];
+            let isProcessing = false;
 
             while (true) {
                 const {done, value} = await reader.read();
@@ -1459,6 +1598,17 @@ async function sendMessage(redo = false) {
                                 if (json.numURLs) {
                                     numURLs = json.numURLs;
                                 }
+                                
+                                const url = json.choices[0]?.delta?.url;
+                                let thinkUrlElement = assistantMessageDiv.querySelector('.think-url');
+                                if (!thinkUrlElement) {
+                                    thinkUrlElement = createThinkUrl(assistantMessageDiv);
+                                }
+                
+                                if (url) {  
+                                    thinkUrlElement.classList.toggle('hidden', false);
+                                    await updateThinkUrl(thinkUrlElement, url, urlQueue, isProcessing);
+                                }
                                 removeLoadingIndicator(assistantMessageDiv);
 
                                 let tempContent = content;
@@ -1469,6 +1619,7 @@ async function sendMessage(redo = false) {
                                     if (inThinkSection) {
                                         const thinkEndIndex = tempContent.indexOf("</think>");
                                         if (thinkEndIndex !== -1) {
+                                            thinkUrlElement?.remove();
                                             thinkContent += tempContent.substring(0, thinkEndIndex);
                                             if (thinkSectionElement) {
                                                 const thinkContentElement = thinkSectionElement.querySelector('.think-content');
@@ -1537,6 +1688,7 @@ async function sendMessage(redo = false) {
                             }
                         } catch (e) {
                             console.error('Error parsing JSON:', e);
+                            clearTimeout(hideUrlTimer);
                         }
                     }
                 }
@@ -1713,6 +1865,7 @@ dialogCloseBtns.forEach(btn => {
         e.stopPropagation();
         const dialog = btn.closest('.dialog-overlay');
         dialog.classList.remove('visible');
+        clearInterval(renderNavigationListTimer);
     });
 });
 
@@ -1803,7 +1956,7 @@ messageInput.addEventListener('input', () => {
 });
 
 // Close dialogs when clicking outside
-[apiKeyDialog, helpDialog].forEach(dialog => {
+[apiKeyDialog, helpDialog, navigationDialog].forEach(dialog => {
     dialog.addEventListener('click', (e) => {
         if (e.target === dialog) {
             dialog.classList.remove('visible');
