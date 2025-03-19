@@ -941,7 +941,8 @@ function createCodeCopyButton(codeElement) {
     const copyIcon = `<svg class="action-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
     copyButton.innerHTML = copyIcon;
     
-    copyButton.addEventListener('click', () => {
+    copyButton.addEventListener('click', (e) => {
+        e.stopPropagation();
         handleCopyEvent(copyButton, copyIcon, codeElement.textContent);
     });
     
@@ -1296,11 +1297,10 @@ function createThinkUrl(assistantMessageDiv) {
     thinkUrlElement.classList.add('think-url', 'hidden', 'action-buttons-container');
 
     // navigation button
-    const icon = `<svg class="action-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-navigation"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>`
+    const icon = `<svg class="action-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
     const navigationButton = document.createElement('button');
     navigationButton.id = 'think-navigation-button';
     navigationButton.classList.add('icon-button', 'tooltip-container');
-    navigationButton.setAttribute('data-tooltip', 'tooltips.navigation');
     const text = document.createElement('span');
     text.setAttribute('data-label', 'think.navigation');
     text.textContent = UI_STRINGS.think.navigation();
@@ -1313,8 +1313,6 @@ function createThinkUrl(assistantMessageDiv) {
     // text
     const urlLink = document.createElement('span');
     urlLink.classList.add('think-url-link');
-
-    handleTooltipEvent(navigationButton);
 
     thinkUrlElement.append(navigationButton, faviconContainer, urlLink);
     thinkSection?.insertAdjacentElement('afterend', thinkUrlElement);
@@ -1495,6 +1493,7 @@ async function sendMessage(redo = false) {
     let inThinkSection = false;
     let thinkSectionElement = null;
     let thinkHeaderElement = null;
+    let thinkUrlElement = null;
 
     try {
         const headers = {
@@ -1568,7 +1567,6 @@ async function sendMessage(redo = false) {
             let partialBrokenData = '';
             let visitedURLs = [];
             let numURLs = 0;
-            let hideUrlTimer = 0;
             const urlQueue = [];
             let isProcessing = false;
 
@@ -1599,7 +1597,7 @@ async function sendMessage(redo = false) {
                                 }
                                 
                                 const url = json.choices[0]?.delta?.url;
-                                let thinkUrlElement = assistantMessageDiv.querySelector('.think-url');
+                                thinkUrlElement = assistantMessageDiv.querySelector('.think-url');
                                 if (!thinkUrlElement) {
                                     thinkUrlElement = createThinkUrl(assistantMessageDiv);
                                 }
@@ -1687,7 +1685,6 @@ async function sendMessage(redo = false) {
                             }
                         } catch (e) {
                             console.error('Error parsing JSON:', e);
-                            clearTimeout(hideUrlTimer);
                         }
                     }
                 }
@@ -1705,6 +1702,11 @@ async function sendMessage(redo = false) {
                     referencesSection.insertAdjacentElement('beforebegin', copyButton);
                 } else {
                     markdownDiv.appendChild(copyButton);
+                }
+                const thinkSection = assistantMessageDiv.querySelector('.think-content');
+                if (thinkSection) {
+                    const thinkCopyButton = createCodeCopyButton(thinkSection);
+                    thinkSection.appendChild(thinkCopyButton);
                 }
 
                 existingMessages.push({
@@ -1764,7 +1766,8 @@ async function sendMessage(redo = false) {
             assistantMessageDiv.appendChild(errorContainer);
         }
     } finally {
-        isLoading = false;
+        thinkUrlElement?.remove();
+        handleStopEvent();
         makeAllLinksOpenInNewTab();
     }
 }
@@ -1811,6 +1814,8 @@ function updateMessagesList() {
                 if (thinkHeaderElement) {
                     thinkHeaderElement.textContent = UI_STRINGS.think.toggle();
                 }
+                const thinkCopyButton = createCodeCopyButton(thinkContentElement);
+                thinkContentElement.appendChild(thinkCopyButton);
             }
         }
         // User messages are already handled in displayMessage

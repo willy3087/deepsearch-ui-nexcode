@@ -30,12 +30,12 @@
       "upgrade": "Upgrade to higher rate limit",
       "upload": "Upload files (txt/pdf/png/jpeg/webp supported)",
       "stop": "Stop",
-      "navigation": "Navigating to URLs"
+      "navigation": "Reading URLs"
     },
     "think": {
       "initial": "Thinking...",
       "toggle": "Thoughts",
-      "navigation": "Navigating..."
+      "navigation": "Reading..."
     },
     "references": {
       "title": "References",
@@ -83,7 +83,7 @@
         "description": "Are you sure you want to delete all sessions? This action cannot be undone."
       },
       "navigation" : {
-        "title": "Navigated URLs"
+        "title": "Read URLs"
       }
     }
   },
@@ -118,12 +118,12 @@
       "upgrade": "升级到更高的速率限制",
       "upload": "上传文件，支持txt/pdf/png/jpeg/webp格式",
       "stop": "停止",
-      "navigation": "浏览中的 URLs"
+      "navigation": "阅读中的 URLs"
     },
     "think": {
       "initial": "思考中...",
       "toggle": "思考过程",
-      "navigation": "浏览中..."
+      "navigation": "阅读中..."
     },
     "references": {
       "title": "参考资料",
@@ -171,7 +171,7 @@
         "description": "您确定要删除所有会话吗？此操作无法撤消。"
       },
       "navigation" : {
-        "title": "浏览过的 URLs"
+        "title": "已阅读的 URLs"
       }
     }
   },
@@ -206,12 +206,12 @@
       "upgrade": "升級到更高的速度限制",
       "upload": "上傳檔案 (支援 txt/pdf/png/jpeg/webp 格式)",
       "stop": "停止",
-      "navigation": "瀏覽中的 URLs"
+      "navigation": "讀取 URLs 中"
     },
     "think": {
       "initial": "思考中...",
       "toggle": "思考過程",
-      "navigation": "瀏覽中..."
+      "navigation": "讀取中..."
     },
     "references": {
       "title": "參考資料",
@@ -259,7 +259,7 @@
         "description": "你確定要刪除所有對話嗎？這個動作無法復原。"
       },
       "navigation" : {
-        "title": "已瀏覽 URLs"
+        "title": "已讀取的 URLs"
       }
     }
   },
@@ -294,12 +294,12 @@
       "upgrade": "上限を引き上げる",
       "upload": "ファイルをアップロード (txt/pdf/png/jpeg/webp形式)",
       "stop": "停止",
-      "navigation": "ナビゲーション中 URLs"
+      "navigation": "URLを読み込み中"
     },
     "think": {
       "initial": "思考中...",
       "toggle": "思考プロセス",
-      "navigation": "ナビゲーション中..."
+      "navigation": "読み込み中..."
     },
     "references": {
       "title": "参考資料",
@@ -347,7 +347,7 @@
         "description": "すべてのセッションを削除してもよろしいですか？この操作は元に戻すことができません。"
       },
       "navigation" : {
-        "title": "ナビゲーション中のURL"
+        "title": "URLを読み込みました"
       }
     }
   },
@@ -382,12 +382,12 @@
       "upgrade": "Passer à une limite de taux supérieure",
       "upload": "Télécharger des fichiers (formats txt/pdf/png/jpeg/webp pris en charge)",
       "stop": "Arrêter",
-      "navigation": "URL en cours de navigation"
+      "navigation": "Lecture des URL"
     },
     "think": {
       "initial": "Réflexion en cours...",
       "toggle": "Processus de réflexion",
-      "navigation": "Navigation en cours..."
+      "navigation": "Lecture en cours..."
     },
     "references": {
       "title": "Références",
@@ -435,7 +435,7 @@
         "description": "Êtes-vous sûr de vouloir supprimer toutes les sessions ? Cette action est irréversible."
       },
       "navigation" : {
-        "title": "URL naviguées"
+        "title": "URL lues"
       }
     }
   },
@@ -469,12 +469,12 @@
       "upload": "Dateien hochladen (txt/pdf/png/jpeg/webp unterstützt)",
       "stop": "Stop",
       "recent": "Kürzlich angesehene Konversationen",
-      "navigation": "Navigierte URLs"
+      "navigation": "URLs werden gelesen"
     },
     "think": {
       "initial": "Denke nach...",
       "toggle": "Denkprozess",
-      "navigation": "Navigiere..."
+      "navigation": "Wird gelesen..."
     },
     "references": {
       "title": "Referenzen",
@@ -520,7 +520,7 @@
         "description": "Möchten Sie wirklich alle Sitzungen löschen? Dieser Vorgang kann nicht rückgängig gemacht werden."
       },
       "navigation" : {
-        "title": "Navigierte URLs"
+        "title": "URLs gelesen"
       }
     }
   },
@@ -554,12 +554,12 @@
       "upload": "파일 업로드 (txt/pdf/png/jpeg/webp 지원)",
       "stop": "중지",
       "recent": "최근 대화 보기",
-      "navigation": "탐색 중인 URL"
+      "navigation": "URL 읽는 중"
     },
     "think": {
       "initial": "생각 중...",
       "toggle": "사고 과정",
-      "navigation": "탐색 중..."
+      "navigation": "읽는 중..."
     },
     "references": {
       "title": "참조",
@@ -605,7 +605,7 @@
         "description": "모든 세션을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다."
       },
       "navigation" : {
-        "title": "탐색한 URL"
+        "title": "URL 읽음"
       }
     }
   }
