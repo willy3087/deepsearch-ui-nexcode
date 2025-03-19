@@ -3,28 +3,27 @@ let i18n = {};
 let currentLanguage = "pt-BR";
 let UI_STRINGS = {
   buttons: {
-    send: () => "Busca Profunda",
-    addKey: () => "Atualizar",
-    updateKey: () => "Atualizar Chave",
-    getKey: () => "Obter Chave API",
-    purchase: () => "Comprar mais tokens",
+    send: () => "Send",
+    addKey: () => "Upgrade",
+    updateKey: () => "Update Key",
+    getKey: () => "Get API Key",
+    purchase: () => "Purchase More Token",
   },
   think: {
-    initial: () => "Pensando...",
-    toggle: () => "Processo de raciocínio",
-    navigation: () => "Lendo...",
+    initial: () => "Thinking...",
+    toggle: () => "Thoughts",
   },
   references: {
-    title: () => "Referências",
-    sources: () => "Fontes",
+    title: () => "References",
+    sources: () => "Sources",
   },
   errors: {
     invalidKey: () =>
-      "Chave API inválida. Por favor, atualize sua chave clicando no botão abaixo.",
+      "Invalid API key. Please update your key by click the button below.",
     insufficientTokens: () =>
-      "Tokens insuficientes na sua chave API. Por favor, compre mais tokens ou troque para outra chave.",
+      "Insufficient tokens in your API key. Please purchase more tokens or swap to another key.",
     rateLimit: () =>
-      "Você atingiu o limite de requisições. Por favor, tente novamente mais tarde. Você também pode atualizar para um plano superior clicando no botão abaixo.",
+      "You have reached the rate limit. Please try again later. You can also upgrade to a higher plan by clicking the button below.",
   },
 };
 
@@ -173,7 +172,6 @@ function applyTranslations() {
     think: {
       initial: () => t("think.initial"),
       toggle: () => t("think.toggle"),
-      navigation: () => t("think.navigation"),
     },
     references: {
       title: () => t("references.title"),
@@ -195,7 +193,6 @@ const chatContainer = document.getElementById("chat-container");
 const messageForm = document.getElementById("input-area");
 const messageInput = document.getElementById("message-input");
 const newChatButton = document.getElementById("new-chat-button");
-// api key management
 const apiKeyInput = document.getElementById("api-key-input");
 const saveApiKeyBtn = document.getElementById("save-api-key");
 const toggleApiKeyBtn = document.getElementById("toggle-api-key");
@@ -203,19 +200,17 @@ const toggleApiKeyBtnText = toggleApiKeyBtn.querySelector("span");
 const getApiKeyBtn = document.getElementById("get-api-key");
 const freeUserRPMInfo = document.getElementById("free-user-rpm");
 const apiKeyDialog = document.getElementById("api-key-dialog");
-// settings & help dialog
 const helpButton = document.getElementById("help-button");
 const helpDialog = document.getElementById("help-dialog");
 const settingsButton = document.getElementById("settings-button");
 const settingsDialog = document.getElementById("settings-dialog");
 const dialogCloseBtns = document.querySelectorAll(".dialog-close");
-// upload file
 const fileUploadButton = document.getElementById("file-upload-button");
 const fileInput = document.getElementById("file-input");
 const filePreviewContainer = document.getElementById("file-preview-container");
 const inputErrorMessage = document.getElementById("input-error-message");
-// message actions
 const stopMessageButton = document.getElementById("stop-message-button");
+// Session management DOM elements
 const recentSessionsContainer = document.getElementById(
   "recent-sessions-container"
 );
@@ -227,7 +222,6 @@ const deleteSessionDialog = document.getElementById("delete-session-dialog");
 const deleteAllSessionsDialog = document.getElementById(
   "delete-all-sessions-dialog"
 );
-const navigationDialog = document.getElementById("navigation-dialog");
 
 const loadingSvg = `<svg id="thinking-animation-icon" width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><style>.spinner_mHwL{animation:spinner_OeFQ .75s cubic-bezier(0.56,.52,.17,.98) infinite; fill:currentColor}.spinner_ote2{animation:spinner_ZEPt .75s cubic-bezier(0.56,.52,.17,.98) infinite;fill:currentColor}@keyframes spinner_OeFQ{0%{cx:4px;r:3px}50%{cx:9px;r:8px}}@keyframes spinner_ZEPt{0%{cx:15px;r:8px}50%{cx:20px;r:3px}}</style><defs><filter id="spinner-gF00"><feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="y"/><feColorMatrix in="y" mode="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 18 -7" result="z"/><feBlend in="SourceGraphic" in2="z"/></filter></defs><g filter="url(#spinner-gF00)"><circle class="spinner_mHwL" cx="4" cy="12" r="3"/><circle class="spinner_ote2" cx="15" cy="12" r="8"/></g></svg>`;
 const BASE_ORIGIN = "https://deepsearch.jina.ai";
@@ -264,12 +258,7 @@ const SUPPORTED_FILE_TYPES = {
 let chatSessions = [];
 const MAX_SESSIONS = 10;
 let isSessionsDropdownOpen = false;
-
-// Navigation bar variables
-
-// Navigation bar variables
 let renderNavigationListTimer = null;
-const NAVIGATION_TIME_OUT = 7000;
 
 // API Key Management
 function initializeApiKey() {
@@ -748,15 +737,10 @@ function createReferencesSection(content, visitedURLs = [], numURLs = 0) {
   return section;
 }
 
-const renderFaviconList = async (visitedURLs, numURLs, faviconContainer) => {
-  let faviconList;
-  if (faviconContainer) {
-    faviconList = faviconContainer;
-  } else {
-    // Create DOM elements and data structures
-    faviconList = document.createElement("div");
-    faviconList.classList.add("favicon-list");
-  }
+const renderFaviconList = async (visitedURLs, numURLs) => {
+  // Create DOM elements and data structures
+  const faviconList = document.createElement("div");
+  faviconList.classList.add("favicon-list");
 
   // Process URLs and create Map of domain -> {urls, element data}
   const domainMap = visitedURLs.reduce((map, url) => {
@@ -803,21 +787,19 @@ const renderFaviconList = async (visitedURLs, numURLs, faviconContainer) => {
     return map;
   }, new Map());
 
-  if (numURLs) {
-    // Add sources count
-    const sourceCount = document.createElement("div");
-    sourceCount.classList.add("sources-count");
-    sourceCount.textContent = `${visitedURLs.length}${
-      numURLs > visitedURLs.length ? "+" : ""
-    } `;
+  // Add sources count
+  const sourceCount = document.createElement("div");
+  sourceCount.classList.add("sources-count");
+  sourceCount.textContent = `${visitedURLs.length}${
+    numURLs > visitedURLs.length ? "+" : ""
+  } `;
 
-    const label = document.createElement("span");
-    label.setAttribute("data-label", "references.sources");
-    label.textContent = UI_STRINGS.references.sources();
+  const label = document.createElement("span");
+  label.setAttribute("data-label", "references.sources");
+  label.textContent = UI_STRINGS.references.sources();
 
-    sourceCount.appendChild(label);
-    faviconList.appendChild(sourceCount);
-  }
+  sourceCount.appendChild(label);
+  faviconList.appendChild(sourceCount);
 
   // Favicon fetching function with retry support
   const fetchFavicons = async (domains) => {
@@ -903,6 +885,7 @@ function createThinkSection(messageDiv) {
     );
   });
 
+  // thinkSection.appendChild(thinkHeader);
   thinkSection.appendChild(thinkContent);
   messageDiv.prepend(thinkSection);
   return thinkSection;
@@ -1836,9 +1819,6 @@ async function sendMessage(redo = false) {
       let partialBrokenData = "";
       let visitedURLs = [];
       let numURLs = 0;
-      let hideUrlTimer = 0;
-      const urlQueue = [];
-      let isProcessing = false;
 
       while (true) {
         const { done, value } = await reader.read();
@@ -1865,23 +1845,6 @@ async function sendMessage(redo = false) {
                 if (json.numURLs) {
                   numURLs = json.numURLs;
                 }
-
-                const url = json.choices[0]?.delta?.url;
-                let thinkUrlElement =
-                  assistantMessageDiv.querySelector(".think-url");
-                if (!thinkUrlElement) {
-                  thinkUrlElement = createThinkUrl(assistantMessageDiv);
-                }
-
-                if (url) {
-                  thinkUrlElement.classList.toggle("hidden", false);
-                  await updateThinkUrl(
-                    thinkUrlElement,
-                    url,
-                    urlQueue,
-                    isProcessing
-                  );
-                }
                 removeLoadingIndicator(assistantMessageDiv);
 
                 let tempContent = content;
@@ -1892,7 +1855,6 @@ async function sendMessage(redo = false) {
                   if (inThinkSection) {
                     const thinkEndIndex = tempContent.indexOf("</think>");
                     if (thinkEndIndex !== -1) {
-                      thinkUrlElement?.remove();
                       thinkContent += tempContent.substring(0, thinkEndIndex);
                       if (thinkSectionElement) {
                         const thinkContentElement =
@@ -1997,7 +1959,6 @@ async function sendMessage(redo = false) {
               }
             } catch (e) {
               console.error("Error parsing JSON:", e);
-              clearTimeout(hideUrlTimer);
             }
           }
         }
@@ -2190,7 +2151,6 @@ dialogCloseBtns.forEach((btn) => {
     e.stopPropagation();
     const dialog = btn.closest(".dialog-overlay");
     dialog.classList.remove("visible");
-    clearInterval(renderNavigationListTimer);
   });
 });
 
@@ -2282,7 +2242,7 @@ messageInput.addEventListener("input", () => {
 });
 
 // Close dialogs when clicking outside
-[apiKeyDialog, helpDialog, navigationDialog].forEach((dialog) => {
+[apiKeyDialog, helpDialog].forEach((dialog) => {
   dialog.addEventListener("click", (e) => {
     if (e.target === dialog) {
       dialog.classList.remove("visible");
