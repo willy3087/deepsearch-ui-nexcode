@@ -1371,46 +1371,18 @@ function handleClickNavigationEvent(e) {
     navigationDialog.classList.add('visible');
 }
 
-async function updateThinkUrl(thinkUrlElement, url, urlQueue, isProcessing) {      
-    const animateUrlChange = async (url) => {
-        isProcessing = true;
-
+async function updateThinkUrl(thinkUrlElement, url) {      
+    if (thinkUrlElement && url) {
         // Add favicon
         const faviconContainer = thinkUrlElement.querySelector('.favicon-container');
         const existingUrls = Array.from(thinkUrlElement.querySelectorAll('.favicon-item')).map(item => item.getAttribute('data-tooltip'));
-        if (existingUrls.includes(url)) return;
-        await renderFaviconList([url], 0, faviconContainer);
+        if (!existingUrls.includes(url)) {
+            await renderFaviconList([url], 0, faviconContainer);
+        }
 
-        // Update URL
         const thinkUrlLink = thinkUrlElement.querySelector('.think-url-link');
         thinkUrlLink.textContent = url.replace(/^(https?:\/\/)/, '');
-        thinkUrlLink.href = url;
-    
-        setTimeout(() => {
-            isProcessing = false;
-            processNextUrl();
-        }, 500);
     };
-    
-    const processNextUrl = async () => {
-        if (urlQueue.length === 0) return;
-    
-        const url = urlQueue.shift();
-        await animateUrlChange(url);
-    };
-    
-    const updateUrl = async (url) => {
-        if (!urlQueue.includes(url)) {
-            urlQueue.push(url);
-        }
-        if (!isProcessing) {
-            await processNextUrl();
-        }
-    };
-
-    if (thinkUrlElement && url) {
-        await updateUrl(url);
-    }
 };
 
 async function sendMessage(redo = false) {
@@ -1573,8 +1545,6 @@ async function sendMessage(redo = false) {
             let partialBrokenData = '';
             let visitedURLs = [];
             let numURLs = 0;
-            const urlQueue = [];
-            let isProcessing = false;
             let hideThinkUrlTimer = Date.now();
 
             while (true) {
@@ -1616,7 +1586,7 @@ async function sendMessage(redo = false) {
                                     hideThinkUrlTimer = Date.now();
                                     clearTimeout(hideThinkUrlTimer);
                                     thinkUrlElement.classList.remove('hidden');
-                                    await updateThinkUrl(thinkUrlElement, url, urlQueue, isProcessing);
+                                    await updateThinkUrl(thinkUrlElement, url);
                                 } else {
                                     if (Date.now() - hideThinkUrlTimer > NAVIGATION_TIME_OUT) {
                                         if (thinkUrlElement && !thinkUrlElement.classList.contains('hidden')) {
