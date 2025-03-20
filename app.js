@@ -216,6 +216,7 @@ const SUPPORTED_FILE_TYPES = {
     'image/webp': imgIcon,
     'image/gif': imgIcon,
 };
+const NAVIGATION_TIME_OUT = 7000;
 
 // State variables
 let isLoading = false;
@@ -1335,6 +1336,7 @@ function handleClickNavigationEvent(e) {
         faviconItems.forEach((item) => {
             const img = item.querySelector('img');
             const url = item.getAttribute('data-tooltip');
+            if (shownUrls.includes(url)) return;
 
             const itemContainer = document.createElement('a');
             itemContainer.classList.add('action-buttons-container');
@@ -1369,7 +1371,7 @@ function handleClickNavigationEvent(e) {
     navigationDialog.classList.add('visible');
 }
 
-async function updateThinkUrl(thinkUrlElement, url, urlQueue, isProcessing) {                               
+async function updateThinkUrl(thinkUrlElement, url, urlQueue, isProcessing) {      
     const animateUrlChange = async (url) => {
         isProcessing = true;
 
@@ -1385,7 +1387,7 @@ async function updateThinkUrl(thinkUrlElement, url, urlQueue, isProcessing) {
         setTimeout(() => {
             isProcessing = false;
             processNextUrl();
-        }, 1000);
+        }, 500);
     };
     
     const processNextUrl = async () => {
@@ -1396,7 +1398,9 @@ async function updateThinkUrl(thinkUrlElement, url, urlQueue, isProcessing) {
     };
     
     const updateUrl = async (url) => {
-        urlQueue.push(url);
+        if (!urlQueue.includes(url)) {
+            urlQueue.push(url);
+        }
         if (!isProcessing) {
             await processNextUrl();
         }
@@ -1569,6 +1573,7 @@ async function sendMessage(redo = false) {
             let numURLs = 0;
             const urlQueue = [];
             let isProcessing = false;
+            let hideThinkUrlTimer = Date.now();
 
             while (true) {
                 const {done, value} = await reader.read();
@@ -1580,7 +1585,10 @@ async function sendMessage(redo = false) {
                     const events = streamData.split('\n\ndata:').filter(Boolean);
 
                     for (const event of events) {
-                        const data = event.replace(/data: /, '').trim();
+                        let data = event.trim();
+                        if (data.startsWith('data: ')) {
+                            data = data.slice(5).trim();
+                        }
                         partialBrokenData += data;
 
                         try {
@@ -1602,9 +1610,17 @@ async function sendMessage(redo = false) {
                                     thinkUrlElement = createThinkUrl(assistantMessageDiv);
                                 }
                 
-                                if (url) {  
-                                    thinkUrlElement.classList.toggle('hidden', false);
+                                if (url) {
+                                    hideThinkUrlTimer = Date.now();
+                                    clearTimeout(hideThinkUrlTimer);
+                                    thinkUrlElement.classList.remove('hidden');
                                     await updateThinkUrl(thinkUrlElement, url, urlQueue, isProcessing);
+                                } else {
+                                    if (Date.now() - hideThinkUrlTimer > NAVIGATION_TIME_OUT) {
+                                        if (thinkUrlElement && !thinkUrlElement.classList.contains('hidden')) {
+                                            thinkUrlElement.classList.add('hidden');
+                                        }
+                                    }
                                 }
                                 removeLoadingIndicator(assistantMessageDiv);
 
