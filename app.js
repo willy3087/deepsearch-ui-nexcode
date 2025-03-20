@@ -1820,6 +1820,8 @@ async function sendMessage(redo = false) {
       let partialBrokenData = "";
       let visitedURLs = [];
       let numURLs = 0;
+      const urlQueue = [];
+      let isProcessing = false;
       let hideThinkUrlTimer = Date.now();
 
       while (true) {
@@ -1862,7 +1864,12 @@ async function sendMessage(redo = false) {
                   hideThinkUrlTimer = Date.now();
                   clearTimeout(hideThinkUrlTimer);
                   thinkUrlElement.classList.remove("hidden");
-                  await updateThinkUrl(thinkUrlElement, url);
+                  await updateThinkUrl(
+                    thinkUrlElement,
+                    url,
+                    urlQueue,
+                    isProcessing
+                  );
                 } else {
                   if (Date.now() - hideThinkUrlTimer > NAVIGATION_TIME_OUT) {
                     if (
