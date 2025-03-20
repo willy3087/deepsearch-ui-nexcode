@@ -276,7 +276,6 @@ let isSessionsDropdownOpen = false;
 // Navigation bar variables
 let renderNavigationListTimer = null;
 const NAVIGATION_TIME_OUT = 7000;
-const NAVIGATION_TIME_OUT = 7000;
 
 // API Key Management
 function initializeApiKey() {
@@ -1615,20 +1614,44 @@ function handleClickNavigationEvent(e) {
   navigationDialog.classList.add("visible");
 }
 
-async function updateThinkUrl(thinkUrlElement, url) {
-  if (thinkUrlElement && url) {
+async function updateThinkUrl(thinkUrlElement, url, urlQueue, isProcessing) {
+  const animateUrlChange = async (url) => {
+    isProcessing = true;
+
     // Add favicon
     const faviconContainer =
       thinkUrlElement.querySelector(".favicon-container");
-    const existingUrls = Array.from(
-      thinkUrlElement.querySelectorAll(".favicon-item")
-    ).map((item) => item.getAttribute("data-tooltip"));
-    if (!existingUrls.includes(url)) {
-      await renderFaviconList([url], 0, faviconContainer);
-    }
+    await renderFaviconList([url], 0, faviconContainer);
 
+    // Update URL
     const thinkUrlLink = thinkUrlElement.querySelector(".think-url-link");
     thinkUrlLink.textContent = url.replace(/^(https?:\/\/)/, "");
+    thinkUrlLink.href = url;
+
+    setTimeout(() => {
+      isProcessing = false;
+      processNextUrl();
+    }, 500);
+  };
+
+  const processNextUrl = async () => {
+    if (urlQueue.length === 0) return;
+
+    const url = urlQueue.shift();
+    await animateUrlChange(url);
+  };
+
+  const updateUrl = async (url) => {
+    if (!urlQueue.includes(url)) {
+      urlQueue.push(url);
+    }
+    if (!isProcessing) {
+      await processNextUrl();
+    }
+  };
+
+  if (thinkUrlElement && url) {
+    await updateUrl(url);
   }
 }
 
