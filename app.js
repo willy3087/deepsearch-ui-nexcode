@@ -1377,6 +1377,8 @@ async function updateThinkUrl(thinkUrlElement, url, urlQueue, isProcessing) {
 
         // Add favicon
         const faviconContainer = thinkUrlElement.querySelector('.favicon-container');
+        const existingUrls = Array.from(thinkUrlElement.querySelectorAll('.favicon-item')).map(item => item.getAttribute('data-tooltip'));
+        if (existingUrls.includes(url)) return;
         await renderFaviconList([url], 0, faviconContainer);
 
         // Update URL
