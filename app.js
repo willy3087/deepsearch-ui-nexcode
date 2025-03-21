@@ -272,7 +272,10 @@ const MAX_SESSIONS = 10;
 let isSessionsDropdownOpen = false;
 
 // Navigation bar variables
+
+// Navigation bar variables
 let renderNavigationListTimer = null;
+const NAVIGATION_TIME_OUT = 7000;
 const NAVIGATION_TIME_OUT = 7000;
 
 // API Key Management
@@ -1062,7 +1065,6 @@ function handleDownloadEvent(downloadButton, downloadIcon) {
   if (window.html2canvas) {
     downloadButton.innerHTML = downloadingSvg;
     const assistantMessageDiv = downloadButton.closest(".message");
-    const id = assistantMessageDiv.getAttribute("id");
     const theme = document.documentElement.getAttribute("data-theme");
     const computedStyle = window.getComputedStyle(document.documentElement);
     const backgroundColor =
@@ -1082,9 +1084,8 @@ function handleDownloadEvent(downloadButton, downloadIcon) {
     const scrollWidths = tables
       .concat(codeBlocks)
       .map((ele) => ele.scrollWidth);
-    const maxWidth =
-      Math.max(assistantMessageDiv.scrollWidth, ...scrollWidths) + 138;
-    const PADDING = 52;
+    const maxWidth = Math.max(assistantMessageDiv.scrollWidth, ...scrollWidths);
+    const PADDING = 72;
 
     const filter = function (element) {
       if (
@@ -1347,7 +1348,7 @@ function markdownItTableWrapper(md) {
 
   md.renderer.rules.table_open = function (tokens, idx, options, env, self) {
     return (
-      '<div class="table-container">\n' +
+      '<div id="table-container">\n' +
       defaultTableRenderer(tokens, idx, options, env, self)
     );
   };

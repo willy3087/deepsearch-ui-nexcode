@@ -987,7 +987,7 @@ ol.footnotes-list {
 }
 
 .table-container {
-  overflow-x: auto;
+    overflow-x: auto;
 }
 
 /* Favicon container styles */
