@@ -954,8 +954,8 @@ function handleDownloadEvent (downloadButton, downloadIcon) {
         const tables = Array.from(assistantMessageDiv.querySelectorAll('.table-container'));
         const codeBlocks = Array.from(assistantMessageDiv.querySelectorAll('.markdown-inner pre code'));
         const scrollWidths = tables.concat(codeBlocks).map(ele => ele.scrollWidth);
-        const maxWidth = Math.max(assistantMessageDiv.scrollWidth, ...scrollWidths);
-        const PADDING = 72;
+        const maxWidth = Math.max(assistantMessageDiv.scrollWidth, ...scrollWidths) + 90;
+        const PADDING = 52;
 
         const filter = function (element) {
             if (element.classList.contains('think-section') || element.classList.contains('references-section')) {
@@ -968,7 +968,7 @@ function handleDownloadEvent (downloadButton, downloadIcon) {
         }
         const clone = function (clonedDocument) {
             const clonedElement = clonedDocument.getElementById('chat-container');
-            clonedElement.style.maxWidth = `${maxWidth + PADDING}px`;
+            clonedElement.style.maxWidth = `${maxWidth}px`;
         };
 
         html2canvas(assistantMessageDiv, { 
@@ -980,7 +980,7 @@ function handleDownloadEvent (downloadButton, downloadIcon) {
             const dataUrl = canvas.toDataURL('image/png');
             const link = document.createElement('a');
             link.href = dataUrl;
-            link.download = 'captured_image.png';
+            link.download = `jinaai_deepsearch_${Date.now()}.png`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
