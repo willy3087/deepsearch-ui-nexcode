@@ -174,6 +174,7 @@ const chatContainer = document.getElementById('chat-container');
 const messageForm = document.getElementById('input-area');
 const messageInput = document.getElementById('message-input');
 const newChatButton = document.getElementById('new-chat-button');
+// api key management
 const apiKeyInput = document.getElementById('api-key-input');
 const saveApiKeyBtn = document.getElementById('save-api-key');
 const toggleApiKeyBtn = document.getElementById('toggle-api-key');
@@ -181,17 +182,19 @@ const toggleApiKeyBtnText = toggleApiKeyBtn.querySelector('span');
 const getApiKeyBtn = document.getElementById('get-api-key');
 const freeUserRPMInfo = document.getElementById('free-user-rpm');
 const apiKeyDialog = document.getElementById('api-key-dialog');
+// settings & help dialog
 const helpButton = document.getElementById('help-button');
 const helpDialog = document.getElementById('help-dialog');
 const settingsButton = document.getElementById('settings-button');
 const settingsDialog = document.getElementById('settings-dialog');
 const dialogCloseBtns = document.querySelectorAll('.dialog-close');
+// upload file
 const fileUploadButton = document.getElementById('file-upload-button');
 const fileInput = document.getElementById('file-input');
 const filePreviewContainer = document.getElementById('file-preview-container');
 const inputErrorMessage = document.getElementById('input-error-message');
+// message actions
 const stopMessageButton = document.getElementById('stop-message-button');
-// Session management DOM elements
 const recentSessionsContainer = document.getElementById('recent-sessions-container');
 const recentSessionsButton = document.getElementById('recent-sessions-button');
 const sessionsDropdown = document.getElementById('sessions-dropdown');
@@ -201,24 +204,15 @@ const deleteSessionDialog = document.getElementById('delete-session-dialog');
 const deleteAllSessionsDialog = document.getElementById('delete-all-sessions-dialog');
 const navigationDialog = document.getElementById('navigation-dialog');
 
-const loadingSvg = `<svg id="thinking-animation-icon" width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><style>.spinner_mHwL{animation:spinner_OeFQ .75s cubic-bezier(0.56,.52,.17,.98) infinite; fill:currentColor}.spinner_ote2{animation:spinner_ZEPt .75s cubic-bezier(0.56,.52,.17,.98) infinite;fill:currentColor}@keyframes spinner_OeFQ{0%{cx:4px;r:3px}50%{cx:9px;r:8px}}@keyframes spinner_ZEPt{0%{cx:15px;r:8px}50%{cx:20px;r:3px}}</style><defs><filter id="spinner-gF00"><feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="y"/><feColorMatrix in="y" mode="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 18 -7" result="z"/><feBlend in="SourceGraphic" in2="z"/></filter></defs><g filter="url(#spinner-gF00)"><circle class="spinner_mHwL" cx="4" cy="12" r="3"/><circle class="spinner_ote2" cx="15" cy="12" r="8"/></g></svg>`;
 const BASE_ORIGIN = 'https://deepsearch.jina.ai';
-const MAX_TOTAL_SIZE = 10 * 1024 * 1024; // 10MB in bytes
 
+// SVG icons
+const loadingSvg = `<svg id="thinking-animation-icon" width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><style>.spinner_mHwL{animation:spinner_OeFQ .75s cubic-bezier(0.56,.52,.17,.98) infinite; fill:currentColor}.spinner_ote2{animation:spinner_ZEPt .75s cubic-bezier(0.56,.52,.17,.98) infinite;fill:currentColor}@keyframes spinner_OeFQ{0%{cx:4px;r:3px}50%{cx:9px;r:8px}}@keyframes spinner_ZEPt{0%{cx:15px;r:8px}50%{cx:20px;r:3px}}</style><defs><filter id="spinner-gF00"><feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="y"/><feColorMatrix in="y" mode="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 18 -7" result="z"/><feBlend in="SourceGraphic" in2="z"/></filter></defs><g filter="url(#spinner-gF00)"><circle class="spinner_mHwL" cx="4" cy="12" r="3"/><circle class="spinner_ote2" cx="15" cy="12" r="8"/></g></svg>`;
 const docIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>'
 const imgIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-image"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>'
-const SUPPORTED_FILE_TYPES = {
-    'application/pdf': docIcon,
-    'text/plain': docIcon,
-    'text/csv': docIcon,
-    'image/jpeg': imgIcon,
-    'image/png': imgIcon,
-    'image/webp': imgIcon,
-    'image/gif': imgIcon,
-};
-const NAVIGATION_TIME_OUT = 7000;
+const downloadingSvg = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><style>.spinner_Wezc{transform-origin:center;animation:spinner_Oiah .75s step-end infinite}@keyframes spinner_Oiah{8.3%{transform:rotate(30deg)}16.6%{transform:rotate(60deg)}25%{transform:rotate(90deg)}33.3%{transform:rotate(120deg)}41.6%{transform:rotate(150deg)}50%{transform:rotate(180deg)}58.3%{transform:rotate(210deg)}66.6%{transform:rotate(240deg)}75%{transform:rotate(270deg)}83.3%{transform:rotate(300deg)}91.6%{transform:rotate(330deg)}100%{transform:rotate(360deg)}}</style><g class="spinner_Wezc"><circle cx="12" cy="2.5" r="1.5" opacity=".14"/><circle cx="16.75" cy="3.77" r="1.5" opacity=".29"/><circle cx="20.23" cy="7.25" r="1.5" opacity=".43"/><circle cx="21.50" cy="12.00" r="1.5" opacity=".57"/><circle cx="20.23" cy="16.75" r="1.5" opacity=".71"/><circle cx="16.75" cy="20.23" r="1.5" opacity=".86"/><circle cx="12" cy="21.5" r="1.5"/></g></svg>`;
 
-// State variables
+// Message variables
 let isLoading = false;
 let abortController = null;
 let existingMessages = [];
@@ -230,12 +224,25 @@ let compositionEnded = false;
 
 // File upload state
 let uploadedFiles = [];
+const MAX_TOTAL_SIZE = 10 * 1024 * 1024; // 10MB in bytes
+const SUPPORTED_FILE_TYPES = {
+    'application/pdf': docIcon,
+    'text/plain': docIcon,
+    'text/csv': docIcon,
+    'image/jpeg': imgIcon,
+    'image/png': imgIcon,
+    'image/webp': imgIcon,
+    'image/gif': imgIcon,
+};
 
 // Session management variables
 let chatSessions = [];
 const MAX_SESSIONS = 10;
 let isSessionsDropdownOpen = false;
+
+// Navigation bar variables
 let renderNavigationListTimer = null;
+const NAVIGATION_TIME_OUT = 7000;
 
 // API Key Management
 function initializeApiKey() {
@@ -933,6 +940,60 @@ function handleStopEvent () {
     }
 }
 
+function handleDownloadEvent (downloadButton, downloadIcon) {
+    if (window.html2canvas) {
+        downloadButton.innerHTML = downloadingSvg;
+        const assistantMessageDiv = downloadButton.closest('.message');
+        const theme = document.documentElement.getAttribute('data-theme');
+        const computedStyle = window.getComputedStyle(document.documentElement);
+        const backgroundColor = theme === 'dark' ? computedStyle.getPropertyValue('--bg-color') : computedStyle.getPropertyValue('--bg-color');
+        // remove transitions and animations to prevent rendering issues
+        assistantMessageDiv.style.transition = 'none';
+        assistantMessageDiv.style.animation = 'none';
+        // get the scroll width of tables and code blocks to set the max width of the image
+        const tables = Array.from(assistantMessageDiv.querySelectorAll('.table-container'));
+        const codeBlocks = Array.from(assistantMessageDiv.querySelectorAll('.markdown-inner pre code'));
+        const scrollWidths = tables.concat(codeBlocks).map(ele => ele.scrollWidth);
+        const maxWidth = Math.max(assistantMessageDiv.scrollWidth, ...scrollWidths);
+        const PADDING = 72;
+
+        const filter = function (element) {
+            if (element.classList.contains('think-section') || element.classList.contains('references-section')) {
+                return true;
+            }
+            if (element.classList.contains('action-buttons-container')) {
+                return true;
+            }
+            return false;
+        }
+        const clone = function (clonedDocument) {
+            const clonedElement = clonedDocument.getElementById('chat-container');
+            clonedElement.style.maxWidth = `${maxWidth + PADDING}px`;
+        };
+
+        html2canvas(assistantMessageDiv, { 
+            ignoreElements: filter,
+            backgroundColor: backgroundColor,
+            onclone: clone,
+            windowWidth: maxWidth + PADDING,
+         }).then((canvas) => {
+            const dataUrl = canvas.toDataURL('image/png');
+            const link = document.createElement('a');
+            link.href = dataUrl;
+            link.download = 'captured_image.png';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }).catch((error) => {
+            console.error('Error capturing image:', error);
+        }).finally(() => {
+            downloadButton.innerHTML = downloadIcon;
+        });
+    } else {
+        console.error('html2canvas not available');
+    }
+}
+
 // Create a copy button for code blocks
 function createCodeCopyButton(codeElement) {
     const copyButton = document.createElement('button');
@@ -970,8 +1031,16 @@ function createActionButton(content) {
     const copyIcon = `<svg class="action-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
     copyButton.innerHTML = copyIcon;
 
+    // download button
+    const downloadButton = document.createElement('button');
+    downloadButton.classList.add('download-button', 'tooltip-container');
+    downloadButton.setAttribute('data-tooltip', 'tooltips.download');
+    const downloadIcon = `<svg class="action-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>`;
+    downloadButton.innerHTML = downloadIcon;
+
     buttonContainer.appendChild(redoButton);
     buttonContainer.appendChild(copyButton);
+    buttonContainer.appendChild(downloadButton);
 
     redoButton.addEventListener('click', () => {
         handleReDoEvent(redoButton);
@@ -981,7 +1050,11 @@ function createActionButton(content) {
         handleCopyEvent(copyButton, copyIcon, content);
     });
 
-    [redoButton, copyButton].forEach(button => {
+    downloadButton.addEventListener('click', () => {
+        handleDownloadEvent(downloadButton, downloadIcon);
+    });
+
+    [redoButton, copyButton, downloadButton].forEach(button => {
         handleTooltipEvent(button);
     });
 
@@ -1131,7 +1204,7 @@ function markdownItTableWrapper(md) {
     };
 
     md.renderer.rules.table_open = function (tokens, idx, options, env, self) {
-        return '<div id="table-container">\n' + defaultTableRenderer(tokens, idx, options, env, self);
+        return '<div class="table-container">\n' + defaultTableRenderer(tokens, idx, options, env, self);
     };
 
     const defaultTableCloseRenderer = md.renderer.rules.table_close || function (tokens, idx, options, env, self) {
@@ -2258,7 +2331,6 @@ function ensureHljsLoaded() {
         }, 2500);
     });
 }
-
 
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize appearance first

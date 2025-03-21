@@ -132,6 +132,7 @@ a {
 
 .action-buttons-container {
     display: flex;
+    margin-top: 16px;
 }
 
 
@@ -922,7 +923,7 @@ ol.footnotes-list {
     padding: 4px;
 }
 
-#table-container {
+.table-container {
     overflow-x: auto;
 }
 
