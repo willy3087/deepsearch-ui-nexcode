@@ -1100,14 +1100,8 @@ function handleDownloadEvent(downloadButton, downloadIcon) {
     };
     const clone = function (clonedDocument) {
       const clonedElement = clonedDocument.getElementById("chat-container");
-      clonedElement.style.maxWidth = `${maxWidth}px`;
-      const cloneMessage = clonedDocument.getElementById(id);
-      cloneMessage.style.padding = "16px 40px";
+      clonedElement.style.maxWidth = `${maxWidth + PADDING}px`;
     };
-    const isMobile =
-      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-        navigator.userAgent
-      );
 
     html2canvas(assistantMessageDiv, {
       ignoreElements: filter,
@@ -1116,15 +1110,13 @@ function handleDownloadEvent(downloadButton, downloadIcon) {
       windowWidth: maxWidth + PADDING,
     })
       .then((canvas) => {
-        canvas.toBlob((blob) => {
-          const dataUrl = URL.createObjectURL(blob);
-          const link = document.createElement("a");
-          link.href = dataUrl;
-          link.download = `jinaai_deepsearch_${Date.now()}.png`;
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-        });
+        const dataUrl = canvas.toDataURL("image/png");
+        const link = document.createElement("a");
+        link.href = dataUrl;
+        link.download = "captured_image.png";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
       })
       .catch((error) => {
         console.error("Error capturing image:", error);
