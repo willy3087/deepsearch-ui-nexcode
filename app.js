@@ -518,7 +518,6 @@ function handleClearAllSessionsEvent() {
       e.stopPropagation();
       deleteAllSessionsDialog.classList.remove("visible");
       chatSessions = [];
-      clearMessages();
       saveChatSessions();
       updateSessionsList();
       toggleSessionsDropdown(false);
@@ -1224,6 +1223,7 @@ function createMessage(role, content, messageId = null) {
   if (role === "assistant") {
     messageDiv.innerHTML = `<div id="loading-indicator">${loadingSvg}</div>`;
   } else {
+    // Handle user message with potential file content
     if (typeof content === "string") {
       // Simple text message
       messageDiv.replaceChildren(renderMarkdown(content, true, [], role));
@@ -1730,7 +1730,7 @@ async function sendMessage(redo = false) {
 
   let markdownContent = "";
   let thinkContent = "";
-  let inThinkSection = true;
+  let inThinkSection = false;
   let thinkSectionElement = null;
   let thinkHeaderElement = null;
   let thinkUrlElement = null;
@@ -1850,7 +1850,6 @@ async function sendMessage(redo = false) {
                 const json = JSON.parse(partialBrokenData);
                 partialBrokenData = "";
                 const content = json.choices[0]?.delta?.content || "";
-                const type = json.choices[0]?.delta?.type || "text";
                 // Store visitedURLs from the final chunk if provided
                 if (json.visitedURLs) {
                   visitedURLs = json.visitedURLs;
@@ -1884,79 +1883,114 @@ async function sendMessage(redo = false) {
                 removeLoadingIndicator(assistantMessageDiv);
 
                 let tempContent = content;
+                const thinkingAnimation = document.createElement("span");
+                thinkingAnimation.id = "thinking-animation";
+                thinkingAnimation.innerHTML = loadingSvg;
                 while (tempContent.length > 0) {
-                  if (type === "think") {
-                    thinkContent += tempContent.replace(
-                      /<think>|<\/think>/g,
-                      ""
-                    );
-                    if (!thinkSectionElement) {
-                      // Create think section if it doesn't exist yet
+                  if (inThinkSection) {
+                    const thinkEndIndex = tempContent.indexOf("</think>");
+                    if (thinkEndIndex !== -1) {
+                      thinkUrlElement?.remove();
+                      thinkContent += tempContent.substring(0, thinkEndIndex);
+                      if (thinkSectionElement) {
+                        const thinkContentElement =
+                          thinkSectionElement.querySelector(".think-content");
+                        thinkContentElement.textContent = thinkContent;
+                        thinkContentElement.classList.add("auto-scrolling");
+                        thinkContentElement.scrollTop =
+                          thinkContentElement.scrollHeight;
+                        setTimeout(
+                          () =>
+                            thinkContentElement.classList.remove(
+                              "auto-scrolling"
+                            ),
+                          1000
+                        );
+                      }
+                      inThinkSection = false;
+                      tempContent = tempContent.substring(
+                        thinkEndIndex + "</think>".length
+                      );
+                      if (thinkSectionElement) {
+                        const thinkContentElement =
+                          thinkSectionElement.querySelector(".think-content");
+                        thinkContentElement.classList.remove("expanded");
+
+                        if (thinkHeaderElement) {
+                          thinkHeaderElement.textContent =
+                            UI_STRINGS.think.toggle();
+                          thinkHeaderElement.classList.remove("expanded");
+                        }
+                      }
+                    } else {
+                      thinkContent += tempContent;
+                      if (thinkSectionElement) {
+                        const thinkContentElement =
+                          thinkSectionElement.querySelector(".think-content");
+                        thinkContentElement.textContent = thinkContent;
+                        thinkContentElement.classList.add("auto-scrolling");
+                        thinkContentElement.scrollTop =
+                          thinkContentElement.scrollHeight;
+                        const animationElement =
+                          thinkSectionElement.querySelector(
+                            "#thinking-animation"
+                          );
+                        if (!animationElement) {
+                          thinkContentElement.appendChild(thinkingAnimation);
+                        }
+                        thinkContentElement.classList.add("expanded");
+                        setTimeout(
+                          () =>
+                            thinkContentElement.classList.remove(
+                              "auto-scrolling"
+                            ),
+                          1000
+                        );
+                      }
+                      tempContent = "";
+                    }
+                  } else {
+                    const thinkStartIndex = tempContent.indexOf("<think>");
+                    if (thinkStartIndex !== -1) {
+                      markdownContent += tempContent.substring(
+                        0,
+                        thinkStartIndex
+                      );
+                      markdownDiv.innerHTML = renderMarkdown(markdownContent);
+
+                      inThinkSection = true;
+                      thinkContent = "";
+                      tempContent = tempContent.substring(
+                        thinkStartIndex + "<think>".length
+                      );
                       thinkSectionElement =
                         createThinkSection(assistantMessageDiv);
                       thinkHeaderElement =
                         thinkSectionElement.querySelector(".think-header");
+                      const thinkContentElement =
+                        thinkSectionElement.querySelector(".think-content");
+                      thinkContentElement.textContent = thinkContent;
+                      thinkContentElement.scrollTop =
+                        thinkContentElement.scrollHeight;
+                      thinkContentElement.classList.add("expanded");
+
                       if (thinkHeaderElement) {
                         thinkHeaderElement.textContent =
                           UI_STRINGS.think.initial();
                       }
-                    }
-
-                    // Update think section content
-                    if (thinkSectionElement && tempContent) {
-                      const thinkContentElement =
-                        thinkSectionElement.querySelector(".think-content");
-                      thinkContentElement.textContent = thinkContent;
-                      thinkContentElement.classList.add("auto-scrolling");
-                      thinkContentElement.scrollTop =
-                        thinkContentElement.scrollHeight;
-
-                      // Add animation only if it doesn't exist
                       const animationElement =
                         thinkSectionElement.querySelector(
                           "#thinking-animation"
                         );
                       if (!animationElement) {
-                        const thinkingAnimation =
-                          document.createElement("span");
-                        thinkingAnimation.id = "thinking-animation";
-                        thinkingAnimation.innerHTML = loadingSvg;
                         thinkContentElement.appendChild(thinkingAnimation);
                       }
-
-                      thinkContentElement.classList.add("expanded");
-                      setTimeout(
-                        () =>
-                          thinkContentElement.classList.remove(
-                            "auto-scrolling"
-                          ),
-                        1000
-                      );
+                    } else {
+                      markdownContent += tempContent;
+                      markdownDiv.innerHTML = renderMarkdown(markdownContent);
+                      tempContent = "";
                     }
-                    tempContent = "";
-                  } else {
-                    if (thinkSectionElement && inThinkSection) {
-                      // Finalize think section
-                      const thinkContentElement =
-                        thinkSectionElement.querySelector(".think-content");
-                      if (thinkContentElement) {
-                        thinkContentElement.classList.remove("expanded");
-                      }
-
-                      if (thinkHeaderElement) {
-                        thinkHeaderElement.textContent =
-                          UI_STRINGS.think.toggle();
-                        thinkHeaderElement.classList.remove("expanded");
-                        thinkHeaderElement.classList.add("collapsed");
-                      }
-                      // Remove the navigation bar
-                      thinkUrlElement?.remove();
-                    }
-                    markdownContent += tempContent;
-                    markdownDiv.innerHTML = renderMarkdown(markdownContent);
-                    tempContent = "";
                   }
-                  inThinkSection = type === "think";
                 }
               }
             } catch (e) {
@@ -1977,34 +2011,36 @@ async function sendMessage(redo = false) {
           numURLs
         );
         markdownDiv.replaceChildren(markdown);
-      }
-      const copyButton = createActionButton(markdownContent);
-      const referencesSection = markdownDiv.querySelector(
-        ".references-section"
-      );
-      if (referencesSection) {
-        referencesSection.insertAdjacentElement("beforebegin", copyButton);
-      } else {
-        markdownDiv.appendChild(copyButton);
-      }
-      const thinkSection = assistantMessageDiv.querySelector(".think-content");
-      if (thinkSection) {
-        const thinkCopyButton = createCodeCopyButton(thinkSection);
-        thinkSection.appendChild(thinkCopyButton);
-      }
 
-      existingMessages.push({
-        role: "assistant",
-        content: markdownContent,
-        think: thinkContent,
-        id: assistantMessageId,
-      });
+        const copyButton = createActionButton(markdownContent);
+        const referencesSection = markdownDiv.querySelector(
+          ".references-section"
+        );
+        if (referencesSection) {
+          referencesSection.insertAdjacentElement("beforebegin", copyButton);
+        } else {
+          markdownDiv.appendChild(copyButton);
+        }
+        const thinkSection =
+          assistantMessageDiv.querySelector(".think-content");
+        if (thinkSection) {
+          const thinkCopyButton = createCodeCopyButton(thinkSection);
+          thinkSection.appendChild(thinkCopyButton);
+        }
 
-      // Save messages to localStorage
-      saveChatMessages();
-      // Check if the Favicon Badge API is supported
-      setFaviconBadge();
-      playNotificationSound();
+        existingMessages.push({
+          role: "assistant",
+          content: markdownContent,
+          think: thinkContent,
+          id: assistantMessageId,
+        });
+
+        // Save messages to localStorage
+        saveChatMessages();
+        // Check if the Favicon Badge API is supported
+        setFaviconBadge();
+        playNotificationSound();
+      }
     } else {
       const jsonResult = await res.json();
       if (jsonResult) {
