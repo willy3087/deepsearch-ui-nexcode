@@ -257,6 +257,23 @@ function generateId(type = 'message') {
     return `${type}-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
 }
 
+function sanitizeHtml(content) {
+    try {
+        if (window.DOMPurify) {
+            const options = {
+                IN_PLACE: true,
+                FORBID_TAGS: ['style', 'script', 'iframe'],
+                FORBID_ATTR: ['style', 'onerror', 'onload'],
+            };
+            return DOMPurify.sanitize(content, options);
+        }
+        return content;
+    } catch(error) {
+        console.error('Sanitizing error:', error)
+        return content;
+    }
+}
+
 // Chat Message Persistence
 function saveChatMessages() {
     try {
@@ -462,7 +479,7 @@ function updateSessionsList() {
         
         const sessionTitle = document.createElement('span');
         sessionTitle.classList.add('session-title');
-        sessionTitle.textContent = session.title;
+        sessionTitle.innerText = session.title;
         
         const deleteButton = document.createElement('button');
         deleteButton.classList.add('delete-session');
@@ -955,6 +972,7 @@ function handleDownloadEvent (downloadButton, downloadIcon) {
     if (window.html2canvas) {
         downloadButton.innerHTML = downloadingSvg;
         const assistantMessageDiv = downloadButton.closest('.message');
+        const id = assistantMessageDiv.getAttribute('id');
         const theme = document.documentElement.getAttribute('data-theme');
         const computedStyle = window.getComputedStyle(document.documentElement);
         const backgroundColor = theme === 'dark' ? computedStyle.getPropertyValue('--bg-color') : computedStyle.getPropertyValue('--bg-color');
@@ -965,7 +983,7 @@ function handleDownloadEvent (downloadButton, downloadIcon) {
         const tables = Array.from(assistantMessageDiv.querySelectorAll('.table-container'));
         const codeBlocks = Array.from(assistantMessageDiv.querySelectorAll('.markdown-inner pre code'));
         const scrollWidths = tables.concat(codeBlocks).map(ele => ele.scrollWidth);
-        const maxWidth = Math.max(assistantMessageDiv.scrollWidth, ...scrollWidths) + 90;
+        const maxWidth = Math.max(assistantMessageDiv.scrollWidth, ...scrollWidths) + 138;
         const PADDING = 52;
 
         const filter = function (element) {
@@ -980,6 +998,8 @@ function handleDownloadEvent (downloadButton, downloadIcon) {
         const clone = function (clonedDocument) {
             const clonedElement = clonedDocument.getElementById('chat-container');
             clonedElement.style.maxWidth = `${maxWidth}px`;
+            const cloneMessage = clonedDocument.getElementById(id);
+            cloneMessage.style.padding = '16px 40px';
         };
 
         html2canvas(assistantMessageDiv, { 
@@ -988,13 +1008,15 @@ function handleDownloadEvent (downloadButton, downloadIcon) {
             onclone: clone,
             windowWidth: maxWidth + PADDING,
          }).then((canvas) => {
-            const dataUrl = canvas.toDataURL('image/png');
-            const link = document.createElement('a');
-            link.href = dataUrl;
-            link.download = `jinaai_deepsearch_${Date.now()}.png`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            canvas.toBlob((blob) => {
+                const dataUrl = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = dataUrl;
+                link.download = `jinaai_deepsearch_${Date.now()}.png`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
         }).catch((error) => {
             console.error('Error capturing image:', error);
         }).finally(() => {
@@ -1259,13 +1281,15 @@ function renderMarkdown(content, returnElement = false, visitedURLs = [], role =
         content = '';
     }
     
-    tempDiv.innerHTML = content;
     if (md) {
         try {
             // Only try to render markdown if content is not empty
             if (content.trim()) {
-                const rendered = md.render(content);
-                tempDiv.innerHTML = rendered;
+                if (role === 'user') {
+                    tempDiv.innerText = md.renderInline(content, {html: false});
+                } else {
+                    tempDiv.innerHTML = sanitizeHtml(md.render(content));
+                }
             }
         } catch (e) {
             console.error('Error rendering markdown:', e);
@@ -1299,6 +1323,8 @@ function renderMarkdown(content, returnElement = false, visitedURLs = [], role =
                 el.innerHTML = el.innerHTML.replace(/\n/g, '<br>');
             });
         }
+    } else {
+        tempDiv.innerHTML = sanitizeHtml(content);
     }
     
     // Add copy buttons to code blocks if returning the element
