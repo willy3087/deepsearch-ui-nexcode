@@ -1001,22 +1001,48 @@ function handleDownloadEvent (downloadButton, downloadIcon) {
             const cloneMessage = clonedDocument.getElementById(id);
             cloneMessage.style.padding = '16px 40px';
         };
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
         html2canvas(assistantMessageDiv, { 
             ignoreElements: filter,
             backgroundColor: backgroundColor,
             onclone: clone,
             windowWidth: maxWidth + PADDING,
+            scale: isMobile ? 2 : window.devicePixelRatio,
          }).then((canvas) => {
-            canvas.toBlob((blob) => {
-                const dataUrl = URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = dataUrl;
-                link.download = `jinaai_deepsearch_${Date.now()}.png`;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
+            return new Promise((resolve, reject) => {
+                let finalCanvas = canvas;
+                const maxWidthHeight = 50000000; // 5 megapixels
+                if (canvas.width * canvas.height >= maxWidthHeight && isMobile) {
+                    console.log('Image too large, resizing...');
+                    const scaleFactor = Math.sqrt(maxWidthHeight / (canvas.width * canvas.height));
+                    const scaledCanvas = document.createElement('canvas');
+                    scaledCanvas.width = canvas.width * scaleFactor;
+                    scaledCanvas.height = canvas.height * scaleFactor;
+                    const scaledCtx = scaledCanvas.getContext('2d');
+                    scaledCtx.imageSmoothingEnabled = true;
+                    scaledCtx.scale(scaleFactor, scaleFactor);
+                    scaledCtx.drawImage(canvas, 0, 0);
+                    finalCanvas = scaledCanvas;
+                }
+                setTimeout(() => {
+                    finalCanvas.toBlob(function(blob) {
+                        if (!blob) {
+                            reject('Blob creation failed.');
+                            return;
+                        }
+                        const url = window.URL.createObjectURL(blob);
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.download = `jinaai_deepsearch_${Date.now()}.png`;
+                        link.click();
+                        console.log('Image downloaded', url);
+                        window.URL.revokeObjectURL(url);
+                        resolve();
+                    }, 'image/png');
+                }, 500);
             });
+            
         }).catch((error) => {
             console.error('Error capturing image:', error);
         }).finally(() => {
