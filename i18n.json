@@ -1,6 +1,6 @@
 {
   "en": {
-    "title": "Jina AI Deep Search",
+    "title": "NexCode Deep Search",
     "description": "AI deep search: read, reason, search until best answer found.",
     "buttons": {
       "settings": "Settings",
@@ -56,7 +56,7 @@
     "dialogs": {
       "apiKey": {
         "title": "Upgrade to Higher Rate Limit",
-        "description": "Use your Jina API key to access a higher rate limit. You can get a free API key and learn more about rate limits on our website.",
+        "description": "Use your NexCode API key to access a higher rate limit. You can get a free API key and learn more about rate limits on our website.",
         "freeUserRpm": "You can send <b>2 requests per minute</b>."
       },
       "help": {
@@ -83,13 +83,13 @@
         "title": "Delete All Sessions?",
         "description": "Are you sure you want to delete all sessions? This action cannot be undone."
       },
-      "navigation" : {
+      "navigation": {
         "title": "Read URLs"
       }
     }
   },
   "zh-CN": {
-    "title": "Jina AI 深度搜索",
+    "title": "NexCode 深度搜索",
     "description": "AI深度搜索：阅读、推理、搜索，直到找到最佳答案。",
     "buttons": {
       "settings": "设置",
@@ -145,7 +145,7 @@
     "dialogs": {
       "apiKey": {
         "title": "获得更高的速率限制",
-        "description": "使用您的Jina API密钥访问更高的速率限制。您可以在我们的网站上获取免费API密钥并了解有关速率限制的更多信息。",
+        "description": "使用您的NexCode API密钥访问更高的速率限制。您可以在我们的网站上获取免费API密钥并了解有关速率限制的更多信息。",
         "freeUserRpm": "您可以发送<b>每分钟2个请求</b>。"
       },
       "help": {
@@ -172,13 +172,13 @@
         "title": "删除所有会话？",
         "description": "您确定要删除所有会话吗？此操作无法撤消。"
       },
-      "navigation" : {
+      "navigation": {
         "title": "已阅读的 URLs"
       }
     }
   },
   "zh-TW": {
-    "title": "Jina AI 深度搜尋",
+    "title": "NexCode 深度搜尋",
     "description": "AI 深度搜尋：讀、理解、找答案，直到找到最好的結果。",
     "buttons": {
       "settings": "設定",
@@ -234,7 +234,7 @@
     "dialogs": {
       "apiKey": {
         "title": "提高速度限制",
-        "description": "用你的 Jina API 金鑰來提高速度限制。在我們的網站上可以免費取得 API 金鑰，也可以了解更多關於速度限制的資訊。",
+        "description": "用你的NexCode API 金鑰來提高速度限制。在我們的網站上可以免費取得 API 金鑰，也可以了解更多關於速度限制的資訊。",
         "freeUserRpm": "你一分鐘可以送<b>两次請求</b>喔。"
       },
       "help": {
@@ -261,13 +261,13 @@
         "title": "刪除所有對話？",
         "description": "你確定要刪除所有對話嗎？這個動作無法復原。"
       },
-      "navigation" : {
+      "navigation": {
         "title": "已讀取的 URLs"
       }
     }
   },
   "jp": {
-    "title": "Jina AI 深度検索",
+    "title": "NexCode 深度検索",
     "description": "AI深度検索：読み込み、推論、検索を繰り返し、最適な回答を見つけます。",
     "buttons": {
       "settings": "設定",
@@ -323,7 +323,7 @@
     "dialogs": {
       "apiKey": {
         "title": "レート制限を引き上げる",
-        "description": "Jina APIキーを使用して、レート制限を引き上げます。無料のAPIキーを取得し、レート制限の詳細については、当社のウェブサイトをご覧ください。",
+        "description": "NexCode APIキーを使用して、レート制限を引き上げます。無料のAPIキーを取得し、レート制限の詳細については、当社のウェブサイトをご覧ください。",
         "freeUserRpm": "<b>1分あたり2リクエスト</b>を送信できます。"
       },
       "help": {
@@ -350,13 +350,13 @@
         "title": "すべてのセッションを削除しますか？",
         "description": "すべてのセッションを削除してもよろしいですか？この操作は元に戻すことができません。"
       },
-      "navigation" : {
+      "navigation": {
         "title": "URLを読み込みました"
       }
     }
   },
   "fr": {
-    "title": "Jina AI Recherche Approfondie",
+    "title": "NexCode Recherche Approfondie",
     "description": "Recherche approfondie par IA : lire, raisonner, chercher jusqu'à trouver la meilleure réponse.",
     "buttons": {
       "settings": "Paramètres",
@@ -412,13 +412,13 @@
     "dialogs": {
       "apiKey": {
         "title": "Mettre à niveau pour une limite de taux plus élevée",
-        "description": "Utilisez votre clé API Jina pour accéder à une limite de taux plus élevée. Vous pouvez obtenir une clé API gratuite et en savoir plus sur les limites de taux sur notre site web.",
+        "description": "Utilisez votre clé API NexCode pour accéder à une limite de taux plus élevée. Vous pouvez obtenir une clé API gratuite et en savoir plus sur les limites de taux sur notre site web.",
         "freeUserRpm": "Vous pouvez envoyer <b>2 requêtes par minute</b>."
       },
       "help": {
         "title": "Profitez d'une expérience pure et approfondie",
         "list": [
-          "Pas de publicité, pas de connexion, pas de puces, pas de rapports longs, pas de design superflu.",
+          "Pas de publicité, pas de connexion, pas de puces, pas de rapports longs, pas de design desnecessaire.",
           "Les utilisateurs gratuits peuvent envoyer 2 requêtes de recherche par minute. Fournissez une clé API pour obtenir une limite de taux plus élevée.",
           "Posez des questions profondes ! Ne gaspillez pas votre précieuse vie avec des questions simples ou des casse-têtes, et ne cherchez pas de réconfort ici quand vous vous ennuyez.",
           "Ajoutez à vos moteurs de recherche de navigateur via <code>https://search.jina.ai/?q={YOUR_QUERY}</code>",
@@ -439,13 +439,13 @@
         "title": "Supprimer toutes les sessions ?",
         "description": "Êtes-vous sûr de vouloir supprimer toutes les sessions ? Cette action est irréversible."
       },
-      "navigation" : {
+      "navigation": {
         "title": "URL lues"
       }
     }
   },
   "de": {
-    "title": "Jina AI Tiefensuche",
+    "title": "NexCode Tiefensuche",
     "description": "KI-Tiefensuche: lesen, schlussfolgern, suchen, bis die beste Antwort gefunden ist.",
     "buttons": {
       "settings": "Einstellungen",
@@ -498,7 +498,7 @@
     "dialogs": {
       "apiKey": {
         "title": "Upgrade für eine höhere Ratenbegrenzung",
-        "description": "Verwenden Sie Ihren Jina API-Schlüssel, um auf eine höhere Ratenbegrenzung zuzugreifen. Sie können einen kostenlosen API-Schlüssel erhalten und mehr über Ratenbegrenzungen auf unserer Website erfahren.",
+        "description": "Verwenden Sie Ihren NexCode API-Schlüssel, um auf eine höhere Ratenbegrenzung zuzugreifen. Sie können einen kostenlosen API-Schlüssel erhalten und mehr über Ratenbegrenzungen auf unserer Website erfahren.",
         "freeUserRpm": "Sie können <b>2 Anfragen pro Minute</b> senden."
       },
       "help": {
@@ -525,13 +525,13 @@
         "title": "Alle Sitzungen löschen?",
         "description": "Möchten Sie wirklich alle Sitzungen löschen? Dieser Vorgang kann nicht rückgängig gemacht werden."
       },
-      "navigation" : {
+      "navigation": {
         "title": "URLs gelesen"
       }
     }
   },
   "ko": {
-    "title": "Jina AI 심층 검색",
+    "title": "NexCode 심층 검색",
     "description": "AI 심층 검색: 읽고, 추론하고, 최적의 답변을 찾을 때까지 검색합니다.",
     "buttons": {
       "settings": "설정",
@@ -584,7 +584,7 @@
     "dialogs": {
       "apiKey": {
         "title": "더 높은 요청 제한으로 업그레이드",
-        "description": "Jina API 키를 사용하여 더 높은 요청 제한에 액세스하세요. 저희 웹사이트에서 무료 API 키를 얻고 요청 제한에 대해 자세히 알아볼 수 있습니다.",
+        "description": "NexCode API 키를 사용하여 더 높은 요청 제한에 액세스하세요. 저희 웹사이트에서 무료 API 키를 얻고 요청 제한에 대해 자세히 알아볼 수 있습니다.",
         "freeUserRpm": "<b>분당 2개의 요청</b>을 보낼 수 있습니다."
       },
       "help": {
@@ -611,8 +611,97 @@
         "title": "모든 세션 삭제?",
         "description": "모든 세션을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다."
       },
-      "navigation" : {
+      "navigation": {
         "title": "URL 읽음"
+      }
+    }
+  },
+  "pt-BR": {
+    "title": "NexCode Busca Profunda",
+    "description": "Busca profunda com IA: lê, analisa e pesquisa até encontrar a melhor resposta.",
+    "buttons": {
+      "settings": "Configurações",
+      "new": "Nova",
+      "upgrade": "Atualizar",
+      "help": "Ajuda",
+      "send": "Busca Profunda",
+      "clearAll": "Limpar Tudo",
+      "addKey": "Atualizar",
+      "updateKey": "Atualizar Chave",
+      "getKey": "Obter Chave API",
+      "saveKey": "Salvar",
+      "purchase": "Comprar mais tokens",
+      "contactUs": "Fale Conosco",
+      "delete": "Excluir"
+    },
+    "labels": {
+      "recent": "Recentes"
+    },
+    "tooltips": {
+      "copy": "Copiar",
+      "redo": "Regenerar",
+      "settings": "Configurações",
+      "help": "Suporte",
+      "new": "Limpar e iniciar uma nova conversa",
+      "recent": "Ver conversas recentes",
+      "upgrade": "Atualizar para um limite maior de requisições",
+      "upload": "Enviar arquivos (formatos txt/pdf/png/jpeg/webp suportados)",
+      "stop": "Parar",
+      "navigation": "Lendo URLs",
+      "download": "Baixar"
+    },
+    "think": {
+      "initial": "Pensando...",
+      "toggle": "Processo de raciocínio",
+      "navigation": "Lendo..."
+    },
+    "references": {
+      "title": "Referências",
+      "sources": "Fontes"
+    },
+    "errors": {
+      "invalidKey": "Chave API inválida. Por favor, atualize sua chave clicando no botão abaixo.",
+      "insufficientTokens": "Tokens insuficientes na sua chave API. Por favor, compre mais tokens ou troque para outra chave.",
+      "rateLimit": "Você atingiu o limite de requisições. Por favor, tente novamente mais tarde. Você também pode atualizar para um plano superior clicando no botão abaixo.",
+      "fileSizeLimit": "O tamanho total dos arquivos excede o limite de 10 MB",
+      "fileTypeNotSupported": "Tipo de arquivo não suportado"
+    },
+    "placeholders": {
+      "messageInput": "Digite sua pergunta aqui",
+      "apiKeyInput": "Digite sua chave API"
+    },
+    "dialogs": {
+      "apiKey": {
+        "title": "Atualizar para um limite maior de requisições",
+        "description": "Use sua chave API NexCode para acessar um limite maior de requisições. Você pode obter uma chave API gratuita e saber mais sobre os limites de requisições em nosso site.",
+        "freeUserRpm": "Você pode enviar <b>2 requisições por minuto</b>."
+      },
+      "help": {
+        "title": "Desfrute de uma experiência pura e profunda",
+        "list": [
+          "Sem anúncios, sem login, sem pontos, sem relatórios longos, sem design desnecessário.",
+          "Usuários gratuitos podem enviar 2 requisições de busca por minuto. Forneça uma chave API para obter um limite maior de requisições.",
+          "Faça perguntas profundas! Não desperdice seu tempo valioso com perguntas simples ou quebra-cabeças, e não busque conforto aqui quando estiver entediado.",
+          "Adicione aos mecanismos de busca do seu navegador via <code>https://search.jina.ai/?q={SUA_PERGUNTA}</code>",
+          "Interessado em implantação local? Entre em contato conosco."
+        ]
+      },
+      "settings": {
+        "title": "Configurações",
+        "darkTheme": "Usar tema escuro",
+        "language": "Idioma",
+        "chirpOnDone": "Emitir som ao finalizar"
+      },
+      "deleteSession": {
+        "title": "Excluir sessão?",
+        "description": "Tem certeza que deseja excluir esta sessão? Esta ação é irreversível."
+      },
+      "deleteAllSessions": {
+        "title": "Excluir todas as sessões?",
+        "description": "Tem certeza que deseja excluir todas as sessões? Esta ação é irreversível."
+      },
+      "navigation": {
+        "title": "URLs lidos"
       }
     }
   }
