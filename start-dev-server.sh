@@ -6,17 +6,38 @@ export NODE_ENV=development
 # Usar porta fixa 8080
 SELECTED_PORT=8080
 
-# Verificar se a porta já está em uso
-if lsof -i:$SELECTED_PORT > /dev/null 2>&1; then
-  echo "AVISO: Porta $SELECTED_PORT já está em uso. Tentando encerrar o processo..."
-  # Tentar matar o processo que está usando a porta
-  PID=$(lsof -i:$SELECTED_PORT -P -n -t)
-  if [ ! -z "$PID" ]; then
-    echo "Encerrando processo $PID na porta $SELECTED_PORT"
-    kill -9 $PID
-    sleep 1
-  fi
-fi
+# Função para matar processo em uma porta
+kill_process_on_port() {
+    local port=$1
+    if lsof -i:$port > /dev/null 2>&1; then
+        echo "AVISO: Porta $port já está em uso. Tentando encerrar o processo..."
+        local PID=$(lsof -i:$port -P -n -t)
+        if [ ! -z "$PID" ]; then
+            echo "Encerrando processo $PID na porta $port"
+            # Primeiro tenta com SIGTERM
+            kill $PID 2>/dev/null
+            sleep 1
+            
+            # Se ainda estiver rodando, tenta com SIGKILL
+            if lsof -i:$port > /dev/null 2>&1; then
+                echo "Processo ainda ativo, usando SIGKILL..."
+                kill -9 $PID
+                sleep 1
+            fi
+            
+            # Verifica se o processo foi realmente encerrado
+            if lsof -i:$port > /dev/null 2>&1; then
+                echo "ERRO: Não foi possível encerrar o processo na porta $port"
+                exit 1
+            else
+                echo "Processo encerrado com sucesso"
+            fi
+        fi
+    fi
+}
+
+# Tentar encerrar qualquer processo existente na porta
+kill_process_on_port $SELECTED_PORT
 
 # Gravar a porta no arquivo para que o Admin Panel possa ler
 echo $SELECTED_PORT > ./.port.txt
