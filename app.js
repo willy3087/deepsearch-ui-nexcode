@@ -806,7 +806,7 @@ const renderFaviconList = async (visitedURLs, numURLs, faviconContainer) => {
       const response = await fetch(
         `https://favicon-fetcher.jina.ai/?domains=${domains.join(
           ","
-        )}&timeout=3000`
+        )}&timeout=3001`
       );
       if (!response.ok) throw new Error("Favicon fetch failed");
 
