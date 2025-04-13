@@ -1676,7 +1676,7 @@ async function sendMessage(redo = false) {
             const reader = res.body?.getReader();
             if (!reader) throw new Error('No readable stream available');
 
-            const decoder = new TextDecoder();
+            const decoder = new TextDecoder('utf-8', { stream: true }); // Specify UTF-8 and enable streaming mode
             let partialBrokenData = '';
             let visitedURLs = [];
             let numURLs = 0;
@@ -1688,7 +1688,7 @@ async function sendMessage(redo = false) {
                 if (done) break;
 
                 if (value) {
-                    const streamData = decoder.decode(value);
+                    const streamData = decoder.decode(value, {stream: true});
                     const events = streamData.split('\n\ndata:').filter(Boolean);
 
                     for (const event of events) {
