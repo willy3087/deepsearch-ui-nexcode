@@ -2400,6 +2400,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (initPrompt) {
+                chatSessions = loadChatSessions();
                 return handleURLParams(initPrompt);
             } else {
                 return loadAndDisplaySavedMessages();
