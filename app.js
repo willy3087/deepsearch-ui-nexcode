@@ -1511,15 +1511,19 @@ function handleClickNavigationEvent(e) {
 
 async function updateThinkUrl(thinkUrlElement, url) {      
     if (thinkUrlElement && url) {
-        // Add favicon
-        const faviconContainer = thinkUrlElement.querySelector('.favicon-container');
-        const existingUrls = Array.from(thinkUrlElement.querySelectorAll('.favicon-item')).map(item => item.getAttribute('data-tooltip'));
-        if (!existingUrls.includes(url)) {
-            await renderFaviconList([url], 0, faviconContainer);
-        }
+       try {
+            // Add favicon
+            const faviconContainer = thinkUrlElement.querySelector('.favicon-container');
+            const existingUrls = Array.from(thinkUrlElement.querySelectorAll('.favicon-item')).map(item => item.getAttribute('data-tooltip'));
+            if (!existingUrls.includes(url)) {
+                await renderFaviconList([url], 0, faviconContainer);
+            }
 
-        const thinkUrlLink = thinkUrlElement.querySelector('.think-url-link');
-        thinkUrlLink.textContent = url.replace(/^(https?:\/\/)/, '');
+            const thinkUrlLink = thinkUrlElement.querySelector('.think-url-link');
+            thinkUrlLink.textContent = url.replace(/^(https?:\/\/)/, '');
+       } catch (error) {
+            console.error('Error updating think URL:', error);
+       }
     };
 };
 
