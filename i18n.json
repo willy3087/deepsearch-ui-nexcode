@@ -57,13 +57,12 @@
       "apiKey": {
         "title": "Upgrade to Higher Rate Limit",
         "description": "Use your Jina API key to access a higher rate limit. You can get a free API key and learn more about rate limits on our website.",
-        "freeUserRpm": "You can send <b>2 requests per minute</b>."
+        "freeUserRpm": "Rate limit: <b>1 request every 2 minutes</b>."
       },
       "help": {
         "title": "Enjoy Pure & Deep",
         "list": [
           "No ads, no login, no bullet points, no lengthy report, no nonsense design.",
-          "Free users get 2 search requests per minute. Provide an API key to get a higher rate limit.",
           "Ask meaningful questions. Avoid wasting your rate limit on trivial greetings or trick questions.",
           "Add to your browser's search engines via <code>https://search.jina.ai/?q={YOUR_QUERY}</code>",
           "Interested in on-prem deploy? Contact us."
@@ -83,7 +82,7 @@
         "title": "Delete All Sessions?",
         "description": "Are you sure you want to delete all sessions? This action cannot be undone."
       },
-      "navigation" : {
+      "navigation": {
         "title": "Read URLs"
       }
     }
@@ -146,16 +145,15 @@
       "apiKey": {
         "title": "获得更高的速率限制",
         "description": "使用您的Jina API密钥访问更高的速率限制。您可以在我们的网站上获取免费API密钥并了解有关速率限制的更多信息。",
-        "freeUserRpm": "您可以发送<b>每分钟2个请求</b>。"
+        "freeUserRpm": "免费用户<b>每2分钟可发送1次请求</b>。"
       },
       "help": {
         "title": "回归深且纯",
         "list": [
           "无登录，无广告，去冗长报告，去废话设计。",
-          "免费用户每分钟可发送2个搜索请求。提供API密钥以获得更高的速率限制。",
-          "问深点！不要浪费宝贵的生命在那些简单问题和脑筋急转弯上，不要在无聊时用此寻求慰藉。",
+          "问深点！不要浪费你的生命在那些简单问题和脑筋急转弯上，不要在无聊时用此寻求慰藉。",
           "通过<code>https://search.jina.ai/?q={YOUR_QUERY}</code>添加到您的浏览器搜索引擎。",
-          "这<i>就是</i>我们的产品，不是蹭热点。对私有化部署感兴趣？联系我们。"
+          "对私有化部署有兴趣？联系我们。"
         ]
       },
       "settings": {
@@ -172,7 +170,7 @@
         "title": "删除所有会话？",
         "description": "您确定要删除所有会话吗？此操作无法撤消。"
       },
-      "navigation" : {
+      "navigation": {
         "title": "已阅读的 URLs"
       }
     }
@@ -235,13 +233,12 @@
       "apiKey": {
         "title": "提高速度限制",
         "description": "用你的 Jina API 金鑰來提高速度限制。在我們的網站上可以免費取得 API 金鑰，也可以了解更多關於速度限制的資訊。",
-        "freeUserRpm": "你一分鐘可以送<b>两次請求</b>喔。"
+        "freeUserRpm": "免費用戶<b>每2分鐘可發送1次請求</b>。"
       },
       "help": {
         "title": "回歸純粹的深度體驗",
         "list": [
           "免登入、沒廣告、沒有長篇大論、沒有廢話設計。",
-          "免費用戶一分鐘可以送三次搜尋請求。提供 API 金鑰可以提高速度限制。",
           "問深點！不要浪費寶貴的生命在那些簡單問題和腦筋急轉彎上，不要在無聊時用此尋求慰藉。",
           "用<code>https://search.jina.ai/?q={YOUR_QUERY}</code>加到你的瀏覽器搜尋引擎裡",
           "對私有化部署有興趣嗎？聯絡我們。"
@@ -261,7 +258,7 @@
         "title": "刪除所有對話？",
         "description": "你確定要刪除所有對話嗎？這個動作無法復原。"
       },
-      "navigation" : {
+      "navigation": {
         "title": "已讀取的 URLs"
       }
     }
@@ -324,13 +321,12 @@
       "apiKey": {
         "title": "レート制限を引き上げる",
         "description": "Jina APIキーを使用して、レート制限を引き上げます。無料のAPIキーを取得し、レート制限の詳細については、当社のウェブサイトをご覧ください。",
-        "freeUserRpm": "<b>1分あたり2リクエスト</b>を送信できます。"
+        "freeUserRpm": "無料ユーザーは<b>2分間に1回</b>リクエストを送信できます。"
       },
       "help": {
         "title": "ピュアでディープな体験をお楽しみください",
         "list": [
           "ログイン不要、広告なし、箇条書きなし、冗長なレポートなし、無駄のないデザイン。",
-          "無料ユーザーは1分あたり2件の検索リクエストを送信できます。APIキーを提供すると、レート制限を引き上げることができます。",
           "深い質問をしてください！簡単な質問やなぞなぞに貴重な時間を無駄にせず、退屈なときにこれを使って楽しもうとしないでください。",
           "<code>https://search.jina.ai/?q={YOUR_QUERY}</code>を使用して、ブラウザの検索エンジンに追加します。",
           "オンプレミス展開にご興味がありますか？お問い合わせください。"
@@ -350,7 +346,7 @@
         "title": "すべてのセッションを削除しますか？",
         "description": "すべてのセッションを削除してもよろしいですか？この操作は元に戻すことができません。"
       },
-      "navigation" : {
+      "navigation": {
         "title": "URLを読み込みました"
       }
     }
@@ -413,13 +409,12 @@
       "apiKey": {
         "title": "Mettre à niveau pour une limite de taux plus élevée",
         "description": "Utilisez votre clé API Jina pour accéder à une limite de taux plus élevée. Vous pouvez obtenir une clé API gratuite et en savoir plus sur les limites de taux sur notre site web.",
-        "freeUserRpm": "Vous pouvez envoyer <b>2 requêtes par minute</b>."
+        "freeUserRpm": "Limite : <b>1 requête toutes les 2 minutes</b>."
       },
       "help": {
         "title": "Profitez d'une expérience pure et approfondie",
         "list": [
           "Pas de publicité, pas de connexion, pas de puces, pas de rapports longs, pas de design superflu.",
-          "Les utilisateurs gratuits peuvent envoyer 2 requêtes de recherche par minute. Fournissez une clé API pour obtenir une limite de taux plus élevée.",
           "Posez des questions profondes ! Ne gaspillez pas votre précieuse vie avec des questions simples ou des casse-têtes, et ne cherchez pas de réconfort ici quand vous vous ennuyez.",
           "Ajoutez à vos moteurs de recherche de navigateur via <code>https://search.jina.ai/?q={YOUR_QUERY}</code>",
           "Intéressé par un déploiement sur site ? Contactez-nous."
@@ -439,7 +434,7 @@
         "title": "Supprimer toutes les sessions ?",
         "description": "Êtes-vous sûr de vouloir supprimer toutes les sessions ? Cette action est irréversible."
       },
-      "navigation" : {
+      "navigation": {
         "title": "URL lues"
       }
     }
@@ -499,13 +494,12 @@
       "apiKey": {
         "title": "Upgrade für eine höhere Ratenbegrenzung",
         "description": "Verwenden Sie Ihren Jina API-Schlüssel, um auf eine höhere Ratenbegrenzung zuzugreifen. Sie können einen kostenlosen API-Schlüssel erhalten und mehr über Ratenbegrenzungen auf unserer Website erfahren.",
-        "freeUserRpm": "Sie können <b>2 Anfragen pro Minute</b> senden."
+        "freeUserRpm": "Geschwindigkeitsbegrenzung: <b>1 Anfrage alle 2 Minuten</b>."
       },
       "help": {
         "title": "Genießen Sie eine reine und tiefe Erfahrung",
         "list": [
           "Keine Werbung, keine Anmeldung, keine Aufzählungspunkte, keine langen Berichte, kein unnötiges Design.",
-          "Kostenlose Benutzer können 2 Suchanfragen pro Minute senden. Geben Sie einen API-Schlüssel an, um eine höhere Ratenbegrenzung zu erhalten.",
           "Stellen Sie tiefgründige Fragen! Verschwenden Sie nicht Ihre wertvolle Zeit mit einfachen Fragen oder Rätseln, und nutzen Sie dies nicht zur Unterhaltung, wenn Ihnen langweilig ist.",
           "Fügen Sie Ihre Browser-Suchmaschinen über <code>https://search.jina.ai/?q={YOUR_QUERY}</code> hinzu",
           "Interessiert an einer On-Premise-Bereitstellung? Kontaktieren Sie uns."
@@ -525,7 +519,7 @@
         "title": "Alle Sitzungen löschen?",
         "description": "Möchten Sie wirklich alle Sitzungen löschen? Dieser Vorgang kann nicht rückgängig gemacht werden."
       },
-      "navigation" : {
+      "navigation": {
         "title": "URLs gelesen"
       }
     }
@@ -539,6 +533,7 @@
       "upgrade": "업그레이드",
       "help": "도움말",
       "send": "심층 검색",
+      "clearAll": "지우기",
       "addKey": "업그레이드",
       "updateKey": "키 업데이트",
       "getKey": "API 키 가져오기",
@@ -585,13 +580,12 @@
       "apiKey": {
         "title": "더 높은 요청 제한으로 업그레이드",
         "description": "Jina API 키를 사용하여 더 높은 요청 제한에 액세스하세요. 저희 웹사이트에서 무료 API 키를 얻고 요청 제한에 대해 자세히 알아볼 수 있습니다.",
-        "freeUserRpm": "<b>분당 2개의 요청</b>을 보낼 수 있습니다."
+        "freeUserRpm": "무료 사용자는 <b>2분에 1회</b> 요청할 수 있습니다."
       },
       "help": {
         "title": "순수하고 심층적인 경험을 즐기세요",
         "list": [
           "광고 없음, 로그인 없음, 요점 없음, 긴 보고서 없음, 불필요한 디자인 없음.",
-          "무료 사용자는 분당 2개의 검색 요청을 보낼 수 있습니다. 더 높은 요청 제한을 받으려면 API 키를 제공하세요.",
           "깊이 있는 질문을 하세요! 간단한 질문이나 수수께끼에 소중한 시간을 낭비하지 말고, 지루할 때 이것을 사용하여 즐기려고 하지 마세요。",
           "<code>https://search.jina.ai/?q={YOUR_QUERY}</code>를 통해 브라우저 검색 엔진에 추가하세요.",
           "온프레미스 배포에 관심이 있으신가요? 문의하세요."
@@ -611,7 +605,7 @@
         "title": "모든 세션 삭제?",
         "description": "모든 세션을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다."
       },
-      "navigation" : {
+      "navigation": {
         "title": "URL 읽음"
       }
     }
