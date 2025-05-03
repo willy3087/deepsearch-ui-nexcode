@@ -1000,6 +1000,7 @@ function handleDownloadEvent (downloadButton, downloadIcon) {
             clonedElement.style.maxWidth = `${maxWidth}px`;
             const cloneMessage = clonedDocument.getElementById(id);
             cloneMessage.style.padding = '16px 40px';
+            cloneMessage.style.fontFamily = 'Arial, Helvetica, sans-serif';
         };
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
@@ -1274,10 +1275,12 @@ function markdownItTableWrapper(md) {
     };
 }
 
-function renderMarkdown(content, returnElement = false, visitedURLs = [], role = 'assistant', numURLs = 0) {
+function renderMarkdown(contentStr, returnElement = false, visitedURLs = [], role = 'assistant', numURLs = 0) {
     if (!md) {
         initializeMarkdown();
     }
+    // Replace non-breaking spaces with regular spaces, this is important for Safari compatibility
+    const content = contentStr.replace(/\u00A0/g, ' ');
     const tempDiv = document.createElement('div');
     tempDiv.classList.add('markdown-inner');
     
@@ -1508,15 +1511,19 @@ function handleClickNavigationEvent(e) {
 
 async function updateThinkUrl(thinkUrlElement, url) {      
     if (thinkUrlElement && url) {
-        // Add favicon
-        const faviconContainer = thinkUrlElement.querySelector('.favicon-container');
-        const existingUrls = Array.from(thinkUrlElement.querySelectorAll('.favicon-item')).map(item => item.getAttribute('data-tooltip'));
-        if (!existingUrls.includes(url)) {
-            await renderFaviconList([url], 0, faviconContainer);
-        }
+       try {
+            // Add favicon
+            const faviconContainer = thinkUrlElement.querySelector('.favicon-container');
+            const existingUrls = Array.from(thinkUrlElement.querySelectorAll('.favicon-item')).map(item => item.getAttribute('data-tooltip'));
+            if (!existingUrls.includes(url)) {
+                await renderFaviconList([url], 0, faviconContainer);
+            }
 
-        const thinkUrlLink = thinkUrlElement.querySelector('.think-url-link');
-        thinkUrlLink.textContent = url.replace(/^(https?:\/\/)/, '');
+            const thinkUrlLink = thinkUrlElement.querySelector('.think-url-link');
+            thinkUrlLink.textContent = url.replace(/^(https?:\/\/)/, '');
+       } catch (error) {
+            console.error('Error updating think URL:', error);
+       }
     };
 };
 
@@ -2400,6 +2407,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (initPrompt) {
+                chatSessions = loadChatSessions();
                 return handleURLParams(initPrompt);
             } else {
                 return loadAndDisplaySavedMessages();
