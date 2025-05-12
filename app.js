@@ -634,7 +634,7 @@ saveApiKeyBtn.addEventListener('click', handleApiKeySave);
 // Message display functions
 function createReferencesSection(content, visitedURLs = [], numURLs=0) {
     // Don't create section if no content and no URLs
-    if (!content && (!visitedURLs || visitedURLs.length === 0)) {
+    if (!content || !visitedURLs || visitedURLs.length === 0) {
         return null;
     }
 
