@@ -231,6 +231,10 @@ const navigationDialog = document.getElementById("navigation-dialog");
 
 const BASE_ORIGIN = "http://localhost:3002";
 
+// Model selector variables
+const modelSelector = document.getElementById("model-selector");
+let selectedModel = "gemini-2.0-flash"; // Default model
+
 // SVG icons
 const loadingSvg = `<svg id="thinking-animation-icon" width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><style>.spinner_mHwL{animation:spinner_OeFQ .75s cubic-bezier(0.56,.52,.17,.98) infinite; fill:currentColor}.spinner_ote2{animation:spinner_ZEPt .75s cubic-bezier(0.56,.52,.17,.98) infinite;fill:currentColor}@keyframes spinner_OeFQ{0%{cx:4px;r:3px}50%{cx:9px;r:8px}}@keyframes spinner_ZEPt{0%{cx:15px;r:8px}50%{cx:20px;r:3px}}</style><defs><filter id="spinner-gF00"><feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="y"/><feColorMatrix in="y" mode="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 18 -7" result="z"/><feBlend in="SourceGraphic" in2="z"/></filter></defs><g filter="url(#spinner-gF00)"><circle class="spinner_mHwL" cx="4" cy="12" r="3"/><circle class="spinner_ote2" cx="15" cy="12" r="8"/></g></svg>`;
 const docIcon =
@@ -280,6 +284,19 @@ function initializeApiKey() {
   toggleApiKeyBtnText.textContent = savedKey
     ? UI_STRINGS.buttons.updateKey()
     : UI_STRINGS.buttons.addKey();
+}
+
+// Model Selector Management
+function initializeModelSelector() {
+  const savedModel = localStorage.getItem("deepSearchAppSelectedModel");
+  if (savedModel) {
+    selectedModel = savedModel;
+    modelSelector.value = savedModel;
+  } else {
+    // Default to gemini-2.0-flash if no saved preference
+    localStorage.setItem("deepSearchAppSelectedModel", selectedModel);
+    modelSelector.value = selectedModel;
+  }
 }
 
 function generateId(type = "message") {
@@ -658,8 +675,16 @@ function getFileTypeDisplay(mimeType) {
   return SUPPORTED_FILE_TYPES[mimeType] || "FILE";
 }
 
-// Initialize API key
+// Initialize API key and model selector
 initializeApiKey();
+initializeModelSelector();
+
+// Model selector event listener
+modelSelector.addEventListener("change", (e) => {
+  selectedModel = e.target.value;
+  localStorage.setItem("deepSearchAppSelectedModel", selectedModel);
+  console.log(`Model changed to: ${selectedModel}`);
+});
 
 // File upload event listeners
 fileUploadButton.addEventListener("click", () => {
@@ -1746,22 +1771,30 @@ async function sendMessage(redo = false) {
       headers["Authorization"] = `Bearer ${apiKey}`;
     }
 
+    // Log detalhado do modelo sendo enviado
+    console.log("Enviando requisição com modelo:", selectedModel);
+
+    const requestBody = {
+      messages: existingMessages
+        .filter(({ content }) => content)
+        .map(({ role, content }) => ({
+          role,
+          content:
+            typeof content === "string"
+              ? content
+              : content.filter((c) => c.text || c.image || c.data),
+        })),
+      stream: true,
+      reasoning_effort: "medium",
+      model: selectedModel,
+    };
+
+    console.log("Corpo completo da requisição:", JSON.stringify(requestBody));
+
     const res = await fetch(`${BASE_ORIGIN}/v1/chat/completions`, {
       method: "POST",
       headers,
-      body: JSON.stringify({
-        messages: existingMessages
-          .filter(({ content }) => content)
-          .map(({ role, content }) => ({
-            role,
-            content:
-              typeof content === "string"
-                ? content
-                : content.filter((c) => c.text || c.image || c.data),
-          })),
-        stream: true,
-        reasoning_effort: "medium",
-      }),
+      body: JSON.stringify(requestBody),
       signal: abortController.signal,
     });
 

@@ -85,6 +85,7 @@ a {
 }
 
 @media (pointer: fine) {
+
   ::-webkit-scrollbar,
   ::-webkit-scrollbar-corner {
     background: transparent;
@@ -304,6 +305,44 @@ a {
 /* Hide clear button when chat is empty */
 #chat-app.empty-chat #new-chat-button {
   display: none;
+}
+
+#model-selector-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.model-selector {
+  padding: 0 8px;
+  border: none;
+  background-color: transparent;
+  color: var(--text-secondary);
+  font-size: var(--body-size);
+  font-family: "Roboto", Arial, sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+  height: 32px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 24px;
+}
+
+.model-selector:focus {
+  outline: none;
+  color: var(--text-color);
+}
+
+.model-selector:hover {
+  background-color: var(--bg-color-100);
+}
+
+#model-selector-container.tooltip-container .tooltip {
+  width: max-content;
 }
 
 #message-input {
@@ -788,12 +827,10 @@ a {
   overflow: hidden;
   flex-grow: 1;
   font-size: var(--secondary-size);
-  background: linear-gradient(
-    90deg,
-    rgba(0, 0, 0, 0) 0%,
-    black 50%,
-    rgba(0, 0, 0, 0) 100%
-  );
+  background: linear-gradient(90deg,
+      rgba(0, 0, 0, 0) 0%,
+      black 50%,
+      rgba(0, 0, 0, 0) 100%);
   background-size: 200% 100%;
   background-clip: text;
   -webkit-background-clip: text;
@@ -802,12 +839,10 @@ a {
 }
 
 [data-theme="dark"] .think-url-link {
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0) 0%,
-    white 50%,
-    rgba(255, 255, 255, 0) 100%
-  );
+  background: linear-gradient(90deg,
+      rgba(255, 255, 255, 0) 0%,
+      white 50%,
+      rgba(255, 255, 255, 0) 100%);
   background-size: 200% 100%;
   background-clip: text;
   -webkit-background-clip: text;
@@ -1141,11 +1176,11 @@ button,
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-input:checked + .toggle-slider {
+input:checked+.toggle-slider {
   background-color: var(--primary);
 }
 
-input:checked + .toggle-slider:before {
+input:checked+.toggle-slider:before {
   transform: translateX(16px);
 }
 
@@ -1452,7 +1487,7 @@ input:checked + .toggle-slider:before {
   display: inline-block;
 }
 
-.message-file-container + .message-file-container {
+.message-file-container+.message-file-container {
   margin-left: 8px;
 }
 

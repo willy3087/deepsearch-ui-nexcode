@@ -149,6 +149,14 @@
           </div>
         </div>
         <div class="buttons-group">
+          <div class="icon-button tooltip-container" id="model-selector-container">
+            <select id="model-selector" class="model-selector" aria-label="Select AI model">
+              <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
+              <option value="gpt-4o-mini">GPT-4 Mini</option>
+              <option value="meta-llama/llama-4-scout:free">Llama 4 Scout</option>
+            </select>
+            <span class="tooltip" data-label="tooltips.model">Selecionar modelo</span>
+          </div>
           <button
             id="toggle-api-key"
             class="icon-button tooltip-container"
