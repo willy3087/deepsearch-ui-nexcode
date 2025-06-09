@@ -57,7 +57,7 @@
       "apiKey": {
         "title": "Upgrade to Higher Rate Limit",
         "description": "Use your Jina API key to access a higher rate limit. You can get a free API key and learn more about rate limits on our website.",
-        "freeUserRpm": "Due to current server API abuse, usage without an API key is temporarily suspended. Please visit the official Jina AI website to obtain a key."
+        "freeUserRpm": "Due to server API abuse, we have disabled keyless access. Please visit the Jina AI website to get a free API key and return to continue using deep search."
       },
       "help": {
         "title": "Enjoy Pure & Deep",
@@ -72,7 +72,8 @@
         "title": "Settings",
         "darkTheme": "Use dark theme",
         "language": "Language",
-        "chirpOnDone": "Chirp on done"
+        "chirpOnDone": "Chirp on done",
+        "arxivResearch": "arXiv Research"
       },
       "deleteSession": {
         "title": "Delete Session?",
@@ -145,7 +146,7 @@
       "apiKey": {
         "title": "获得更高的速率限制",
         "description": "使用您的Jina API密钥访问更高的速率限制。您可以在我们的网站上获取免费API密钥并了解有关速率限制的更多信息。",
-        "freeUserRpm": "当前服务器API被滥用，现暂停无API Key使用，请前往Jina AI官网获取key"
+        "freeUserRpm": "由于服务器的无密钥API端口被滥用，我们关闭了无密钥使用。请前往Jina AI官网获取免费密钥返回此站继续使用深度搜索。"
       },
       "help": {
         "title": "回归深且纯",
@@ -160,7 +161,8 @@
         "title": "设置",
         "darkTheme": "使用深色主题",
         "language": "语言",
-        "chirpOnDone": "完成后蜂鸣提醒"
+        "chirpOnDone": "完成后蜂鸣提醒",
+        "arxivResearch": "arXiv 研究模式"
       },
       "deleteSession": {
         "title": "删除会话？",
@@ -233,7 +235,7 @@
       "apiKey": {
         "title": "提高速度限制",
         "description": "用你的 Jina API 金鑰來提高速度限制。在我們的網站上可以免費取得 API 金鑰，也可以了解更多關於速度限制的資訊。",
-        "freeUserRpm": "由於目前伺服器 API 被濫用，暫時關閉無 API 金鑰的使用，請前往 Jina AI 官網取得金鑰"
+        "freeUserRpm": "由於伺服器的無金鑰 API 端口被濫用，我們關閉了無金鑰使用。請前往 Jina AI 官網獲取免費金鑰返回此站繼續使用深度搜索。"
       },
       "help": {
         "title": "回歸純粹的深度體驗",
@@ -248,7 +250,8 @@
         "title": "設定",
         "darkTheme": "用深色主題",
         "language": "語言",
-        "chirpOnDone": "完成時發出提示音"
+        "chirpOnDone": "完成時發出提示音",
+        "arxivResearch": "arXiv 研究模式"
       },
       "deleteSession": {
         "title": "刪除對話？",
@@ -319,9 +322,9 @@
     },
     "dialogs": {
       "apiKey": {
-        "title": "レート制限を引き上げる",
-        "description": "Jina APIキーを使用して、レート制限を引き上げます。無料のAPIキーを取得し、レート制限の詳細については、当社のウェブサイトをご覧ください。",
-        "freeUserRpm": "現在、サーバーAPIの悪用により、APIキーなしでの使用が一時停止されています。Jina AIの公式ウェブサイトにアクセスしてキーを取得してください。"
+        "title": "アクセス制限の解除",
+        "description": "Jina API キーを使用してアクセス制限を解除します。当社のウェブサイトで無料の API キーを取得し、アクセス制限について詳しく知ることができます。",
+        "freeUserRpm": "サーバーの無キー API ポートが悪用されたため、無キーアクセスを無効にしました。Jina AI の公式サイトで無料の API キーを取得して、このサイトに戻りディープ検索を続けてください。"
       },
       "help": {
         "title": "ピュアでディープな体験をお楽しみください",
@@ -336,7 +339,8 @@
         "title": "設定",
         "darkTheme": "ダークテーマを使用",
         "language": "言語",
-        "chirpOnDone": "完了時に通知音を鳴らす"
+        "chirpOnDone": "完了時に通知音を鳴らす",
+        "arxivResearch": "arXiv 研究模式"
       },
       "deleteSession": {
         "title": "セッションを削除しますか？",
@@ -407,9 +411,9 @@
     },
     "dialogs": {
       "apiKey": {
-        "title": "Mettre à niveau pour une limite de taux plus élevée",
+        "title": "Améliorer la limite de taux",
         "description": "Utilisez votre clé API Jina pour accéder à une limite de taux plus élevée. Vous pouvez obtenir une clé API gratuite et en savoir plus sur les limites de taux sur notre site web.",
-        "freeUserRpm": "En raison d'un abus actuel de l'API du serveur, l'utilisation sans clé API est temporairement suspendue. Veuillez visiter le site officiel de Jina AI pour obtenir une clé."
+        "freeUserRpm": "En raison de l'abus de l'API du serveur, nous avons désactivé l'accès sans clé. Veuillez visiter le site web de Jina AI pour obtenir une clé API gratuite et revenir pour continuer à utiliser la recherche approfondie."
       },
       "help": {
         "title": "Profitez d'une expérience pure et approfondie",
@@ -424,7 +428,8 @@
         "title": "Paramètres",
         "darkTheme": "Utiliser le thème sombre",
         "language": "Langue",
-        "chirpOnDone": "Bip à la fin"
+        "chirpOnDone": "Bip à la fin",
+        "arxivResearch": "Recherche sur arXiv"
       },
       "deleteSession": {
         "title": "Supprimer la session ?",
@@ -492,9 +497,9 @@
     },
     "dialogs": {
       "apiKey": {
-        "title": "Upgrade für eine höhere Ratenbegrenzung",
-        "description": "Verwenden Sie Ihren Jina API-Schlüssel, um auf eine höhere Ratenbegrenzung zuzugreifen. Sie können einen kostenlosen API-Schlüssel erhalten und mehr über Ratenbegrenzungen auf unserer Website erfahren.",
-        "freeUserRpm": "Aufgrund des aktuellen Missbrauchs der Server-API ist die Nutzung ohne API-Schlüssel vorübergehend ausgesetzt. Bitte besuchen Sie die offizielle Jina AI-Website, um einen Schlüssel zu erhalten."
+        "title": "Höhere Ratenbegrenzung",
+        "description": "Verwenden Sie Ihren Jina API-Schlüssel für eine höhere Ratenbegrenzung. Sie können einen kostenlosen API-Schlüssel erhalten und mehr über Ratenbegrenzungen auf unserer Website erfahren.",
+        "freeUserRpm": "Aufgrund von API-Missbrauch haben wir den schlüssellosen Zugriff deaktiviert. Bitte besuchen Sie die Jina AI-Website, um einen kostenlosen API-Schlüssel zu erhalten und zur Tiefensuche zurückzukehren."
       },
       "help": {
         "title": "Genießen Sie eine reine und tiefe Erfahrung",
@@ -509,7 +514,8 @@
         "title": "Einstellungen",
         "darkTheme": "Dunkles Design verwenden",
         "language": "Sprache",
-        "chirpOnDone": "Piepton bei Fertigstellung"
+        "chirpOnDone": "Piepton bei Fertigstellung",
+        "arxivResearch": "arXiv-Suchmodus"
       },
       "deleteSession": {
         "title": "Sitzung löschen?",
@@ -578,9 +584,9 @@
     },
     "dialogs": {
       "apiKey": {
-        "title": "더 높은 요청 제한으로 업그레이드",
-        "description": "Jina API 키를 사용하여 더 높은 요청 제한에 액세스하세요. 저희 웹사이트에서 무료 API 키를 얻고 요청 제한에 대해 자세히 알아볼 수 있습니다.",
-        "freeUserRpm": "현재 서버 API 남용으로 인해 API 키 없이 사용이 일시 중지되었습니다. Jina AI 공식 웹사이트를 방문하여 키를 얻으세요."
+        "title": "속도 제한 업그레이드",
+        "description": "Jina API 키를 사용하여 더 높은 속도 제한에 액세스하세요. 당사 웹사이트에서 무료 API 키를 받고 속도 제한에 대해 자세히 알아볼 수 있습니다.",
+        "freeUserRpm": "서버의 키 없는 API 포트가 악용되어 키 없는 액세스를 비활성화했습니다. Jina AI 웹사이트에서 무료 API 키를 받아 이 사이트로 돌아와 심층 검색을 계속하세요."
       },
       "help": {
         "title": "순수하고 심층적인 경험을 즐기세요",
@@ -595,7 +601,8 @@
         "title": "설정",
         "darkTheme": "어두운 테마 사용",
         "language": "언어",
-        "chirpOnDone": "완료 시 알림음"
+        "chirpOnDone": "완료 시 알림음",
+        "arxivResearch": "arXiv 연구 모드"
       },
       "deleteSession": {
         "title": "세션 삭제?",
