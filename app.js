@@ -690,41 +690,43 @@ const renderFaviconList = async (visitedURLs, numURLs, faviconContainer) => {
     const domainMap = visitedURLs.reduce((map, url) => {
         try {
             const domain = new URL(url).hostname;
+            const img = document.createElement('img');
+            const item = document.createElement('div');
+
+            img.src = 'favicon.ico';
+            img.width = img.height = 16;
+            img.alt = domain;
+
+            item.classList.add('favicon-item', 'tooltip-container');
+            item.setAttribute('data-tooltip', url);
+            item.appendChild(img);
+
+            // Add click handler for favicon
+            item.addEventListener('click', () => {
+                window.open(url, '_blank');
+            });
+            handleTooltipEvent(item, 'top');
+
+            // Add cursor pointer style
+            item.style.cursor = 'pointer';
+
+            faviconList.appendChild(item);
+
             if (!map.has(domain)) {
-                const img = document.createElement('img');
-                const item = document.createElement('div');
-
-                img.src = 'favicon.ico';
-                img.width = img.height = 16;
-                img.alt = domain;
-
-                item.classList.add('favicon-item', 'tooltip-container');
-                item.setAttribute('data-tooltip', url);
-                item.appendChild(img);
-
-                // Add click handler for favicon
-                item.addEventListener('click', () => {
-                    window.open(url, '_blank');
-                });
-                handleTooltipEvent(item, 'top');
-
-                // Add cursor pointer style
-                item.style.cursor = 'pointer';
-
-                faviconList.appendChild(item);
-
                 map.set(domain, {
                     urls: [url],
-                    img,
-                    item
+                    items: [item]
                 });
             } else {
                 map.get(domain).urls.push(url);
+                map.get(domain).items.push(item);
             }
 
             // Update tooltip with URL count
             const data = map.get(domain);
-            data.item.setAttribute('title', `${domain}\n${data.urls.length} URLs`);
+            data.items.forEach(item => {
+                item.setAttribute('title', `${domain}\n${data.urls.length} URLs`);
+            });
         } catch (e) {
             console.error('Invalid URL:', url);
         }
@@ -1631,7 +1633,8 @@ async function sendMessage(redo = false) {
             body: JSON.stringify({
                 messages: existingMessages.filter(({ content }) => content).map(({ role, content }) => ({ role, content: typeof content === 'string' ? content : content.filter(c => c.text || c.image || c.data) })),
                 stream: true,
-                reasoning_effort: 'medium',
+                reasoning_effort: localStorage.getItem('reasoning_effort') || 'medium',
+                no_direct_answer: localStorage.getItem('always_search') === 'true',
                 search_provider: localStorage.getItem('arxiv_research') === 'true' ? 'arxiv' : undefined,
             }),
             signal: abortController.signal,
@@ -1977,6 +1980,20 @@ function initializeSettings() {
     if (arxivResearchToggleInput) {
         arxivResearchToggleInput.checked = arxivResearch;
     }
+
+    // Initialize Always Search setting (default to false)
+    const alwaysSearch = localStorage.getItem('always_search') === 'true';
+    const alwaysSearchToggleInput = document.getElementById('always-search-toggle-input');
+    if (alwaysSearchToggleInput) {
+        alwaysSearchToggleInput.checked = alwaysSearch;
+    }
+
+    // Initialize Reasoning Effort setting (default to medium)
+    const reasoningEffort = localStorage.getItem('reasoning_effort') || 'medium';
+    const reasoningEffortSelect = document.getElementById('reasoning-effort-select');
+    if (reasoningEffortSelect) {
+        reasoningEffortSelect.value = reasoningEffort;
+    }
 }
 
 settingsButton.addEventListener('click', () => {
@@ -2022,8 +2039,17 @@ chirpOnDoneToggleInput?.addEventListener('change', (e) => {
 
 const arxivResearchToggleInput = document.getElementById('arxiv-research-toggle-input');
 arxivResearchToggleInput?.addEventListener('change', (e) => {
-    const arxivResearch = e.target.checked;
-    localStorage.setItem('arxiv_research', arxivResearch);
+    localStorage.setItem('arxiv_research', e.target.checked);
+});
+
+const alwaysSearchToggleInput = document.getElementById('always-search-toggle-input');
+alwaysSearchToggleInput?.addEventListener('change', (e) => {
+    localStorage.setItem('always_search', e.target.checked);
+});
+
+const reasoningEffortSelect = document.getElementById('reasoning-effort-select');
+reasoningEffortSelect?.addEventListener('change', (e) => {
+    localStorage.setItem('reasoning_effort', e.target.value);
 });
 
 // Initialize settings on load

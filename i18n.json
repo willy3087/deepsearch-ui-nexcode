@@ -73,7 +73,9 @@
         "darkTheme": "Use dark theme",
         "language": "Language",
         "chirpOnDone": "Chirp on done",
-        "arxivResearch": "arXiv Research"
+        "arxivResearch": "arXiv Research",
+        "alwaysSearch": "Force thinking before answering",
+        "reasoningEffort": "Reasoning effort"
       },
       "deleteSession": {
         "title": "Delete Session?",
@@ -84,7 +86,7 @@
         "description": "Are you sure you want to delete all sessions? This action cannot be undone."
       },
       "navigation": {
-        "title": "Read URLs"
+        "title": "Reading URLs"
       }
     }
   },
@@ -162,7 +164,9 @@
         "darkTheme": "使用深色主题",
         "language": "语言",
         "chirpOnDone": "完成后蜂鸣提醒",
-        "arxivResearch": "arXiv 研究模式"
+        "arxivResearch": "arXiv 研究模式",
+        "alwaysSearch": "强制思考后再回答",
+        "reasoningEffort": "推理深度"
       },
       "deleteSession": {
         "title": "删除会话？",
@@ -251,7 +255,9 @@
         "darkTheme": "用深色主題",
         "language": "語言",
         "chirpOnDone": "完成時發出提示音",
-        "arxivResearch": "arXiv 研究模式"
+        "arxivResearch": "arXiv 研究模式",
+        "alwaysSearch": "強制思考後再回答",
+        "reasoningEffort": "推理深度"
       },
       "deleteSession": {
         "title": "刪除對話？",
@@ -340,7 +346,9 @@
         "darkTheme": "ダークテーマを使用",
         "language": "言語",
         "chirpOnDone": "完了時に通知音を鳴らす",
-        "arxivResearch": "arXiv 研究模式"
+        "arxivResearch": "arXiv 研究模式",
+        "alwaysSearch": "必ず思考してから回答",
+        "reasoningEffort": "推論の深さ"
       },
       "deleteSession": {
         "title": "セッションを削除しますか？",
@@ -429,7 +437,9 @@
         "darkTheme": "Utiliser le thème sombre",
         "language": "Langue",
         "chirpOnDone": "Bip à la fin",
-        "arxivResearch": "Recherche sur arXiv"
+        "arxivResearch": "Recherche sur arXiv",
+        "alwaysSearch": "Forcer la réflexion avant de répondre",
+        "reasoningEffort": "Profondeur de raisonnement"
       },
       "deleteSession": {
         "title": "Supprimer la session ?",
@@ -515,7 +525,9 @@
         "darkTheme": "Dunkles Design verwenden",
         "language": "Sprache",
         "chirpOnDone": "Piepton bei Fertigstellung",
-        "arxivResearch": "arXiv-Suchmodus"
+        "arxivResearch": "arXiv-Suchmodus",
+        "alwaysSearch": "Vor Antwort nachdenken erzwingen",
+        "reasoningEffort": "Argumentationstiefe"
       },
       "deleteSession": {
         "title": "Sitzung löschen?",
@@ -602,7 +614,9 @@
         "darkTheme": "어두운 테마 사용",
         "language": "언어",
         "chirpOnDone": "완료 시 알림음",
-        "arxivResearch": "arXiv 연구 모드"
+        "arxivResearch": "arXiv 연구 모드",
+        "alwaysSearch": "강제 사고 후 답변",
+        "reasoningEffort": "추론 깊이"
       },
       "deleteSession": {
         "title": "세션 삭제?",
