@@ -679,28 +679,49 @@ function createReferencesSection(content, visitedURLs = [], numURLs = 0) {
 const renderFaviconList = async (visitedURLs, numURLs, faviconContainer) => {
     let faviconList;
     if (faviconContainer) {
-        faviconList = faviconContainer;;
+        faviconList = faviconContainer;
     } else {
         // Create DOM elements and data structures
         faviconList = document.createElement('div');
         faviconList.classList.add('favicon-list');
     }
 
-    // Process URLs and create Map of domain -> {urls, element data}
+    // First pass: Create domainMap to store favicon data
     const domainMap = visitedURLs.reduce((map, url) => {
         try {
             const domain = new URL(url).hostname;
             if (!map.has(domain)) {
                 const img = document.createElement('img');
-                const item = document.createElement('div');
-
                 img.src = 'favicon.ico';
                 img.width = img.height = 16;
                 img.alt = domain;
 
+                map.set(domain, {
+                    img,
+                    urls: [url]
+                });
+            } else {
+                map.get(domain).urls.push(url);
+            }
+        } catch (e) {
+            console.error('Invalid URL:', url);
+        }
+        return map;
+    }, new Map());
+
+    // Second pass: Create favicon items for each URL
+    visitedURLs.forEach(url => {
+        try {
+            const domain = new URL(url).hostname;
+            const domainData = domainMap.get(domain);
+            if (domainData) {
+                const item = document.createElement('div');
                 item.classList.add('favicon-item', 'tooltip-container');
                 item.setAttribute('data-tooltip', url);
-                item.appendChild(img);
+
+                // Clone the img element to avoid DOM node reuse issues
+                const imgClone = domainData.img.cloneNode(true);
+                item.appendChild(imgClone);
 
                 // Add click handler for favicon
                 item.addEventListener('click', () => {
@@ -712,24 +733,11 @@ const renderFaviconList = async (visitedURLs, numURLs, faviconContainer) => {
                 item.style.cursor = 'pointer';
 
                 faviconList.appendChild(item);
-
-                map.set(domain, {
-                    urls: [url],
-                    img,
-                    item
-                });
-            } else {
-                map.get(domain).urls.push(url);
             }
-
-            // Update tooltip with URL count
-            const data = map.get(domain);
-            data.item.setAttribute('title', `${domain}\n${data.urls.length} URLs`);
         } catch (e) {
             console.error('Invalid URL:', url);
         }
-        return map;
-    }, new Map());
+    });
 
     if (numURLs) {
         // Add sources count
@@ -757,7 +765,15 @@ const renderFaviconList = async (visitedURLs, numURLs, faviconContainer) => {
             const favicons = await response.json();
             favicons.forEach(({ domain, favicon, type }) => {
                 if (domainMap.has(domain) && favicon) {
-                    domainMap.get(domain).img.src = `data:${type};base64,${favicon}`;
+                    const domainData = domainMap.get(domain);
+                    domainData.img.src = `data:${type};base64,${favicon}`;
+                    // Update all cloned images for this domain
+                    const items = faviconList.querySelectorAll(`.favicon-item[data-tooltip^="http"]`);
+                    items.forEach(item => {
+                        if (new URL(item.getAttribute('data-tooltip')).hostname === domain) {
+                            item.querySelector('img').src = domainData.img.src;
+                        }
+                    });
                 } else {
                     failedDomains.push(domain);
                 }
