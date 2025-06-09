@@ -690,43 +690,41 @@ const renderFaviconList = async (visitedURLs, numURLs, faviconContainer) => {
     const domainMap = visitedURLs.reduce((map, url) => {
         try {
             const domain = new URL(url).hostname;
-            const img = document.createElement('img');
-            const item = document.createElement('div');
-
-            img.src = 'favicon.ico';
-            img.width = img.height = 16;
-            img.alt = domain;
-
-            item.classList.add('favicon-item', 'tooltip-container');
-            item.setAttribute('data-tooltip', url);
-            item.appendChild(img);
-
-            // Add click handler for favicon
-            item.addEventListener('click', () => {
-                window.open(url, '_blank');
-            });
-            handleTooltipEvent(item, 'top');
-
-            // Add cursor pointer style
-            item.style.cursor = 'pointer';
-
-            faviconList.appendChild(item);
-
             if (!map.has(domain)) {
+                const img = document.createElement('img');
+                const item = document.createElement('div');
+
+                img.src = 'favicon.ico';
+                img.width = img.height = 16;
+                img.alt = domain;
+
+                item.classList.add('favicon-item', 'tooltip-container');
+                item.setAttribute('data-tooltip', url);
+                item.appendChild(img);
+
+                // Add click handler for favicon
+                item.addEventListener('click', () => {
+                    window.open(url, '_blank');
+                });
+                handleTooltipEvent(item, 'top');
+
+                // Add cursor pointer style
+                item.style.cursor = 'pointer';
+
+                faviconList.appendChild(item);
+
                 map.set(domain, {
                     urls: [url],
-                    items: [item]
+                    img,
+                    item
                 });
             } else {
                 map.get(domain).urls.push(url);
-                map.get(domain).items.push(item);
             }
 
             // Update tooltip with URL count
             const data = map.get(domain);
-            data.items.forEach(item => {
-                item.setAttribute('title', `${domain}\n${data.urls.length} URLs`);
-            });
+            data.item.setAttribute('title', `${domain}\n${data.urls.length} URLs`);
         } catch (e) {
             console.error('Invalid URL:', url);
         }
