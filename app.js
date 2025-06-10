@@ -1657,7 +1657,7 @@ async function sendMessage(redo = false) {
                 reasoning_effort: localStorage.getItem('reasoning_effort') || 'medium',
                 no_direct_answer: localStorage.getItem('always_search') === 'true',
                 search_provider: localStorage.getItem('arxiv_research') === 'true' ? 'arxiv' : undefined,
-                with_images: localStorage.getItem('include_images') !== 'false' ? true : undefined,
+                // with_images: localStorage.getItem('include_images') !== 'false' ? true : undefined,
             }),
             signal: abortController.signal,
         });
