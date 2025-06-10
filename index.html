@@ -282,23 +282,55 @@
                     <label for="reasoning-effort-select" class="settings-label"
                         data-label="dialogs.settings.reasoningEffort">Reasoning effort</label>
                     <select id="reasoning-effort-select" class="settings-select">
-                        <option value="low">Low</option>
-                        <option value="medium">Medium</option>
-                        <option value="high">High</option>
+                        <option value="low" data-label="dialogs.settings.reasoningLevels.low">Low</option>
+                        <option value="medium" data-label="dialogs.settings.reasoningLevels.medium">Medium</option>
+                        <option value="high" data-label="dialogs.settings.reasoningLevels.high">High</option>
                     </select>
                 </div>
-                <div class="settings-option">
-                    <label for="language-select" class="settings-label"
-                        data-label="dialogs.settings.language">Language</label>
-                    <select id="language-select" class="settings-select">
-                        <option value="en">English</option>
-                        <option value="zh-CN">中文(简体)</option>
-                        <option value="zh-TW">中文(繁體)</option>
-                        <option value="jp">日本語</option>
-                        <option value="ko">한국어</option>
-                        <option value="fr">Français</option>
-                        <option value="de">Deutsch</option>
-                    </select>
+                <div class="settings-section">
+                    <h3 class="settings-section-title" data-label="dialogs.settings.languageSettings">Language Settings
+                    </h3>
+                    <div class="settings-option">
+                        <label for="language-select" class="settings-label" data-label="dialogs.settings.language">UI
+                            Language</label>
+                        <select id="language-select" class="settings-select">
+                            <option value="en">English</option>
+                            <option value="zh-CN">中文(简体)</option>
+                            <option value="zh-TW">中文(繁體)</option>
+                            <option value="jp">日本語</option>
+                            <option value="ko">한국어</option>
+                            <option value="fr">Français</option>
+                            <option value="de">Deutsch</option>
+                        </select>
+                    </div>
+                    <div class="settings-option">
+                        <label for="answer-language-select" class="settings-label"
+                            data-label="dialogs.settings.answerLanguage">Answer/Think Language</label>
+                        <select id="answer-language-select" class="settings-select">
+                            <option value="unset" data-label="dialogs.settings.unset">Unset</option>
+                            <option value="en">English</option>
+                            <option value="zh-CN">中文(简体)</option>
+                            <option value="zh-TW">中文(繁體)</option>
+                            <option value="jp">日本語</option>
+                            <option value="ko">한국어</option>
+                            <option value="fr">Français</option>
+                            <option value="de">Deutsch</option>
+                        </select>
+                    </div>
+                    <div class="settings-option">
+                        <label for="search-language-select" class="settings-label"
+                            data-label="dialogs.settings.searchLanguage">Search Query Language</label>
+                        <select id="search-language-select" class="settings-select">
+                            <option value="unset" data-label="dialogs.settings.unset">Unset</option>
+                            <option value="en">English</option>
+                            <option value="zh-CN">中文(简体)</option>
+                            <option value="zh-TW">中文(繁體)</option>
+                            <option value="jp">日本語</option>
+                            <option value="ko">한국어</option>
+                            <option value="fr">Français</option>
+                            <option value="de">Deutsch</option>
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>
@@ -355,24 +387,26 @@
             </div>
         </div>
     </div>
-</div>
-<!-- Image references dialog -->
-<div class="dialog-overlay" id="image-references-dialog" role="dialog" aria-labelledby="image-references-dialog-title" aria-modal="true">
-    <div class="dialog">
-        <div class="dialog-header">
-            <span class="dialog-title" id="image-references-title" data-label="dialogs.image.references.title">Image preview</span>
-            <button class="dialog-close" aria-label="Close image references dialog">&times;</button>
-        </div>
-        <div class="dialog-content">
-            <img id="selected-image-reference" src="" alt="Image reference" />
+    </div>
+    <!-- Image references dialog -->
+    <div class="dialog-overlay" id="image-references-dialog" role="dialog"
+        aria-labelledby="image-references-dialog-title" aria-modal="true">
+        <div class="dialog">
+            <div class="dialog-header">
+                <span class="dialog-title" id="image-references-title" data-label="dialogs.image.references.title">Image
+                    preview</span>
+                <button class="dialog-close" aria-label="Close image references dialog">&times;</button>
+            </div>
+            <div class="dialog-content">
+                <img id="selected-image-reference" src="" alt="Image reference" />
+            </div>
         </div>
     </div>
-</div>
 
-<script async src="preload.js"></script>
-<script defer src="hljs.js"></script>
-<script defer src="utils.js"></script>
-<script defer src="app.js"></script>
+    <script async src="preload.js"></script>
+    <script defer src="hljs.js"></script>
+    <script defer src="utils.js"></script>
+    <script defer src="app.js"></script>
 
 </body>
 

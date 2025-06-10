@@ -34,9 +34,12 @@
 body {
     font-family: 'Roboto', Arial, sans-serif;
     margin: 0;
-    height: -webkit-fill-available; /* For Safari on iOS */
-    height: 100vh; /* Fallback */
-    height: stretch; /* Standardized property */
+    height: -webkit-fill-available;
+    /* For Safari on iOS */
+    height: 100vh;
+    /* Fallback */
+    height: stretch;
+    /* Standardized property */
     overflow: hidden;
     background-color: var(--bg-color);
     color: var(--text-color);
@@ -56,7 +59,7 @@ button {
     display: flex;
     align-items: center;
     transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-    color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 button:hover {
@@ -74,51 +77,52 @@ a {
 }
 
 @media (pointer:fine) {
+
     ::-webkit-scrollbar,
     ::-webkit-scrollbar-corner {
-      background: transparent;
-      height: 12px;
-      width: 12px;
+        background: transparent;
+        height: 12px;
+        width: 12px;
     }
-  
+
     ::-webkit-scrollbar-thumb {
-      background: content-box transparent;
-      border: 2px solid transparent;
-      border-radius: 10px;
-      min-height: 48px;
-      min-width: 48px;
+        background: content-box transparent;
+        border: 2px solid transparent;
+        border-radius: 10px;
+        min-height: 48px;
+        min-width: 48px;
     }
-  
+
     @supports not (scrollbar-color:auto) {
-      :hover {
-        will-change: scrollbar-color;
-      }
+        :hover {
+            will-change: scrollbar-color;
+        }
     }
-  
+
     :hover::-webkit-scrollbar-thumb {
-      background: content-box var(--bg-color-300);
+        background: content-box var(--bg-color-300);
     }
-  
+
     ::-webkit-scrollbar-thumb:active,
     ::-webkit-scrollbar-thumb:hover {
-      background: content-box var(--bg-color-400);
+        background: content-box var(--bg-color-400);
     }
-  
+
     ::-webkit-scrollbar-button {
-      height: 0;
-      width: 0
+        height: 0;
+        width: 0
     }
-  
+
     @supports not (selector(::-webkit-scrollbar)) {
-      * {
-        scrollbar-color: transparent transparent;
-        scrollbar-gutter: auto;
-        scrollbar-width: thin
-      }
-  
-      *:hover {
-        scrollbar-color: var(--bg-color-400) transparent;
-      }
+        * {
+            scrollbar-color: transparent transparent;
+            scrollbar-gutter: auto;
+            scrollbar-width: thin
+        }
+
+        *:hover {
+            scrollbar-color: var(--bg-color-400) transparent;
+        }
     }
 }
 
@@ -220,7 +224,8 @@ a {
 #chat-container {
     flex-grow: 1;
     position: relative;
-    min-height: 50px; /* Ensure container has height even when empty */
+    min-height: 50px;
+    /* Ensure container has height even when empty */
     padding: 20px;
     max-width: 760px;
     margin: 0 auto;
@@ -245,8 +250,8 @@ a {
     z-index: 99;
     gap: 5px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-    background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     max-width: 868px;
     width: calc(100% - 40px);
     margin: 0 auto;
@@ -268,7 +273,8 @@ a {
     gap: 20px;
     border: unset;
     background: unset;
-    height: auto; /* Modified: Allow height to adjust in empty state */
+    height: auto;
+    /* Modified: Allow height to adjust in empty state */
     top: -10%;
     margin: auto;
     max-width: 600px;
@@ -561,6 +567,7 @@ a {
 #clear-all-sessions {
     font-size: 0.8rem;
 }
+
 .delete-session:hover,
 #clear-all-sessions:hover,
 .delete:hover {
@@ -736,7 +743,8 @@ a {
     position: relative;
 }
 
-.think-content, .think-url-link {
+.think-content,
+.think-url-link {
     font-family: 'Roboto Mono', 'Courier New', monospace;
 }
 
@@ -756,6 +764,7 @@ a {
     overflow-x: auto;
     overflow-y: hidden;
 }
+
 .think-url.hidden {
     opacity: 0;
     pointer-events: none;
@@ -786,6 +795,7 @@ a {
     color: transparent;
     animation: fadeText 4s infinite linear;
 }
+
 [data-theme="dark"] .think-url-link {
     background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, white 50%, rgba(255, 255, 255, 0) 100%);
     background-size: 200% 100%;
@@ -797,10 +807,12 @@ a {
     from {
         background-position: 200% 0;
     }
+
     to {
         background-position: -200% 0;
     }
 }
+
 #think-navigation-button {
     display: flex;
     flex-shrink: 0;
@@ -811,18 +823,21 @@ a {
 #navigation-urls {
     padding-bottom: 20px;
 }
+
 .navigation-item {
     display: flex;
     align-items: center;
     padding: 8px 12px;
     width: 100%;
 }
+
 .navigation-icon {
     height: 16px;
     width: 16px;
     margin-right: 8px;
     display: inline-block;
 }
+
 .navigation-link {
     color: var(--text-secondary);
     text-overflow: ellipsis;
@@ -900,12 +915,15 @@ ol.footnotes-list {
 .user-message .markdown-inner code {
     color: var(--text-color);
 }
+
 .user-message .markdown-inner a {
     color: var(--bg-color);
 }
+
 .user-message .markdown-inner a::after {
     background-color: var(--bg-color);
 }
+
 .user-message .markdown-inner p {
     margin: 0;
 }
@@ -979,6 +997,7 @@ ol.footnotes-list {
         opacity: 0;
         transform: translateY(10px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -1048,12 +1067,12 @@ button,
     width: 400px;
     max-width: 80vw;
     box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.14),
-    0 9px 46px 8px rgba(0, 0, 0, 0.12),
-    0 11px 15px -7px rgba(0, 0, 0, 0.2);
+        0 9px 46px 8px rgba(0, 0, 0, 0.12),
+        0 11px 15px -7px rgba(0, 0, 0, 0.2);
     transform: translateY(20px);
     opacity: 0;
     transition: transform 0.225s cubic-bezier(0.0, 0.0, 0.2, 1),
-    opacity 0.225s cubic-bezier(0.0, 0.0, 0.2, 1);
+        opacity 0.225s cubic-bezier(0.0, 0.0, 0.2, 1);
     pointer-events: auto;
 }
 
@@ -1078,7 +1097,32 @@ button,
 .settings-option {
     display: flex;
     align-items: center;
-    margin: 12px 0;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+}
+
+.settings-option:last-child {
+    margin-bottom: 0;
+}
+
+.settings-section .settings-option {
+    margin-bottom: 0.75rem;
+}
+
+.settings-section .settings-option:last-child {
+    margin-bottom: 0;
+}
+
+.settings-section {
+    border-top: 1px solid var(--border-color);
+}
+
+.settings-section-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 0.75rem;
+    opacity: 0.8;
 }
 
 .toggle-switch {
@@ -1117,11 +1161,11 @@ button,
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-input:checked + .toggle-slider {
+input:checked+.toggle-slider {
     background-color: var(--primary);
 }
 
-input:checked + .toggle-slider:before {
+input:checked+.toggle-slider:before {
     transform: translateX(16px);
 }
 
@@ -1156,12 +1200,15 @@ input:checked + .toggle-slider:before {
     0% {
         background-color: transparent;
     }
+
     10% {
         background-color: var(--warning);
     }
+
     90% {
         background-color: var(--warning);
     }
+
     100% {
         background-color: transparent;
     }
@@ -1194,6 +1241,7 @@ input:checked + .toggle-slider:before {
         border-bottom: none;
         gap: 5px;
     }
+
     #main-container {
         padding-inline-start: 0;
     }
@@ -1205,8 +1253,10 @@ input:checked + .toggle-slider:before {
 
 .footnote-ref a {
     display: inline-flex;
-    align-items: center;          /* Vertical centering */
-    justify-content: center;      /* Horizontal centering */
+    align-items: center;
+    /* Vertical centering */
+    justify-content: center;
+    /* Horizontal centering */
     width: 1rem;
     height: 1rem;
     background-color: var(--bg-color-100);
@@ -1214,10 +1264,14 @@ input:checked + .toggle-slider:before {
     text-decoration: none;
     border-radius: 50%;
     font-size: 0.7em;
-    line-height: 1;               /* Ensures consistent height */
-    padding: 0;                   /* Removes any padding that might affect centering */
-    text-align: center;           /* Additional horizontal centering */
-    vertical-align: middle;       /* Additional vertical alignment */
+    line-height: 1;
+    /* Ensures consistent height */
+    padding: 0;
+    /* Removes any padding that might affect centering */
+    text-align: center;
+    /* Additional horizontal centering */
+    vertical-align: middle;
+    /* Additional vertical alignment */
 }
 
 #message-input::placeholder {
@@ -1299,7 +1353,8 @@ input:checked + .toggle-slider:before {
 }
 
 /* File upload button styles */
-#file-upload-button, #stop-message-button {
+#file-upload-button,
+#stop-message-button {
     position: absolute;
     right: 12px;
     top: 9px;
@@ -1394,6 +1449,7 @@ input:checked + .toggle-slider:before {
     height: 16px;
     width: 16px;
 }
+
 /* Hide file preview container when empty */
 #file-preview-container:empty {
     display: none;
@@ -1417,7 +1473,7 @@ input:checked + .toggle-slider:before {
     display: inline-block;
 }
 
-.message-file-container + .message-file-container {
+.message-file-container+.message-file-container {
     margin-left: 8px;
 }
 
@@ -1451,23 +1507,30 @@ input:checked + .toggle-slider:before {
 }
 
 /* Override the existing table border styles */
-table, th, td {
-    border: none; /* Remove default borders first */
+table,
+th,
+td {
+    border: none;
+    /* Remove default borders first */
     font-size: 0.9em;
 }
 
 table th .footnote-ref a,
 table td .footnote-ref a {
-  background-color: var(--bg-color-200);
+    background-color: var(--bg-color-200);
 }
 
 /* Rounded table corners */
 .markdown-inner table {
     border-radius: 8px;
-    overflow: hidden; /* This is important to keep the border-radius visible */
-    border-collapse: separate; /* Required for border-radius to work */
-    border-spacing: 0; /* Ensures no gaps between cells */
-    border: 1px solid var(--bg-color-200); /* Single border around the entire table */
+    overflow: hidden;
+    /* This is important to keep the border-radius visible */
+    border-collapse: separate;
+    /* Required for border-radius to work */
+    border-spacing: 0;
+    /* Ensures no gaps between cells */
+    border: 1px solid var(--bg-color-200);
+    /* Single border around the entire table */
 }
 
 /* Add subtle borders between cells */
@@ -1475,8 +1538,10 @@ table td .footnote-ref a {
 .markdown-inner table th {
     border-right: 1px solid var(--bg-color-200);
     border-bottom: 1px solid var(--bg-color-200);
-    padding: 8px; /* Add some padding for better readability */
-    text-align: left; /* Left-align all table content by default */
+    padding: 8px;
+    /* Add some padding for better readability */
+    text-align: left;
+    /* Left-align all table content by default */
 }
 
 /* Remove right border from last column */
@@ -1517,14 +1582,17 @@ table td .footnote-ref a {
     border-radius: 8px;
     overflow: hidden;
     border: 1px solid var(--bg-color-200);
-    background: none; /* Remove any default background */
+    background: none;
+    /* Remove any default background */
 }
 
 .markdown-inner pre code {
     display: block;
     padding: 16px;
-    border-radius: 0; /* Remove default border radius from code inside pre */
-    border: none; /* Remove default borders */
+    border-radius: 0;
+    /* Remove default border radius from code inside pre */
+    border: none;
+    /* Remove default borders */
     background-color: var(--bg-color-100);
     font-family: 'Roboto Mono', 'Courier New', monospace;
     font-size: var(--body-size);

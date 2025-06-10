@@ -71,12 +71,21 @@
       "settings": {
         "title": "Settings",
         "darkTheme": "Use dark theme",
-        "language": "Language",
+        "language": "UI Language",
+        "answerLanguage": "Answer/Think Language",
+        "searchLanguage": "Search Query Language",
+        "languageSettings": "Language Settings",
         "chirpOnDone": "Chirp on done",
         "arxivResearch": "arXiv Research",
         "alwaysSearch": "Force thinking before answering",
         "reasoningEffort": "Reasoning effort",
-        "includeImages": "Include images in result"
+        "includeImages": "Include images in result",
+        "unset": "Unset",
+        "reasoningLevels": {
+          "low": "Low",
+          "medium": "Medium",
+          "high": "High"
+        }
       },
       "deleteSession": {
         "title": "Delete Session?",
@@ -163,12 +172,21 @@
       "settings": {
         "title": "设置",
         "darkTheme": "使用深色主题",
-        "language": "语言",
+        "language": "界面语言",
+        "answerLanguage": "回答/思考语言",
+        "searchLanguage": "搜索查询语言",
+        "languageSettings": "语言设置",
         "chirpOnDone": "完成后蜂鸣提醒",
         "arxivResearch": "arXiv 研究模式",
         "alwaysSearch": "强制思考后再回答",
         "reasoningEffort": "推理深度",
-        "includeImages": "在结果中包含图片"
+        "includeImages": "在结果中包含图片",
+        "unset": "未设置",
+        "reasoningLevels": {
+          "low": "低",
+          "medium": "中",
+          "high": "高"
+        }
       },
       "deleteSession": {
         "title": "删除会话？",
@@ -255,12 +273,21 @@
       "settings": {
         "title": "設定",
         "darkTheme": "用深色主題",
-        "language": "語言",
+        "language": "介面語言",
+        "answerLanguage": "回答/思考語言",
+        "searchLanguage": "搜尋查詢語言",
+        "languageSettings": "語言設定",
         "chirpOnDone": "完成時發出提示音",
         "arxivResearch": "arXiv 研究模式",
         "alwaysSearch": "強制思考後再回答",
         "reasoningEffort": "推理深度",
-        "includeImages": "在結果中包含圖片"
+        "includeImages": "在結果中包含圖片",
+        "unset": "未設定",
+        "reasoningLevels": {
+          "low": "低",
+          "medium": "中",
+          "high": "高"
+        }
       },
       "deleteSession": {
         "title": "刪除對話？",
@@ -347,12 +374,21 @@
       "settings": {
         "title": "設定",
         "darkTheme": "ダークテーマを使用",
-        "language": "言語",
+        "language": "UI言語",
+        "answerLanguage": "回答/思考言語",
+        "searchLanguage": "検索クエリ言語",
+        "languageSettings": "言語設定",
         "chirpOnDone": "完了時に通知音を鳴らす",
         "arxivResearch": "arXiv 研究模式",
         "alwaysSearch": "必ず思考してから回答",
         "reasoningEffort": "推論の深さ",
-        "includeImages": "結果に画像を含める"
+        "includeImages": "結果に画像を含める",
+        "unset": "未設定",
+        "reasoningLevels": {
+          "low": "低",
+          "medium": "中",
+          "high": "高"
+        }
       },
       "deleteSession": {
         "title": "セッションを削除しますか？",
@@ -439,12 +475,21 @@
       "settings": {
         "title": "Paramètres",
         "darkTheme": "Utiliser le thème sombre",
-        "language": "Langue",
+        "language": "Langue de l'interface",
+        "answerLanguage": "Langue de réponse/réflexion",
+        "searchLanguage": "Langue de requête de recherche",
+        "languageSettings": "Paramètres de langue",
         "chirpOnDone": "Bip à la fin",
         "arxivResearch": "Recherche sur arXiv",
         "alwaysSearch": "Forcer la réflexion avant de répondre",
         "reasoningEffort": "Profondeur de raisonnement",
-        "includeImages": "Inclure les images dans le résultat"
+        "includeImages": "Inclure les images dans le résultat",
+        "unset": "Non défini",
+        "reasoningLevels": {
+          "low": "Faible",
+          "medium": "Moyen",
+          "high": "Élevé"
+        }
       },
       "deleteSession": {
         "title": "Supprimer la session ?",
@@ -528,12 +573,21 @@
       "settings": {
         "title": "Einstellungen",
         "darkTheme": "Dunkles Design verwenden",
-        "language": "Sprache",
+        "language": "UI-Sprache",
+        "answerLanguage": "Antwort-/Denksprache",
+        "searchLanguage": "Suchanfragesprache",
+        "languageSettings": "Spracheinstellungen",
         "chirpOnDone": "Piepton bei Fertigstellung",
         "arxivResearch": "arXiv-Suchmodus",
         "alwaysSearch": "Vor Antwort nachdenken erzwingen",
         "reasoningEffort": "Argumentationstiefe",
-        "includeImages": "Bilder im Ergebnis einbeziehen"
+        "includeImages": "Bilder im Ergebnis einbeziehen",
+        "unset": "Nicht festgelegt",
+        "reasoningLevels": {
+          "low": "Niedrig",
+          "medium": "Mittel",
+          "high": "Hoch"
+        }
       },
       "deleteSession": {
         "title": "Sitzung löschen?",
@@ -618,12 +672,21 @@
       "settings": {
         "title": "설정",
         "darkTheme": "어두운 테마 사용",
-        "language": "언어",
+        "language": "UI 언어",
+        "answerLanguage": "답변/사고 언어",
+        "searchLanguage": "검색 쿼리 언어",
+        "languageSettings": "언어 설정",
         "chirpOnDone": "완료 시 알림음",
         "arxivResearch": "arXiv 연구 모드",
         "alwaysSearch": "강제 사고 후 답변",
         "reasoningEffort": "추론 깊이",
-        "includeImages": "결과에 이미지 포함"
+        "includeImages": "결과에 이미지 포함",
+        "unset": "미설정",
+        "reasoningLevels": {
+          "low": "낮음",
+          "medium": "중간",
+          "high": "높음"
+        }
       },
       "deleteSession": {
         "title": "세션 삭제?",

@@ -1033,7 +1033,7 @@ function handleDownloadEvent(downloadButton, downloadIcon) {
             scale: isMobile ? 2 : window.devicePixelRatio,
             useCORS: true,
             allowTaint: false,
-         }).then((canvas) => {
+        }).then((canvas) => {
             return new Promise((resolve, reject) => {
                 let finalCanvas = canvas;
                 const maxWidthHeight = 50000000; // 5 megapixels
@@ -1648,17 +1648,32 @@ async function sendMessage(redo = false) {
             headers['Authorization'] = `Bearer ${apiKey}`;
         }
 
+        // Get language settings
+        const answerLanguage = localStorage.getItem('answer_language') || 'unset';
+        const searchLanguage = localStorage.getItem('search_language') || 'unset';
+
+        // Create payload
+        const payload = {
+            messages: existingMessages.filter(({ content }) => content).map(({ role, content }) => ({ role, content: typeof content === 'string' ? content : content.filter(c => c.text || c.image || c.data) })),
+            stream: true,
+            reasoning_effort: localStorage.getItem('reasoning_effort') || 'medium',
+            no_direct_answer: localStorage.getItem('always_search') === 'true',
+            search_provider: localStorage.getItem('arxiv_research') === 'true' ? 'arxiv' : undefined,
+            // with_images: localStorage.getItem('include_images') !== 'false' ? true : undefined,
+        };
+
+        // Add language codes if set
+        if (answerLanguage !== 'unset') {
+            payload.language_code = answerLanguage;
+        }
+        if (searchLanguage !== 'unset') {
+            payload.search_language_code = searchLanguage;
+        }
+
         const res = await fetch(`${BASE_ORIGIN}/v1/chat/completions`, {
             method: 'POST',
             headers,
-            body: JSON.stringify({
-                messages: existingMessages.filter(({ content }) => content).map(({ role, content }) => ({ role, content: typeof content === 'string' ? content : content.filter(c => c.text || c.image || c.data) })),
-                stream: true,
-                reasoning_effort: localStorage.getItem('reasoning_effort') || 'medium',
-                no_direct_answer: localStorage.getItem('always_search') === 'true',
-                search_provider: localStorage.getItem('arxiv_research') === 'true' ? 'arxiv' : undefined,
-                // with_images: localStorage.getItem('include_images') !== 'false' ? true : undefined,
-            }),
+            body: JSON.stringify(payload),
             signal: abortController.signal,
         });
 
@@ -1748,7 +1763,7 @@ async function sendMessage(redo = false) {
                                 if (json.relatedImages) {
                                     images = json.relatedImages;
                                 }
-                                
+
                                 const url = json.choices[0]?.delta?.url;
                                 thinkUrlElement = assistantMessageDiv.querySelector('.think-url');
                                 if (!thinkUrlElement) {
@@ -2024,10 +2039,20 @@ function initializeSettings() {
     themeToggleInput.checked = savedTheme === 'dark';
     document.documentElement.setAttribute('data-theme', savedTheme);
 
-    // Initialize language
+    // Initialize UI language
     currentLanguage = localStorage.getItem('language') || (window.getBrowserLanguage && getBrowserLanguage()) || 'en';
     const languageSelect = document.getElementById('language-select');
     languageSelect.value = currentLanguage;
+
+    // Initialize answer/think language
+    const answerLanguage = localStorage.getItem('answer_language') || 'unset';
+    const answerLanguageSelect = document.getElementById('answer-language-select');
+    answerLanguageSelect.value = answerLanguage;
+
+    // Initialize search query language
+    const searchLanguage = localStorage.getItem('search_language') || 'unset';
+    const searchLanguageSelect = document.getElementById('search-language-select');
+    searchLanguageSelect.value = searchLanguage;
 
     // Initialize chirp on done setting (default to true)
     const chirpOnDone = localStorage.getItem('chirp_on_done') !== 'false';
@@ -2126,6 +2151,19 @@ includeImagesToggleInput?.addEventListener('change', (e) => {
     localStorage.setItem('include_images', e.target.checked);
 });
 
+// Add event listeners for the new language selects
+const answerLanguageSelect = document.getElementById('answer-language-select');
+answerLanguageSelect.addEventListener('change', (e) => {
+    const language = e.target.value;
+    localStorage.setItem('answer_language', language);
+});
+
+const searchLanguageSelect = document.getElementById('search-language-select');
+searchLanguageSelect.addEventListener('change', (e) => {
+    const language = e.target.value;
+    localStorage.setItem('search_language', language);
+});
+
 // Initialize settings on load
 initializeSettings();
 
@@ -2205,17 +2243,17 @@ async function handleURLParams(queryParam) {
 };
 
 function handleImageReferenceClick(event) {
-  const target = event.target;
-  
-  if (target.tagName !== 'IMG') {
-    return; // Only handle clicks on images
-  }
+    const target = event.target;
 
-  const url = target.src;
-  // open image reference dialog
-  imageReferencesDialog.classList.add('visible');
-  // set the selected image reference
-  selectedImageReference.src = url;
+    if (target.tagName !== 'IMG') {
+        return; // Only handle clicks on images
+    }
+
+    const url = target.src;
+    // open image reference dialog
+    imageReferencesDialog.classList.add('visible');
+    // set the selected image reference
+    selectedImageReference.src = url;
 }
 
 let autoScrollEnabled = true; // Flag to track auto-scroll state
